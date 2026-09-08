@@ -19,6 +19,7 @@ verified against the current codebase.
 | License | MIT, open source |
 | Website / source | https://github.com/weskcode/cheatsheet |
 | Support | https://github.com/weskcode/cheatsheet/issues |
+| Email | weskcode@duck.com |
 | Icon | `CheatSheetApp/Resources/Assets.xcassets/AppIcon.appiconset/icon_1024.png` |
 | Screenshots | `AppStoreScreenshots/final/` (9 images) and `Docs/Images/` (5 marketing photos) |
 

@@ -108,13 +108,14 @@ Note: iPad has been a supported device family since before 1.2
 (`TARGETED_DEVICE_FAMILY = "1,2"`). This release fixes iPad-specific bugs
 that testing newly caught; it doesn't add iPad as a new platform.
 
-## 9. URLs
+## 9. URLs and contact email
 
 | Field | Value |
 | --- | --- |
 | Support URL | `https://github.com/weskcode/cheatsheet/issues` |
 | Marketing URL | `https://cheatsheet.apphq.online/` (branded landing page) |
 | Privacy Policy URL | `https://cheatsheet.apphq.online/privacy` (live; full text, verified accurate) |
+| Contact email | `weskcode@duck.com` |
 
 Both pages are the branded AppHQ site, verified 2026-09-08: the landing page
 lists all three platforms (Mac, iPhone, iPad) and the privacy page carries the
@@ -149,6 +150,10 @@ To see the widget: long-press the Home Screen (iOS/iPadOS) or open the Notificat
 
 The app makes zero network calls and stores all data locally via SwiftData in an App Group container shared with the widget extension.
 ```
+
+App Store Connect also asks for App Review Contact Information: a separate
+first name, last name, phone number, and email, kept for Apple's internal
+use during review. Use `weskcode@duck.com` for the email field there.
 
 ---
 
