@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CheatSheet — Notes &amp; commands, at hand</title>
+<meta name="description" content="An open-source notes app for macOS, iOS, and iPadOS that keeps the commands and checklists you use every day one glance away. No account, no ads, no network calls.">
+<style>
+  :root {
+    --bg-top: #141923; --bg-mid: #1A2130; --bg-bot: #0D111C;
+    --ink: #EDEFF3; --muted: #A4ABBb; --accent: #7FA6FF; --card: rgba(255,255,255,.04); --line: rgba(255,255,255,.09);
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; color: var(--ink);
+    background: linear-gradient(165deg, var(--bg-top) 0%, var(--bg-mid) 55%, var(--bg-bot) 100%) fixed;
+    font: 17px/1.65 -apple-system, BlinkMacSystemFont, "SF Pro Text", system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 760px; margin: 0 auto; padding: 88px 24px 96px; }
+  .eyebrow { color: var(--accent); font-weight: 600; letter-spacing: .12em; text-transform: uppercase; font-size: 13px; margin: 0 0 14px; }
+  h1 { font-size: clamp(34px, 8vw, 56px); line-height: 1.05; margin: 0 0 16px; letter-spacing: -.02em; }
+  .tagline { font-size: clamp(18px, 3vw, 22px); color: var(--muted); margin: 0 0 36px; max-width: 30ch; }
+  .cta { display: inline-flex; gap: 12px; flex-wrap: wrap; margin: 0 0 8px; }
+  .btn { display: inline-block; padding: 12px 22px; border-radius: 12px; font-weight: 600; font-size: 16px; }
+  .btn-primary { background: var(--accent); color: #0D111C; }
+  .btn-primary:hover { filter: brightness(1.08); }
+  .btn-ghost { border: 1px solid var(--line); color: var(--ink); }
+  .btn-ghost:hover { background: var(--card); }
+  a { color: var(--accent); text-decoration: none; }
+  a.btn { text-decoration: none; }
+  .feat { display: grid; gap: 18px; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); margin: 64px 0 0; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 22px 24px; }
+  .card h3 { margin: 0 0 8px; font-size: 17px; letter-spacing: -.01em; }
+  .card p { margin: 0; color: var(--muted); font-size: 15px; line-height: 1.55; }
+  footer { margin-top: 72px; padding-top: 24px; border-top: 1px solid var(--line); color: var(--muted); font-size: 14px; }
+  footer a { color: var(--muted); text-decoration: underline; }
+</style>
+</head>
+<body>
+<main class="wrap">
+  <p class="eyebrow">macOS · iOS · iPadOS</p>
+  <h1>Notes &amp; commands, at hand.</h1>
+  <p class="tagline">An open-source cheat-sheet app that keeps the commands and checklists you use every day one glance away.</p>
+
+  <div class="cta">
+    <a class="btn btn-ghost" href="https://github.com/weskcode/cheatsheet">View source on GitHub</a>
+    <a class="btn btn-ghost" href="./privacy.html">Privacy policy</a>
+  </div>
+
+  <div class="feat">
+    <div class="card">
+      <h3>Plain text, real structure</h3>
+      <p>Type headings, bullets, and checkboxes in plain text — they format automatically, with no syntax to learn.</p>
+    </div>
+    <div class="card">
+      <h3>Pin one note to a widget</h3>
+      <p>Keep the command you always forget on your Home Screen, menu bar, or desktop — visible without opening the app.</p>
+    </div>
+    <div class="card">
+      <h3>Color-code by project</h3>
+      <p>Ten note colors and four font styles, including a monospaced default built for code.</p>
+    </div>
+    <div class="card">
+      <h3>Nothing leaves your device</h3>
+      <p>No account, no ads, no analytics, and zero network calls. Everything is stored locally — verifiable, because it's open source.</p>
+    </div>
+    <div class="card">
+      <h3>Forgiving trash</h3>
+      <p>Deleted notes wait 30 days in Trash. Restore them, or clear them immediately — your call.</p>
+    </div>
+    <div class="card">
+      <h3>Native on every device</h3>
+      <p>Compact on iPhone, split-view on iPad and Mac, with a menu bar quick-capture on macOS.</p>
+    </div>
+  </div>
+
+  <footer>
+    CheatSheet is free and open source under the MIT License.
+    <a href="https://github.com/weskcode/cheatsheet">GitHub</a> ·
+    <a href="https://github.com/weskcode/cheatsheet/issues">Support</a> ·
+    <a href="./privacy.html">Privacy</a>
+  </footer>
+</main>
+</body>
+</html>
