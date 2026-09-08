@@ -9,7 +9,7 @@ import XCTest
 /// marketing captures need their own path that only ever shows
 /// `ScreenshotDemoContent`.
 ///
-/// Not a correctness gate — it asserts only enough to know a capture is of the
+/// Not a correctness gate. It asserts only enough to know a capture is of the
 /// screen it claims. CI skips it; run it on demand:
 ///   xcodebuild test -scheme CheatSheetiOSUI \
 ///     -only-testing:CheatSheetiOSUITests/MarketingScreenshotTests
@@ -43,19 +43,19 @@ final class MarketingScreenshotTests: XCTestCase {
     func testCaptureMarketingSet() throws {
         let app = launchSeeded()
 
-        // M1 — the library. Real developer reference notes, colour-coded.
+        // M1: the library. Real developer reference notes, colour-coded.
         XCTAssertTrue(app.staticTexts["Git Rescue"].waitForExistence(timeout: 20))
         shoot(app, "M1-library")
 
-        // M2 — a real note open: heading, commands, checkboxes, monospace.
+        // M2: a real note open, with a heading, commands, checkboxes, and monospace text.
         app.staticTexts["Git Rescue"].firstMatch.tap()
         XCTAssertTrue(app.textFields["note-title-field"].waitForExistence(timeout: 15))
         shoot(app, "M2-note-open")
 
-        // M3 — the palette + font controls sit above the editor on a real note.
+        // M3: the palette and font controls sit above the editor on a real note.
         shoot(app, "M3-style-controls")
 
-        // M4 — font menu open over real content.
+        // M4: font menu open over real content.
         let fontPicker = app.buttons["font-style-picker"].firstMatch
         if fontPicker.waitForExistence(timeout: 10), fontPicker.isHittable {
             fontPicker.tap()

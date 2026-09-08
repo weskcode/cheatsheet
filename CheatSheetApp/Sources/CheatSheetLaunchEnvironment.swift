@@ -3,7 +3,7 @@ import Foundation
 /// Launch-argument hooks used by UI tests.
 ///
 /// UI tests drive the real app process, so without these the suite would read
-/// and write the shared App Group store — the developer's (or CI machine's)
+/// and write the shared App Group store: the developer's (or CI machine's)
 /// actual notes. Test mode swaps in an in-memory SwiftData container so runs are
 /// isolated, deterministic, and repeatable.
 enum CheatSheetLaunchEnvironment {

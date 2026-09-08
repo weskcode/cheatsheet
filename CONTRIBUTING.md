@@ -2,12 +2,12 @@
 
 Thanks for taking the time to improve CheatSheet.
 
-This project is meant to stay small, native, and easy to build. The best contributions are focused, well tested, and easy to review.
+This project is meant to stay small, native, and easy to build. The best contributions stay focused and come with tests that make them easy to review.
 
 ## Development Setup
 
 1. Install Xcode 26. An Xcode 27 beta is fine for development, but must
-   never be used for a submission build — see `Docs/os-support-policy.md`.
+   never be used for a submission build. See `Docs/os-support-policy.md`.
    The app requires macOS 26 / iOS 26, so a Mac running macOS 26 or later is
    needed to run the macOS app and its tests.
 2. Install XcodeGen.
@@ -67,12 +67,12 @@ under `CheatSheetApp/` and `CheatSheetWidgets/`, and
 
 This project follows [Git Flow](https://nvie.com/posts/a-successful-git-branching-model/):
 
-- `main` — always reflects the latest released version. Only release and hotfix branches merge here.
-- `develop` — integration branch for the next release. Feature branches merge here.
-- `feature/<short-name>` — new work, branched from `develop`. Merge back into `develop` via pull request when done.
-- `release/<version>` — cut from `develop` to stabilize a release (version bumps, release notes, final QA). Merges into both `main` (tagged) and back into `develop`.
-- `hotfix/<short-name>` — urgent fixes branched from `main`. Merges into both `main` (tagged) and `develop`.
-- `feature/ios-<major>-readiness` — long-lived OS adoption branch off `develop`, carrying a different SDK
+- `main`: always reflects the latest released version. Only release and hotfix branches merge here.
+- `develop`: integration branch for the next release. Feature branches merge here.
+- `feature/<short-name>`: new work, branched from `develop`. Merge back into `develop` via pull request when done.
+- `release/<version>`: cut from `develop` to stabilize a release (version bumps, release notes, final QA). Merges into both `main` (tagged) and back into `develop`.
+- `hotfix/<short-name>`: urgent fixes branched from `main`. Merges into both `main` (tagged) and `develop`.
+- `feature/ios-<major>-readiness`: long-lived OS adoption branch off `develop`, carrying a different SDK
   contract from the shipping line. Keep it thin and merge `develop` into it often. See
   [`Docs/os-support-policy.md`](Docs/os-support-policy.md).
 
@@ -95,7 +95,7 @@ Guidelines:
 
 ## Conduct
 
-Be kind, specific, and practical. Assume good intent, keep feedback focused on the work, and help maintain a welcoming space for people learning macOS app development.
+Be kind, specific, and practical. Assume good intent and keep feedback focused on the work. Many contributors here are still learning macOS app development, so help keep the space welcoming.
 
 ## Pull Requests
 

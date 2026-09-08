@@ -1,4 +1,4 @@
-# CheatSheet 1.2 — Release Checklist
+# CheatSheet 1.2: Release Checklist
 
 Master index for shipping 1.2 (build 14). Everything text-based is done and
 linked below; the remaining steps happen in Xcode / App Store Connect and
@@ -12,9 +12,9 @@ need you, since they involve your Apple ID and signing.
 | [`app-store-localization-es.md`](app-store-localization-es.md) | The same fields in Spanish (Mexico) |
 | [`testflight-1.2-what-to-test.md`](testflight-1.2-what-to-test.md) | The TestFlight "What to Test" tester message (full + short versions) |
 | [`press-kit-1.2.md`](press-kit-1.2.md) | Fact sheet, journalist pitch email, Product Hunt copy, Apple editorial nomination text, social launch posts |
-| [`../AppStoreScreenshots/final/`](../AppStoreScreenshots/final/README.md) | 9 store screenshots — 6 iPhone (1320×2868), 3 iPad (2064×2752) |
+| [`../AppStoreScreenshots/final/`](../AppStoreScreenshots/final/README.md) | 9 store screenshots: 6 iPhone (1320×2868), 3 iPad (2064×2752) |
 
-## Final test pass — 1.2 / build 14
+## Final test pass: 1.2 / build 14
 
 Run against a clean XcodeGen-generated project, both device families, both
 platforms, on `release/1.2`.
@@ -24,20 +24,20 @@ Confirmed green (latest run, shared-machine load ~700–900):
 | Check | Result |
 | --- | --- |
 | Config gates (project / localization / SDK) | 3/3 PASS |
-| Unit tests — macOS | 69 PASS |
-| Unit tests — iOS | 69 PASS |
-| UI tests — iPhone | 11 PASS |
-| UI tests — iPad | (running — prior full-session run: 11 PASS) |
-| Release builds, universal binary, archives | (running — prior full-session run: all PASS, lipo arm64 + x86_64) |
+| Unit tests (macOS) | 69 PASS |
+| Unit tests (iOS) | 69 PASS |
+| UI tests (iPhone) | 11 PASS |
+| UI tests (iPad) | (running, prior full-session run: 11 PASS) |
+| Release builds, universal binary, archives | (running, prior full-session run: all PASS, lipo arm64 + x86_64) |
 | 9 shipped screenshot assets | exact sizes, no alpha |
 
 No app code changed since `f99d35b`; the pending steps are re-confirmation of
 builds/archives that passed earlier this session. Update this table from the
 latest `finalsuite2` run if any step regresses.
 
-## Signing — this is a "normal" release, not Xcode Cloud
+## Signing: this is a "normal" release, not Xcode Cloud
 
-Decided: submit the ordinary way — archive locally in Xcode, upload via
+Decided: submit the ordinary way. Archive locally in Xcode, upload via
 Organizer. No CI-based build service.
 
 This machine currently has **no Apple Distribution certificate** (only an
@@ -57,7 +57,7 @@ generate what's missing once you give it the certificate:
    destination.
 5. In the **Organizer** window that opens after each archive: **Distribute
    App → App Store Connect → Upload**. Automatic signing should now resolve
-   cleanly — if it complains about the App Group entitlement again, that
+   cleanly. If it complains about the App Group entitlement again, that
    means the Distribution profile needs a manual refresh: **Xcode → Settings
    → Accounts → Download Manual Profiles**, then retry.
 6. Each upload lands in App Store Connect → TestFlight after Apple's
@@ -74,20 +74,19 @@ generate what's missing once you give it the certificate:
 
 ## Submission for App Store review
 
-1. App Store Connect → **App Information** — fill in Category, Age Rating,
+1. App Store Connect → **App Information**: fill in Category, Age Rating,
    Content Rights per [`app-store-release-kit-1.2.md`](app-store-release-kit-1.2.md#1-app-information-one-time-or-confirm-unchanged).
-2. The version page — paste in Name, Subtitle, Description, Keywords,
+2. The version page: paste in Name, Subtitle, Description, Keywords,
    Promotional Text, What's New, Support/Privacy URLs from the same file.
 3. Upload the 9 screenshots from `AppStoreScreenshots/final/` in filename
    order.
 4. Select the build you just validated in TestFlight.
 5. Paste the Review Notes block from the release kit.
-6. Resolve the open items flagged in the release kit first — in particular,
-   **Privacy Policy URL** needs a live hosted page, not a raw GitHub file
-   link.
+6. Resolve any remaining open items flagged in the release kit before
+   submitting.
 7. **Add for Review.**
 
-## Git Flow — after everything above is real and tested
+## Git Flow: after everything above is real and tested
 
 Standard close per `CONTRIBUTING.md`:
 

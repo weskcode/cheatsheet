@@ -1,4 +1,4 @@
-# Final App Store screenshots — 1.2
+# Final App Store screenshots (1.2)
 
 Upload order is the filename order. iPhone files go in the **6.9"** slot, iPad
 in the **13"** slot; App Store Connect scales every smaller size down from
@@ -18,7 +18,7 @@ these, so no other sizes are needed.
 
 ## How these were produced
 
-1. **Capture** — `MarketingScreenshotTests` in the UI test target, run on an
+1. **Capture**: `MarketingScreenshotTests` in the UI test target, run on an
    iPhone 17 Pro Max and an iPad Pro 13". It seeds `ScreenshotDemoContent` and
    only ever photographs that curated content.
 
@@ -31,12 +31,12 @@ these, so no other sizes are needed.
    xcrun xcresulttool export attachments --path out.xcresult --output-path raw/
    ```
 
-2. **Compose** — `AppStoreScreenshots/templates/compose_screenshot.py` per the
+2. **Compose**: `AppStoreScreenshots/templates/compose_screenshot.py` per the
    approved style in `../planning/style-direction.md`.
 
 **Do not reuse `testQASweep` captures for the store.** That test creates a
 throwaway "QA Sweep Note" with placeholder body text, so everything it captures
-after its third checkpoint shows test data — which Apple treats as grounds for
+after its third checkpoint shows test data, which Apple treats as grounds for
 rejection. `MarketingScreenshotTests` exists specifically to avoid that.
 
 ## Caption strategy

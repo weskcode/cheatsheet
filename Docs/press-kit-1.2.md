@@ -1,8 +1,8 @@
-# CheatSheet — Press Kit & Launch Materials (1.2)
+# CheatSheet: Press Kit & Launch Materials (1.2)
 
 Copy-paste materials for a press kit page, journalist outreach, Product Hunt,
-Apple's editorial nomination, and social launch posts. Everything here is a
-claim already verified against the codebase this session — nothing invented.
+Apple's editorial nomination, and social launch posts. Every claim below is
+verified against the current codebase.
 
 ## Fact sheet
 
@@ -38,13 +38,13 @@ the MIT license.
 
 ```
 CheatSheet is the notes app for people who keep forgetting the same git
-command — type it once, pin it to a widget, never look it up again.
+command: type it once, pin it to a widget, never look it up again.
 ```
 
 ## Journalist / newsletter pitch email
 
 ```
-Subject: CheatSheet — an open-source cheat-sheet app that never phones home
+Subject: CheatSheet, an open-source cheat-sheet app that never phones home
 
 Hi [name],
 
@@ -56,12 +56,12 @@ What makes it different from a generic notes app:
 - Plain text auto-formats into headings, bullets, and checkboxes as you type
 - Pin one note to a Home Screen or menu bar widget so it's visible without
   opening the app
-- Zero network calls, no account, no analytics, no ads — verified in the
-  source, since the whole app is MIT-licensed and open source
+- Zero network calls, no account, no analytics, no ads (verified in the
+  source, since the whole app is MIT-licensed and open source)
 - Native on Mac, iPhone, and iPad, with an adaptive layout on each
 
-I'd love for you to try it — happy to send a TestFlight link, or it's already
-live on the App Store: [App Store link].
+I'd love for you to try it. I'm happy to send a TestFlight link, or it's
+already live on the App Store: [App Store link].
 
 Thanks for your time,
 Wesley
@@ -84,7 +84,7 @@ Mac, iPhone, and iPad that auto-formats plain text into checklists and
 headings, and lets you pin one note to a widget so the thing you always
 forget is just... visible.
 
-It's free, open source (MIT), and makes zero network calls — everything
+It's free, open source (MIT), and makes zero network calls. Everything
 stays on your device. Would love your feedback, especially on what other
 "I keep forgetting this" use cases it should cover.
 ```
@@ -97,7 +97,7 @@ built around a narrow, well-solved problem: the commands and checklists a
 developer or power user looks up again and again. Plain text auto-formats
 into headings, bullets, and checkboxes with no markdown syntax to learn, one
 note can be pinned to a Home Screen or menu bar widget, and the app makes
-zero network calls — no account, no ads, no analytics, ever. It's fully
+zero network calls: no account, no ads, no analytics, ever. It's fully
 native SwiftUI, built for iOS 26 and macOS 26, with adaptive layouts for
 each device and full Spanish localization.
 ```
@@ -106,7 +106,7 @@ each device and full Spanish localization.
 
 **Short (X / Mastodon, ~280 chars):**
 ```
-Shipped CheatSheet 1.2 today — a free, open-source notes app for Mac,
+Shipped CheatSheet 1.2 today: a free, open-source notes app for Mac,
 iPhone, and iPad. Type plain text, get real checklists. Pin one note to a
 widget. Zero network calls, ever. Now with Spanish localization and iPad
 fixes. 🔗 [App Store link]
@@ -122,7 +122,7 @@ Write plain text, it auto-formats into headings and checkboxes as you go.
 Pin one note to a widget so it's visible without opening the app.
 
 It's free, open source under the MIT license, and makes zero network
-calls — no account, no ads, no analytics, nothing leaves your device.
+calls: no account, no ads, no analytics, nothing leaves your device.
 
 1.2 adds Spanish localization, fixes a handful of iPad-specific bugs, and
 is now built for iOS 26 and macOS 26.
@@ -132,8 +132,7 @@ is now built for iOS 26 and macOS 26.
 
 ## What NOT to claim
 
-Keep every public claim inside what's actually true of this build — no
+Keep every public claim inside what's actually true of this build: no
 review counts, ratings, "#1", or award language until they're real. The
-zero-network-calls and open-source claims above are both directly verifiable
-in the source, which is exactly why they're the strongest thing to lead
-with — anyone can check.
+zero-network-calls and open-source claims above are directly verifiable in
+the source, so lead with them.

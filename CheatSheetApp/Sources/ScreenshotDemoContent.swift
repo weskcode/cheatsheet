@@ -4,7 +4,7 @@ import Foundation
 ///
 /// Real starter content (`CheatSheetNote.starterNotes`) stays small and
 /// first-run-appropriate. Screenshot captures need a fuller, varied sidebar
-/// to show organization and color variety honestly — this is real,
+/// to show organization and color variety honestly. This is real,
 /// representative developer reference content (generic git/docker/vim/HTTP
 /// facts, nothing app-specific or fabricated), never used outside a launch
 /// gated by `-cheatsheet-seed-screenshot-demo`.
