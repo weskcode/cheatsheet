@@ -84,12 +84,40 @@ The expected major is a branch-level contract, defaulting to `26` and overridabl
 CHEATSHEET_EXPECTED_SDK_MAJOR=27 Scripts/verify-build-sdk.sh
 ```
 
-Both CI jobs run the hard-fail form immediately after selecting Xcode, so the
-pin is asserted rather than assumed. Local verification warns instead of failing,
-because developing against a beta is fine, but archiving against one is not.
+`ci_scripts/ci_post_clone.sh` runs the hard-fail form as the first thing Xcode
+Cloud does after cloning, so the pin is asserted rather than assumed. Local
+verification warns instead of failing, because developing against a beta is
+fine, but archiving against one is not.
 
 `Scripts/verify-project-config.sh` separately asserts the deployment floors in
-`project.yml`, so a regression to an older target fails CI instead of shipping.
+`project.yml`, so a regression to an older target fails the Xcode Cloud build
+instead of shipping. See "CI provider" below for how the pieces fit together.
+
+## CI provider: Xcode Cloud
+
+CheatSheet builds and tests on Xcode Cloud. It previously ran on GitHub
+Actions, which was dropped because macOS runners bill Actions minutes at a
+10x multiplier on every GitHub plan, and a free-tier account has no minutes
+left over for iOS work once that multiplier applies. Xcode Cloud comes with
+its own free monthly build-hour allotment tied to the Apple Developer Program
+and produces an archive that can go straight to TestFlight, something GitHub
+Actions never did for this project.
+
+`CheatSheet.xcodeproj` is gitignored, so the first thing any CI provider needs
+to do is regenerate it from `project.yml`. `ci_scripts/ci_post_clone.sh` does
+that, then runs `Scripts/verify-build-sdk.sh`,
+`Scripts/verify-project-config.sh`, and `Scripts/verify-localization.sh`, the
+same fast, toolchain-independent checks the old GitHub Actions pipeline ran
+before its simulator work.
+
+Xcode version selection is a workflow setting in App Store Connect, not a
+repository file: open the workflow's Environment tab and choose a specific
+Xcode build from the version dropdown, never "Latest Beta," for any workflow
+that produces a submission archive. A `.xcode-version` file at the repository
+root pins the version for local tooling and for opening the project in Xcode
+directly; treat the Environment tab setting as the one that actually governs
+an Xcode Cloud build, since real-world reports of Xcode Cloud not always
+honoring that file mean it should not be relied on alone.
 
 ## iOS 27 readiness: measured, not assumed
 
@@ -160,13 +188,15 @@ CI moved to the `macos-26` runner so the macOS job can host a macOS 26 app.
 
 **Phase 2: beta season (now until iOS 27 GM).** Create
 `feature/ios-27-readiness` off `develop` when there is something to put on it.
-On that branch set `CHEATSHEET_EXPECTED_SDK_MAJOR=27` and point the CI Xcode
-selection at `Xcode_27*.app`. Re-run the trial build against each beta.
-`develop` and `main` do not move.
+On that branch set `CHEATSHEET_EXPECTED_SDK_MAJOR=27` as an environment
+variable on a dedicated Xcode Cloud workflow for the branch, and set that
+workflow's Environment tab to the Xcode 27 beta. Re-run the trial build
+against each beta. `develop` and `main` do not move.
 
 **Phase 3: iOS 27 released, Xcode 27 released.** Flip the SDK contract on
-`develop`: `CHEATSHEET_EXPECTED_SDK_MAJOR` default `26` → `27`, CI Xcode
-selection `26` → `27`, and update the support matrix above plus `README.md` and
+`develop`: `CHEATSHEET_EXPECTED_SDK_MAJOR` default `26` → `27`, the `.xcode-version`
+file and the Environment tab on `develop`'s and `main`'s Xcode Cloud workflows
+`26` → `27`, and update the support matrix above plus `README.md` and
 `CONTRIBUTING.md`. Merge `feature/ios-27-readiness` into `develop`, cut a
 `release/*`, run the full device sweep, tag into `main`. Leave the floor at 26.0
 unless a needed feature forces it higher.

@@ -62,9 +62,9 @@ CheatSheetWidgets/Resources/Localizable.xcstrings    Widget extension strings
 
 `Scripts/verify-localization.sh` checks both catalogs for missing translations,
 mismatched `%@`/`%lld` placeholders between languages, and untranslated stable
-keys; it runs in CI alongside `Scripts/verify-project-config.sh`. Adding a new
-user-visible string requires adding both an English and a Spanish entry to the
-relevant catalog.
+keys. It runs as part of every Xcode Cloud build alongside
+`Scripts/verify-project-config.sh`. Adding a new user-visible string requires
+adding both an English and a Spanish entry to the relevant catalog.
 
 ## Project Layout
 

@@ -56,6 +56,14 @@ Tests run on iOS 26.5 or newer. `Scripts/resolve-ios-simulator.sh` fails rather
 than selecting an older runtime; install a newer simulator via Xcode > Settings >
 Components, or override the floor with `CHEATSHEET_MIN_IOS_RUNTIME`.
 
+## Continuous Integration
+
+CheatSheet builds and tests on Xcode Cloud, not GitHub Actions. Every push to
+`develop` or `main`, and every pull request against them, triggers a build.
+Xcode Cloud regenerates the project from `project.yml` on clone
+(`ci_scripts/ci_post_clone.sh`), so nothing needs to change in that script when
+adding new source files.
+
 ## Widget Signing
 
 The widgets need a shared app group. Forks should use their own Apple Developer

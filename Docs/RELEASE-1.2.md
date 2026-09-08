@@ -35,33 +35,42 @@ No app code changed since `f99d35b`; the pending steps are re-confirmation of
 builds/archives that passed earlier this session. Update this table from the
 latest `finalsuite2` run if any step regresses.
 
-## Signing: this is a "normal" release, not Xcode Cloud
+## Signing and distribution: Xcode Cloud
 
-Decided: submit the ordinary way. Archive locally in Xcode, upload via
-Organizer. No CI-based build service.
+CheatSheet builds, tests, and archives on Xcode Cloud. It signs on Apple's
+servers using the certificates and profiles tied to your Apple Developer
+account, so this does not depend on any certificate installed in a local
+keychain. `CODE_SIGN_STYLE` is `Automatic` for every target in `project.yml`,
+which Xcode Cloud's managed signing expects.
 
-This machine currently has **no Apple Distribution certificate** (only an
-expired-plus-valid set of Development certs) and no provisioning profiles
-carrying the App Group entitlement the widgets need. `CODE_SIGN_STYLE` is
-already `Automatic` in `project.yml` for every target, so Xcode will
-generate what's missing once you give it the certificate:
+If a workflow does not exist yet:
 
-1. **Xcode → Settings → Accounts** → select your Apple ID → **Manage
-   Certificates** → **+** → **Apple Distribution**. One-time; the cert
-   installs into your keychain.
-2. Open `CheatSheet.xcodeproj` (regenerate first if it doesn't exist:
-   `xcodegen generate`).
-3. Select the **CheatSheetiOS** scheme → a Generic iOS Device destination →
-   **Product → Archive**.
-4. Repeat for the **CheatSheetApp** (macOS) scheme with a My Mac
-   destination.
-5. In the **Organizer** window that opens after each archive: **Distribute
-   App → App Store Connect → Upload**. Automatic signing should now resolve
-   cleanly. If it complains about the App Group entitlement again, that
-   means the Distribution profile needs a manual refresh: **Xcode → Settings
-   → Accounts → Download Manual Profiles**, then retry.
-6. Each upload lands in App Store Connect → TestFlight after Apple's
-   automated processing (usually a few minutes to an hour).
+1. Open `CheatSheet.xcodeproj` in Xcode (regenerate first if it does not
+   exist: `xcodegen generate`), then **Product → Xcode Cloud → Create
+   Workflow**. Xcode Cloud walks through connecting the repository if this is
+   the first workflow on the project.
+2. Pick the **CheatSheetiOS** target for this release's workflow.
+3. **Environment tab**: select a specific stable Xcode build from the version
+   dropdown. Do not leave it on "Latest Release" or "Latest Beta"; both drift
+   without warning as Apple ships new versions. `.xcode-version` at the
+   repository root records the version this project currently expects
+   (`26.6`) for reference, but the Environment tab setting is what actually
+   governs the build.
+4. **Start Condition**: Branch Changes on `release/1.2` (or `main`, once this
+   merges there) for an archive-and-distribute workflow. A separate,
+   lighter-weight workflow triggered on Pull Request against `develop` and
+   `main` replaces the old GitHub Actions build/test gate; give it a Test
+   action instead of Archive.
+5. **Actions**: Archive, with the **CheatSheetiOS** scheme.
+6. **Post-Actions**: TestFlight Internal Testing.
+7. Save, then **Start Build** to run it for the first time.
+
+Repeat for **CheatSheetApp** (macOS) once Mac App Store screenshots exist;
+until then, a Test-only workflow for that scheme is enough to keep the Mac
+build verified without shipping it.
+
+A build normally reaches TestFlight within fifteen to twenty-five minutes of
+starting.
 
 ## After upload: TestFlight
 
