@@ -15,6 +15,9 @@ these, so no other sizes are needed.
 | ipad-01 | 2064×2752 | IPAD SPLIT VIEW | Browse and edit side by side |
 | ipad-02 | 2064×2752 | FILTER AS YOU TYPE | Search every note instantly |
 | ipad-03 | 2064×2752 | MONOSPACE AND SERIF | Choose the font that fits |
+| mac-01 | 2880×1800 | MAC SPLIT VIEW | Browse and edit side by side |
+| mac-02 | 2880×1800 | INSTANT SEARCH | Find any snippet as you type |
+| mac-03 | 2880×1800 | 30-DAY TRASH | Restore deleted notes for 30 days |
 
 ## How these were produced
 
@@ -33,6 +36,13 @@ these, so no other sizes are needed.
 
 2. **Compose**: `AppStoreScreenshots/templates/compose_screenshot.py` per the
    approved style in `../planning/style-direction.md`.
+
+   Mac captures (`mac-raw-*.png`) came straight from the Debug build running
+   locally with the same launch arguments the UI tests use
+   (`-cheatsheet-ui-testing -cheatsheet-skip-onboarding
+   -cheatsheet-seed-screenshot-demo`), so they photograph the same curated
+   demo content; the window was captured with `screencapture -x -o -l` and
+   composed with `--device mac --canvas-size 2880x1800`.
 
 **Do not reuse `testQASweep` captures for the store.** That test creates a
 throwaway "QA Sweep Note" with placeholder body text, so everything it captures

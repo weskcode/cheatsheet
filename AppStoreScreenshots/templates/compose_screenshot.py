@@ -140,7 +140,9 @@ def compose(screenshot_path, eyebrow, headline, canvas_w, canvas_h, out_path,
 
     # iPads have a visibly smaller corner radius relative to device width
     # than iPhones — verified against reference photos, not guessed.
-    bezel_radius = int(phone_w * (0.115 if device == "iphone" else 0.06))
+    # Mac windows are near-square corners in a thin bezel, no cutout.
+    bezel_scale = {"iphone": 0.115, "ipad": 0.06, "mac": 0.018}[device]
+    bezel_radius = int(phone_w * bezel_scale)
     bezel = diagonal_gradient(phone_w, phone_h, 180,
                                [(0.0, BEZEL_TOP), (0.22, BEZEL_MID), (0.78, BEZEL_MID), (1.0, BEZEL_BOTTOM)])
     bezel_mask = rounded_mask((phone_w, phone_h), bezel_radius)
@@ -148,7 +150,7 @@ def compose(screenshot_path, eyebrow, headline, canvas_w, canvas_h, out_path,
     bezel_pad = max(2, int(phone_w * 0.011))
     screen_w = phone_w - 2 * bezel_pad
     screen_h = phone_h - 2 * bezel_pad
-    screen_radius = int(screen_w * 0.10)
+    screen_radius = int(screen_w * (0.012 if device == "mac" else 0.10))
 
     shot = Image.open(screenshot_path).convert("RGB")
     shot_ratio = screen_w / screen_h
@@ -186,6 +188,8 @@ def compose(screenshot_path, eyebrow, headline, canvas_w, canvas_h, out_path,
         dot_x = phone_w // 2
         dot_y = int(phone_h * 0.022)
         pd.ellipse([dot_x - dot_r, dot_y - dot_r, dot_x + dot_r, dot_y + dot_r], fill=(0, 0, 0))
+    elif device == "mac":
+        pass
     else:
         raise ValueError(f"device {device!r} has no bezel treatment yet — see style-direction.md; only 'iphone' and 'ipad' are implemented")
 
@@ -203,7 +207,7 @@ if __name__ == "__main__":
     p.add_argument("--headline", required=True)
     p.add_argument("--canvas-size", default="1320x2868")
     p.add_argument("--out", required=True)
-    p.add_argument("--device", default="iphone", choices=["iphone", "ipad"])
+    p.add_argument("--device", default="iphone", choices=["iphone", "ipad", "mac"])
     args = p.parse_args()
     w, h = (int(v) for v in args.canvas_size.split("x"))
     out = compose(args.screenshot, args.eyebrow, args.headline, w, h, args.out, args.device)

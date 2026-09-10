@@ -136,8 +136,8 @@ no Required Reason API is used beyond `UserDefaults`, correctly declared.
 ## 11. Screenshots
 
 Ready in [`AppStoreScreenshots/final/`](../AppStoreScreenshots/final/README.md):
-6 iPhone (1320×2868, 6.9" slot) + 3 iPad (2064×2752, 13" slot). Upload in
-filename order. No Mac screenshots exist yet (see open items).
+6 iPhone (1320×2868, 6.9" slot) + 3 iPad (2064×2752, 13" slot) + 3 Mac
+(2880×1800, 16:10 slot). Upload in filename order.
 
 ## 12. Review Notes (paste into the "App Review Information" notes field)
 
@@ -176,5 +176,8 @@ use during review. Use `weskcode@duck.com` for the email field there.
   `https://cheatsheet.apphq.online/privacy`, verified accurate. The GitHub
   Pages copy remains as a mirror.
 - ❔ **EU Digital Services Act trader status**: required for EU distribution since Feb 2025; verified only inside App Store Connect, not from this repo.
-- ❔ **Mac App Store screenshots**: only iPhone/iPad exist. If you're submitting the macOS build to the Mac App Store (not just iOS/iPadOS), you need at least one 16:10 screenshot (2880×1800 recommended); none captured yet.
+- ✅ **Mac App Store screenshots**: RESOLVED. Three 2880×1800 (16:10)
+  screenshots exist in `AppStoreScreenshots/final/mac-0{1,2,3}.png`, captured
+  from a seeded Debug build with the same demo content the iPhone/iPad shots
+  use (see `AppStoreScreenshots/raw/mac-raw-*.png`).
 - ❔ **First-ever submission vs. update**: if App Store Connect doesn't already have this app's record, category/age-rating/URLs above are first-time setup, not just an edit.
