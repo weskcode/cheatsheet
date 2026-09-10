@@ -14,4 +14,6 @@ The source code is publicly available under the MIT License. Privacy-relevant ch
 
 Support: <https://github.com/weskcode/cheatsheet/issues>
 
+Email: <weskcode@duck.com>
+
 Source: <https://github.com/weskcode/cheatsheet>
