@@ -9,25 +9,23 @@ ruby <<'RUBY'
 require "json"
 
 CATALOGS = {
-  "CheatSheetApp/Resources/Localizable.xcstrings" => %w[
-    CheatSheetApp/Sources/NoteStore.swift
-    CheatSheetApp/Sources/PersistenceStatusBanner.swift
-    CheatSheetApp/Sources/MenuBarQuickAccessView.swift
-    CheatSheetApp/Sources/ChecklistLineView.swift
+  "CheatSheetApp/Resources/Localizable.xcstrings" => Dir.glob("CheatSheetApp/Sources/*.swift") + %w[
     Shared/Sources/CheatSheetNote.swift
     Shared/Sources/DisplayLine.swift
     Shared/Sources/CheatSheetNote+Trash.swift
     Shared/Sources/CheatSheetNoteRepository.swift
   ],
-  "CheatSheetWidgets/Resources/Localizable.xcstrings" => %w[
-    CheatSheetWidgets/Sources/CheatSheetWidgetView.swift
-    CheatSheetWidgets/Sources/WidgetLineView.swift
-  ]
+  "CheatSheetWidgets/Resources/Localizable.xcstrings" => Dir.glob("CheatSheetWidgets/Sources/*.swift")
 }.freeze
 
 LANGUAGES = %w[en es].freeze
 PLACEHOLDER_PATTERN = /%(?:\d+\$)?[@dlfsu]+/.freeze
 STABLE_KEY_CALL_PATTERN = /String\(\s*localized:\s*"([a-zA-Z0-9.]+)",\s*defaultValue:/m.freeze
+# Catches the common SwiftUI call sites (Text/Button/Label/Toggle) that take a
+# literal string as their first argument, which becomes a LocalizedStringKey
+# keyed by that literal text. Interpolated strings ("\(...)") aren't literal
+# keys, so they're intentionally left to STABLE_KEY_CALL_PATTERN above.
+LITERAL_UI_STRING_PATTERN = /\b(?:Text|Button|Label|Toggle)\(\s*"((?:[^"\\]|\\.)*)"/.freeze
 
 errors = []
 
@@ -71,6 +69,16 @@ CATALOGS.each do |catalog_path, source_files|
     source.scan(STABLE_KEY_CALL_PATTERN).each do |(key)|
       unless strings.key?(key)
         errors << "#{source_file} references key '#{key}' which is missing from #{catalog_path}"
+      end
+    end
+
+    source.scan(LITERAL_UI_STRING_PATTERN).each do |(raw_key)|
+      # SwiftUI's LocalizedStringKey folds each "\(...)" interpolation into a
+      # %@ format specifier before the catalog lookup, so "\(x) note color"
+      # is keyed as "%@ note color", not the raw interpolation source.
+      key = raw_key.gsub(/\\\(.*?\)/, "%@")
+      unless strings.key?(key)
+        errors << "#{source_file} references literal string '#{key}' which is missing from #{catalog_path}"
       end
     end
   end

@@ -259,8 +259,23 @@ final class NoteStore {
             lastReloadedWidgetNote = Self.widgetNote(in: notes)
             isPersistenceSuspended = false
             persistenceStatus = .ready
+
+            if notes != storedNotes {
+                persistImmediately()
+            }
         } catch {
             handleLoadFailure(error)
+        }
+    }
+
+    /// Retries whichever kind of failure is currently showing: re-reads the
+    /// store after a load failure, or re-attempts writing the in-memory notes
+    /// after a save failure.
+    func retry() {
+        if isPersistenceSuspended {
+            retryLoad()
+        } else {
+            persistImmediately()
         }
     }
 

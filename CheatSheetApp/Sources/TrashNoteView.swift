@@ -2,6 +2,11 @@ import SwiftUI
 
 struct TrashNoteView: View {
     let note: CheatSheetNote
+    /// Hidden when a system back chevron already exists (the iPhone compact
+    /// layout pushes this view onto a `NavigationStack`). Shown by default,
+    /// since the macOS and iPad split-view layouts present this view directly
+    /// with no navigation chrome of their own to return to Notes with.
+    var showBackButton: Bool = true
     let backAction: () -> Void
     let restoreAction: () -> Void
     let deleteNowAction: () -> Void
@@ -9,10 +14,12 @@ struct TrashNoteView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: AppDesign.panelSpacing) {
-            Button("Back to Notes", systemImage: "chevron.left", action: backAction)
-                .controlSize(.small)
-                .glassCompatibleButtonStyle()
-                .help("Return to active notes")
+            if showBackButton {
+                Button("Back to Notes", systemImage: "chevron.left", action: backAction)
+                    .controlSize(.small)
+                    .glassCompatibleButtonStyle()
+                    .help("Return to active notes")
+            }
 
             VStack(alignment: .leading, spacing: AppDesign.panelSpacing) {
                 Label("In Trash", systemImage: "archivebox")

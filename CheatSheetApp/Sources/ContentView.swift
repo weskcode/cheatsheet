@@ -12,18 +12,48 @@ struct ContentView: View {
     @State private var isShowingOnboarding = false
     @State private var isShowingTrash = CheatSheetLaunchEnvironment.isStartingInTrash
     @State private var compactPath: [CheatSheetNote.ID] = []
+    /// Bound explicitly so the sidebar can never auto-collapse: without a
+    /// binding here, NavigationSplitView occasionally drops to `.detailOnly`
+    /// on its own (e.g. right after inserting a new note) and the system
+    /// "Show Sidebar" command has no state to restore, leaving the sidebar
+    /// stuck hidden until the app relaunches.
+    @State private var columnVisibility: NavigationSplitViewVisibility = .all
+    #if os(iOS)
+    @State private var isShowingSettings = false
+    @State private var isPresentingPersistenceAlert = false
+    #endif
 
     var body: some View {
         adaptiveContent
             .disabled(store.isPersistenceSuspended)
+            #if os(macOS)
             .safeAreaInset(edge: .top, spacing: 0) {
                 PersistenceStatusBanner(
                     status: store.persistenceStatus,
                     canRetryLoad: store.isPersistenceSuspended,
-                    retryAction: store.retryLoad
+                    retryAction: store.retry
                 )
             }
-            .tint(.blue)
+            #else
+            // A top safe-area banner would sit between the status bar and the
+            // nav bar, an unusual spot on iOS -- an alert is the more typical
+            // way this class of error surfaces here.
+            .alert(
+                persistenceAlertTitle,
+                isPresented: $isPresentingPersistenceAlert
+            ) {
+                Button("Try Again", action: store.retry)
+                if !store.isPersistenceSuspended {
+                    Button("OK", role: .cancel) {}
+                }
+            } message: {
+                Text(persistenceAlertMessage)
+            }
+            .onChange(of: store.persistenceStatus) { _, newStatus in
+                isPresentingPersistenceAlert = newStatus.isFailure
+            }
+            #endif
+            .tint(Color(hex: CheatSheetPalette.blue.rawValue))
             .onChange(of: scenePhase) { _, newPhase in
                 guard newPhase != .active else { return }
                 Task {
@@ -35,7 +65,25 @@ struct ContentView: View {
             }
             .sheet(isPresented: $isShowingOnboarding) {
                 OnboardingView()
+                    // Onboarding only marks itself complete when the user taps
+                    // Done/Start Writing. Without this, a swipe-to-dismiss on
+                    // iOS skips that and onboarding reappears every launch.
+                    .interactiveDismissDisabled()
             }
+            #if os(iOS)
+            .sheet(isPresented: $isShowingSettings) {
+                NavigationStack {
+                    SettingsView()
+                        .navigationTitle("Settings")
+                        .navigationBarTitleDisplayMode(.inline)
+                        .toolbar {
+                            ToolbarItem(placement: .confirmationAction) {
+                                Button("Done") { isShowingSettings = false }
+                            }
+                        }
+                }
+            }
+            #endif
     }
 
     @ViewBuilder
@@ -72,6 +120,21 @@ struct ContentView: View {
     /// items, which left the compact iPhone layout with no visible actions.
     @ToolbarContentBuilder
     private var contentToolbar: some ToolbarContent {
+        #if os(iOS)
+        ContentToolbar(
+            isShowingTrash: isShowingTrash,
+            selectedNoteIsArchived: store.selectedNote?.isArchived ?? true,
+            createAction: createNote,
+            archiveAction: {
+                store.archiveSelectedNote()
+                compactPath.removeAll()
+            },
+            toggleTrashAction: {
+                isShowingTrash ? showNotes() : showTrash()
+            },
+            settingsAction: { isShowingSettings = true }
+        )
+        #else
         ContentToolbar(
             isShowingTrash: isShowingTrash,
             selectedNoteIsArchived: store.selectedNote?.isArchived ?? true,
@@ -84,10 +147,11 @@ struct ContentView: View {
                 isShowingTrash ? showNotes() : showTrash()
             }
         )
+        #endif
     }
 
     private var splitRoot: some View {
-        NavigationSplitView {
+        NavigationSplitView(columnVisibility: $columnVisibility) {
             SidebarView(store: store, isShowingTrash: isShowingTrash)
                 .navigationSplitViewColumnWidth(min: 220, ideal: 260, max: 320)
         } detail: {
@@ -150,7 +214,7 @@ struct ContentView: View {
             } deleteNowAction: {
                 store.permanentlyDeleteArchivedNote(selectedNote.id)
             }
-            .padding(AppDesign.windowPadding)
+            .padding(AppDesign.contentPadding)
         } else {
             TrashEmptyStateView()
         }
@@ -160,7 +224,7 @@ struct ContentView: View {
     @ViewBuilder
     private func compactDestination(for noteID: CheatSheetNote.ID) -> some View {
         if isShowingTrash, let note = store.note(with: noteID), note.isArchived {
-            TrashNoteView(note: note) {
+            TrashNoteView(note: note, showBackButton: false) {
                 showNotes()
             } restoreAction: {
                 store.restoreArchivedNote(noteID)
@@ -236,6 +300,31 @@ struct ContentView: View {
             showWidgetHints = false
         }
     }
+
+    #if os(iOS)
+    private var persistenceAlertTitle: String {
+        store.isPersistenceSuspended
+            ? String(localized: "persistence.title.loadFailed", defaultValue: "Notes could not be opened")
+            : String(localized: "persistence.title.saveFailed", defaultValue: "Changes are not being saved")
+    }
+
+    private var persistenceAlertMessage: String {
+        switch store.persistenceStatus {
+        case let .loadFailed(message):
+            String(
+                localized: "persistence.loadFailed.retryable",
+                defaultValue: "\(message) Editing is paused so your stored notes are not overwritten."
+            )
+        case let .saveFailed(message):
+            String(
+                localized: "persistence.saveFailed.suffix",
+                defaultValue: "\(message) Recent edits are only in memory."
+            )
+        case .ready, .saving, .saved:
+            ""
+        }
+    }
+    #endif
 }
 
 private struct ContentToolbar: ToolbarContent {
@@ -244,6 +333,9 @@ private struct ContentToolbar: ToolbarContent {
     let createAction: () -> Void
     let archiveAction: () -> Void
     let toggleTrashAction: () -> Void
+    #if os(iOS)
+    let settingsAction: () -> Void
+    #endif
 
     var body: some ToolbarContent {
         #if os(iOS)
@@ -272,6 +364,13 @@ private struct ContentToolbar: ToolbarContent {
             }
             .disabled(selectedNoteIsArchived)
             .accessibilityIdentifier("move-to-trash-button")
+
+            Button {
+                settingsAction()
+            } label: {
+                Label("Settings", systemImage: "gear")
+            }
+            .accessibilityIdentifier("settings-button")
         }
         #else
         ToolbarItemGroup(placement: .primaryAction) {
@@ -281,6 +380,7 @@ private struct ContentToolbar: ToolbarContent {
                 Label("New Note", systemImage: "plus")
             }
             .keyboardShortcut("n")
+            .help("New Note")
 
             Button(role: .destructive) {
                 archiveAction()
@@ -303,16 +403,20 @@ private struct ContentToolbar: ToolbarContent {
 
 private struct TrashEmptyStateView: View {
     var body: some View {
-        VStack(spacing: 12) {
+        VStack(spacing: 8) {
             Image(systemName: "archivebox")
-                .font(.system(size: 36, weight: .semibold))
+                .font(.largeTitle.weight(.semibold))
                 .foregroundStyle(.secondary)
                 .accessibilityHidden(true)
 
             Text("Trash is empty")
                 .font(.title3.weight(.semibold))
+
+            Text("Deleted notes stay here for 30 days.")
+                .font(.callout)
         }
         .foregroundStyle(.secondary)
+        .multilineTextAlignment(.center)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
 }

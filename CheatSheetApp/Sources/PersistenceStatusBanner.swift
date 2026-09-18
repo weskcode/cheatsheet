@@ -27,9 +27,10 @@ struct PersistenceStatusBanner: View {
 
                 Spacer(minLength: 8)
 
-                if canRetryLoad {
+                if status.isFailure {
                     Button("Try Again", action: retryAction)
                         .controlSize(.small)
+                        .glassCompatibleButtonStyle()
                         .accessibilityIdentifier("persistence-retry-button")
                 }
             }

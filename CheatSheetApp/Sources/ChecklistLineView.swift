@@ -12,7 +12,7 @@ struct ChecklistLineView: View {
             Image(systemName: isComplete ? "checkmark.circle.fill" : "circle")
                 .font(.caption)
                 .foregroundStyle(isComplete ? .green : .secondary)
-                .opacity(isTask ? 1 : 0.4)
+                .opacity(isTask ? 1 : 0.18)
                 .accessibilityHidden(true)
 
             Text(text)

@@ -39,8 +39,7 @@ struct MenuBarQuickAccessView: View {
             quickCapture
 
             Button {
-                let noteID = store.addNote()
-                store.selectedNoteID = noteID
+                store.addNote()
                 openMainWindow()
             } label: {
                 Label("New Note", systemImage: "plus")
