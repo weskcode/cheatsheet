@@ -12,7 +12,7 @@ struct ChecklistLineView: View {
             Image(systemName: isComplete ? "checkmark.circle.fill" : "circle")
                 .font(.caption)
                 .foregroundStyle(isComplete ? .green : .secondary)
-                .opacity(isTask ? 1 : 0.4)
+                .opacity(isTask ? 1 : 0.18)
                 .accessibilityHidden(true)
 
             Text(text)
@@ -27,6 +27,8 @@ struct ChecklistLineView: View {
 
     private var accessibilityLabel: String {
         guard isTask else { return text }
-        return isComplete ? "Complete, \(text)" : "Incomplete, \(text)"
+        return isComplete
+            ? String(localized: "checklist.line.complete", defaultValue: "Complete, \(text)")
+            : String(localized: "checklist.line.incomplete", defaultValue: "Incomplete, \(text)")
     }
 }

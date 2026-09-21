@@ -382,7 +382,12 @@ private struct EmptyLegacyRepository: CheatSheetNoteRepository {
 
 private final class SpyLegacyRepository: CheatSheetNoteRepository, @unchecked Sendable {
     let notes: [CheatSheetNote]
-    private(set) var savedNotes: [[CheatSheetNote]] = []
+    private let lock = NSLock()
+    private var _savedNotes: [[CheatSheetNote]] = []
+
+    var savedNotes: [[CheatSheetNote]] {
+        lock.withLock { _savedNotes }
+    }
 
     init(notes: [CheatSheetNote]) {
         self.notes = notes
@@ -393,6 +398,6 @@ private final class SpyLegacyRepository: CheatSheetNoteRepository, @unchecked Se
     }
 
     func saveNotes(_ notes: [CheatSheetNote]) throws {
-        savedNotes.append(notes)
+        lock.withLock { _savedNotes.append(notes) }
     }
 }

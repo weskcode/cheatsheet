@@ -5,17 +5,18 @@ struct WidgetLineView: View {
     @Environment(\.widgetRenderingMode) private var renderingMode
     let line: DisplayLine
     let fontStyle: CheatSheetFontStyle
+    let fontSize: CheatSheetFontSize
 
     var body: some View {
         HStack(alignment: .firstTextBaseline, spacing: 6) {
             Image(systemName: line.isComplete ? "checkmark.circle.fill" : "circle")
                 .font(.caption)
                 .foregroundStyle(iconStyle)
-                .opacity(line.isTask ? 1 : 0.35)
+                .opacity(line.isTask ? 1 : 0.18)
                 .accessibilityHidden(true)
 
             Text(line.text)
-                .font(.system(.caption, design: fontStyle.design).weight(line.isHeading ? .semibold : .regular))
+                .font(.system(fontSize.widgetLineTextStyle, design: fontStyle.design).weight(line.isHeading ? .semibold : .regular))
                 .foregroundStyle(textStyle)
                 .strikethrough(line.isComplete)
                 .lineLimit(2)
@@ -27,7 +28,9 @@ struct WidgetLineView: View {
 
     private var accessibilityLabel: String {
         guard line.isTask else { return line.text }
-        return line.isComplete ? "Complete, \(line.text)" : "Incomplete, \(line.text)"
+        return line.isComplete
+            ? String(localized: "checklist.line.complete", defaultValue: "Complete, \(line.text)")
+            : String(localized: "checklist.line.incomplete", defaultValue: "Incomplete, \(line.text)")
     }
 
     private var textStyle: Color {
