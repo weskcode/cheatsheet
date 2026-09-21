@@ -29,11 +29,14 @@ Spanish (Mexico) localization metadata is a separate, already-complete file:
 Every questionnaire descriptor should be answered **None** / **No**:
 violence, mature themes, gambling, horror, alcohol/drugs, unrestricted web
 access, user-generated content shared with others, contests. CheatSheet has
-no network access, no accounts, and no way for one user to see another
-user's content. Nothing in the app scores above 4+ on any axis. If Apple's
-expanded age-rating questionnaire (13+/16+/18+ categories, required since
-Jan 31 2026) asks about data-linked advertising or profiling, answer **No**
-to all. `PrivacyInfo.xcprivacy` declares zero data collection.
+no accounts and no way for one user to see another user's content. Nothing
+in the app scores above 4+ on any axis. If Apple's expanded age-rating
+questionnaire (13+/16+/18+ categories, required since Jan 31 2026) asks
+about data-linked advertising or profiling, answer **No** to all — the
+app's analytics are anonymous and not linked to identity.
+`PrivacyInfo.xcprivacy` declares one collected data type (Product
+Interaction usage analytics via TelemetryDeck), not linked to identity and
+not used for tracking.
 
 ## 3. App Name (10/30 characters)
 
@@ -62,7 +65,7 @@ Editable any time without a new build or review. Update seasonally if useful.
 Short notes, commands, and checklists always at hand, with widgets for macOS, iOS, and iPadOS. No account, no ads, no internet connection required.
 ```
 
-## 6. Description (1,346/4,000 characters)
+## 6. Description (1,462/4,000 characters)
 
 ```
 CheatSheet is an open-source app for macOS, iOS, and iPadOS that keeps the short notes, checklists, and commands you use every day close at hand.
@@ -77,7 +80,7 @@ With CheatSheet you can:
 - Capture a note or jump to a recent one straight from the macOS menu bar.
 - Use adaptive layouts built for each device: compact on iPhone, split-view on iPad and Mac.
 
-CheatSheet stores everything only on your device using SwiftData and a shared app group between the app and its widget. There's no account, no internet connection required, and no analytics, ads, or third-party services of any kind. Nothing you write ever leaves your device.
+CheatSheet stores everything only on your device using SwiftData and a shared app group between the app and its widget. There's no account and no internet connection required to use the app. It sends a small number of anonymous, aggregate usage signals via TelemetryDeck (for example, that a note was pinned) that are never linked to your identity. Nothing you write ever leaves your device.
 
 Fully localized in English and Spanish, including onboarding, starter notes, and accessibility labels.
 
@@ -118,20 +121,30 @@ that testing newly caught; it doesn't add iPad as a new platform.
 | Contact email | `weskcode@duck.com` |
 
 Both pages are the branded AppHQ site, verified 2026-09-08: the landing page
-lists all three platforms (Mac, iPhone, iPad) and the privacy page carries the
-full policy (effective date, contact, local-only storage, no
-accounts/analytics/third-parties/network) matching the App Privacy answers.
+lists all three platforms (Mac, iPhone, iPad) and the privacy page carried the
+full policy (effective date, contact, local-only storage, no accounts, no
+third parties). That verification predates the TelemetryDeck analytics
+addition to `PRIVACY.md` — the live AppHQ and GitHub Pages copies need to be
+re-published from the current `PRIVACY.md` before submission so they match
+the App Privacy answers below.
 The GitHub Pages copy (`weskcode.github.io/cheatsheet/`) remains as a mirror/
 fallback.
 
 ## 10. App Privacy ("Nutrition Label") questionnaire
 
-Answer **"Data Not Collected"** for every category. This matches
-`CheatSheetApp/Resources/PrivacyInfo.xcprivacy` /
-`CheatSheetWidgets/Resources/PrivacyInfo.xcprivacy`
-(`NSPrivacyTracking = false`, no collected data types declared) and
-`PRIVACY.md`. Verified in the earlier appstore-review audit this session:
-no Required Reason API is used beyond `UserDefaults`, correctly declared.
+Declare one collected data type: **Usage Data → Product Interaction**,
+Not Linked to your identity, Not Used for Tracking, purpose **App
+Functionality**. This is TelemetryDeck's aggregate usage signal (e.g. "a
+note was pinned") and matches
+`CheatSheetApp/Resources/PrivacyInfo.xcprivacy` (one collected data type,
+`NSPrivacyCollectedDataTypeLinked = false`,
+`NSPrivacyCollectedDataTypeTracking = false`) and `PRIVACY.md`. Answer
+**"Data Not Collected"** for every other category. The WidgetKit
+extension's own `CheatSheetWidgets/Resources/PrivacyInfo.xcprivacy` still
+declares zero collected data types (it doesn't call TelemetryDeck), so
+list it separately in App Store Connect if Apple asks per-extension.
+`NSPrivacyTracking = false` in both manifests. No Required Reason API is
+used beyond `UserDefaults`, correctly declared.
 
 ## 11. Screenshots
 
@@ -148,7 +161,7 @@ To see note formatting: open any starter note, or create one and type a line sta
 
 To see the widget: long-press the Home Screen (iOS/iPadOS) or open the Notification Center widget gallery (macOS), add the CheatSheet widget, then pin a note in-app via the pin icon in the editor toolbar.
 
-The app makes zero network calls and stores all data locally via SwiftData in an App Group container shared with the widget extension.
+The app has no login, no server component, and stores all data locally via SwiftData in an App Group container shared with the widget extension. It sends anonymous, non-tracking usage analytics via TelemetryDeck; no note content or user data is ever transmitted.
 ```
 
 App Store Connect also asks for App Review Contact Information: a separate

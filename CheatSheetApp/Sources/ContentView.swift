@@ -1,8 +1,10 @@
 import Observation
+import StoreKit
 import SwiftUI
 
 struct ContentView: View {
     @Environment(\.scenePhase) private var scenePhase
+    @Environment(\.requestReview) private var requestReview
     #if os(iOS)
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
     #endif
@@ -59,6 +61,11 @@ struct ContentView: View {
                 Task {
                     await store.flushPendingChanges()
                 }
+            }
+            .onChange(of: store.shouldRequestReview) { _, shouldRequest in
+                guard shouldRequest else { return }
+                requestReview()
+                store.shouldRequestReview = false
             }
             .task {
                 isShowingOnboarding = !hasCompletedOnboarding

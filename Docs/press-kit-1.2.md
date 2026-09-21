@@ -30,9 +30,10 @@ CheatSheet is a free, open-source notes app for macOS, iOS, and iPadOS built
 around one idea: the commands and checklists you use every day should be one
 glance away, not buried in a search history. It auto-formats plain-text
 headings, bullets, and checkboxes as you type, pins a note to a Home Screen
-or menu bar widget, and stores everything locally with no account, no ads,
-and no network calls of any kind. CheatSheet is free and open source under
-the MIT license.
+or menu bar widget, and stores everything locally with no account and no
+ads. The only network calls are a few anonymous, aggregate analytics
+signals that never include note content. CheatSheet is free and open
+source under the MIT license.
 ```
 
 ## Elevator pitch (one sentence)
@@ -57,8 +58,9 @@ What makes it different from a generic notes app:
 - Plain text auto-formats into headings, bullets, and checkboxes as you type
 - Pin one note to a Home Screen or menu bar widget so it's visible without
   opening the app
-- Zero network calls, no account, no analytics, no ads (verified in the
-  source, since the whole app is MIT-licensed and open source)
+- No account, no ads, and only anonymous, non-tracking usage analytics
+  (verified in the source, since the whole app is MIT-licensed and open
+  source)
 - Native on Mac, iPhone, and iPad, with an adaptive layout on each
 
 I'd love for you to try it. I'm happy to send a TestFlight link, or it's
@@ -85,9 +87,10 @@ Mac, iPhone, and iPad that auto-formats plain text into checklists and
 headings, and lets you pin one note to a widget so the thing you always
 forget is just... visible.
 
-It's free, open source (MIT), and makes zero network calls. Everything
-stays on your device. Would love your feedback, especially on what other
-"I keep forgetting this" use cases it should cover.
+It's free, open source (MIT), and keeps everything on your device. The
+only network calls are a few anonymous, non-tracking usage signals. Would
+love your feedback, especially on what other "I keep forgetting this" use
+cases it should cover.
 ```
 
 ## Apple editorial nomination (App Store Connect → "Nominate for Editorial Consideration")
@@ -97,10 +100,10 @@ CheatSheet is a native, open-source notes app for Mac, iPhone, and iPad
 built around a narrow, well-solved problem: the commands and checklists a
 developer or power user looks up again and again. Plain text auto-formats
 into headings, bullets, and checkboxes with no markdown syntax to learn, one
-note can be pinned to a Home Screen or menu bar widget, and the app makes
-zero network calls: no account, no ads, no analytics, ever. It's fully
-native SwiftUI, built for iOS 26 and macOS 26, with adaptive layouts for
-each device and full Spanish localization.
+note can be pinned to a Home Screen or menu bar widget, and the app keeps
+everything on-device: no account, no ads, and only anonymous, non-tracking
+usage analytics. It's fully native SwiftUI, built for iOS 26 and macOS 26,
+with adaptive layouts for each device and full Spanish localization.
 ```
 
 ## Social launch posts
@@ -109,7 +112,7 @@ each device and full Spanish localization.
 ```
 Shipped CheatSheet 1.2 today: a free, open-source notes app for Mac,
 iPhone, and iPad. Type plain text, get real checklists. Pin one note to a
-widget. Zero network calls, ever. Now with Spanish localization and iPad
+widget. No account, no ads, ever. Now with Spanish localization and iPad
 fixes. 🔗 [App Store link]
 ```
 
@@ -122,8 +125,9 @@ around one habit: looking up the same command or checklist over and over.
 Write plain text, it auto-formats into headings and checkboxes as you go.
 Pin one note to a widget so it's visible without opening the app.
 
-It's free, open source under the MIT license, and makes zero network
-calls: no account, no ads, no analytics, nothing leaves your device.
+It's free, open source under the MIT license, with no account and no ads.
+Only a few anonymous, non-tracking analytics signals leave the device —
+your notes never do.
 
 1.2 adds Spanish localization, fixes a handful of iPad-specific bugs, and
 is now built for iOS 26 and macOS 26.
@@ -135,5 +139,6 @@ is now built for iOS 26 and macOS 26.
 
 Keep every public claim inside what's actually true of this build: no
 review counts, ratings, "#1", or award language until they're real. The
-zero-network-calls and open-source claims above are directly verifiable in
-the source, so lead with them.
+open-source and on-device-storage claims above are directly verifiable in
+the source, so lead with them. Don't claim "zero network calls" — the app
+sends anonymous, non-tracking analytics signals via TelemetryDeck.

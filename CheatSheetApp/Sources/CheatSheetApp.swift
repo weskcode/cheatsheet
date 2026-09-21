@@ -30,6 +30,8 @@ struct CheatSheetApp: App {
 
     init() {
         CheatSheetLaunchEnvironment.applyLaunchOverrides()
+        AnalyticsService.start()
+        AnalyticsService.send("App.launched")
         let store = NoteStore(repository: CheatSheetLaunchEnvironment.makeRepository())
         _store = State(wrappedValue: store)
         #if os(macOS)
