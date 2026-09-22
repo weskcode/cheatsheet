@@ -6,12 +6,12 @@
 # carries an Xcode beta will silently build against the beta SDK, and the
 # rejection only surfaces at upload time. Run this before archiving.
 #
-# The expected major is a branch-level contract: the iOS 26 line pins 26, and an
-# iOS 27 adoption branch overrides it with CHEATSHEET_EXPECTED_SDK_MAJOR=27.
+# The expected major is a branch-level contract: the iOS 27 line pins 27, and an
+# older-line branch overrides it with CHEATSHEET_EXPECTED_SDK_MAJOR=<major>.
 
 set -euo pipefail
 
-expected_major="${CHEATSHEET_EXPECTED_SDK_MAJOR:-26}"
+expected_major="${CHEATSHEET_EXPECTED_SDK_MAJOR:-27}"
 
 warn_only=0
 if [[ "${1:-}" == "--warn" ]]; then

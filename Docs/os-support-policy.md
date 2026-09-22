@@ -8,8 +8,8 @@ that is on the App Store.
 
 | Platform      | Minimum (deployment target) | Built against (SDK) | Toolchain | Test runtime |
 | ------------- | --------------------------- | ------------------- | --------- | ------------ |
-| iOS / iPadOS  | 26.0                        | 26.x                | Xcode 26  | iOS 26.5+    |
-| macOS         | 26.0                        | 26.x                | Xcode 26  | macOS 26+    |
+| iOS / iPadOS  | 26.0                        | 27.x                | Xcode 27  | iOS 26.5+    |
+| macOS         | 26.0                        | 27.x                | Xcode 27  | macOS 26+    |
 
 ## Two versions that are easy to confuse
 
@@ -78,10 +78,10 @@ Scripts/verify-build-sdk.sh          # hard fail on mismatch, run before archivi
 Scripts/verify-build-sdk.sh --warn   # warn only, used by Scripts/verify-macos.sh
 ```
 
-The expected major is a branch-level contract, defaulting to `26` and overridable:
+The expected major is a branch-level contract, defaulting to `27` and overridable:
 
 ```sh
-CHEATSHEET_EXPECTED_SDK_MAJOR=27 Scripts/verify-build-sdk.sh
+CHEATSHEET_EXPECTED_SDK_MAJOR=26 Scripts/verify-build-sdk.sh
 ```
 
 `ci_scripts/ci_post_clone.sh` runs the hard-fail form as the first thing Xcode
@@ -153,13 +153,16 @@ The iOS 26 line stays shippable at all times; iOS 27 work happens beside it.
 This slots into the existing Git Flow model (see `CONTRIBUTING.md`) rather than
 replacing it.
 
-| Branch                     | Floor | SDK contract | Purpose                                      |
-| -------------------------- | ----- | ------------ | -------------------------------------------- |
-| `main`                     | 26.0  | 26           | Released. Always submittable.                |
-| `develop`                  | 26.0  | 26           | Next release. Always submittable.            |
-| `release/*`                | 26.0  | 26           | Stabilising a release cut from `develop`.    |
-| `hotfix/*`                 | 26.0  | 26           | Urgent fix off `main`.                       |
-| `feature/ios-27-readiness` | 26.0  | 27           | Long-lived OS adoption branch off `develop`. |
+| Branch       | Floor | SDK contract | Purpose                                             |
+| ------------ | ----- | ------------ | ---------------------------------------------------- |
+| `main`       | 26.0  | 27           | Released. Always submittable.                        |
+| `develop`    | 26.0  | 27           | Next release. Always submittable.                    |
+| `release/*`  | 26.0  | 27           | Stabilising a release cut from `develop`.            |
+| `hotfix/*`   | 26.0  | 27           | Urgent fix off `main`.                               |
+
+`release/1.2` is a pinned exception: it was cut and fully tested before this
+flip, so it stays on SDK 26 (`CHEATSHEET_EXPECTED_SDK_MAJOR=26`) rather than
+inheriting the new default, and ships as already verified.
 
 **Why a feature branch and not a permanent parallel branch.** A permanent
 `ios-27` branch rots: it accumulates conflicts against every release, and the
@@ -186,20 +189,19 @@ enforced in CI. iOS 27 trial build proves zero migration debt.
 macOS 26.0, all availability gates removed, test-runtime floor set to iOS 26.5,
 CI moved to the `macos-26` runner so the macOS job can host a macOS 26 app.
 
-**Phase 2: beta season (now until iOS 27 GM).** Create
-`feature/ios-27-readiness` off `develop` when there is something to put on it.
-On that branch set `CHEATSHEET_EXPECTED_SDK_MAJOR=27` as an environment
-variable on a dedicated Xcode Cloud workflow for the branch, and set that
-workflow's Environment tab to the Xcode 27 beta. Re-run the trial build
-against each beta. `develop` and `main` do not move.
+**Phase 2: beta season (skipped).** No `feature/ios-27-readiness` branch was
+needed: the trial build below already proved zero migration debt against the
+beta, and Xcode 27 reached GM before any 27-gated work required a dedicated
+branch.
 
-**Phase 3: iOS 27 released, Xcode 27 released.** Flip the SDK contract on
-`develop`: `CHEATSHEET_EXPECTED_SDK_MAJOR` default `26` → `27`, the `.xcode-version`
-file and the Environment tab on `develop`'s and `main`'s Xcode Cloud workflows
-`26` → `27`, and update the support matrix above plus `README.md` and
-`CONTRIBUTING.md`. Merge `feature/ios-27-readiness` into `develop`, cut a
-`release/*`, run the full device sweep, tag into `main`. Leave the floor at 26.0
-unless a needed feature forces it higher.
+**Phase 3: iOS 27 released, Xcode 27 released (done, 2026-09-22).** SDK
+contract flipped on `develop`: `CHEATSHEET_EXPECTED_SDK_MAJOR` default `26` →
+`27`, `.xcode-version` `26.6` → `27.0`, support matrix above and `README.md` /
+`CONTRIBUTING.md` updated. The Environment tab on `develop`'s and `main`'s
+Xcode Cloud workflows still needs the matching flip in App Store Connect (not
+a repo file). `release/1.2` was already cut and tested against SDK 26 before
+this flip, so it's a pinned exception and ships as-is; the next branch cut
+from `develop` inherits SDK 27. Floor stays at 26.0.
 
 ## Checklist for the day iOS 27 ships
 

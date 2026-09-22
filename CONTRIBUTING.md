@@ -6,8 +6,7 @@ This project is meant to stay small, native, and easy to build. The best contrib
 
 ## Development Setup
 
-1. Install Xcode 26. An Xcode 27 beta is fine for development, but must
-   never be used for a submission build. See `Docs/os-support-policy.md`.
+1. Install Xcode 27. See `Docs/os-support-policy.md`.
    The app requires macOS 26 / iOS 26, so a Mac running macOS 26 or later is
    needed to run the macOS app and its tests.
 2. Install XcodeGen.

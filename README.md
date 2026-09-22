@@ -84,8 +84,7 @@ project.yml          XcodeGen project definition
 ## Requirements
 
 - macOS 26 or later, or iOS/iPadOS 26 or later
-- Xcode 26 for submission builds. An Xcode 27 beta is fine for development only.
-  See the [OS support policy](Docs/os-support-policy.md).
+- Xcode 27 for submission builds. See the [OS support policy](Docs/os-support-policy.md).
 - XcodeGen
 
 Install XcodeGen with Homebrew:
