@@ -2,6 +2,7 @@ import SwiftUI
 
 struct EditorHeader: View {
     @Binding var note: CheatSheetNote
+    @Binding var fontSize: CheatSheetFontSize
     let pinAction: () -> Void
 
     var body: some View {
@@ -41,6 +42,8 @@ struct EditorHeader: View {
 
             FontStylePicker(selection: $note.fontStyle)
 
+            FontSizePicker(selection: $fontSize)
+
             Button(action: pinAction) {
                 Label(note.isPinned ? "Pinned to Widget" : "Use in Widget", systemImage: note.isPinned ? "pin.fill" : "pin")
             }
@@ -48,7 +51,9 @@ struct EditorHeader: View {
             .controlSize(.small)
             .glassCompatibleButtonStyle(prominent: note.isPinned)
             .help(note.isPinned ? "This note appears in the widget" : "Show this note in the widget")
+            .accessibilityElement(children: .ignore)
             .accessibilityLabel(note.isPinned ? "Pinned to Widget" : "Use in Widget")
+            .accessibilityAddTraits(note.isPinned ? [.isSelected] : [])
             .accessibilityIdentifier("widget-pin-button")
         }
     }

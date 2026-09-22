@@ -86,6 +86,11 @@ public struct CheatSheetNote: Codable, Identifiable, Equatable, Sendable {
         return trimmed.isEmpty ? String(localized: "note.untitled", defaultValue: "Untitled Note") : trimmed
     }
 
+    /// Subtitle shown beneath the title in list rows.
+    public var previewLine: String {
+        body.notePreviewLine(skippingLeadingTitle: displayTitle)
+    }
+
     public var fontStyle: CheatSheetFontStyle {
         get {
             guard let fontStyleRawValue,
@@ -217,6 +222,48 @@ public enum CheatSheetFontStyle: String, CaseIterable, Identifiable, Codable, Se
         case .system: .default
         case .rounded: .rounded
         case .serif: .serif
+        }
+    }
+}
+
+/// App-wide note text size, shared between the app and widget via the App Group
+/// suite so a change in one reflects in the other.
+public enum CheatSheetFontSize: String, CaseIterable, Identifiable, Codable, Sendable {
+    case small
+    case medium
+    case large
+
+    public static let storageKey = "cheatSheet.noteFontSize"
+
+    public static var sharedDefaults: UserDefaults {
+        (try? CheatSheetAppGroup.defaults()) ?? .standard
+    }
+
+    public var id: String { rawValue }
+
+    public var displayName: String {
+        switch self {
+        case .small: String(localized: "fontSize.small", defaultValue: "Small")
+        case .medium: String(localized: "fontSize.medium", defaultValue: "Medium")
+        case .large: String(localized: "fontSize.large", defaultValue: "Large")
+        }
+    }
+
+    /// Text style used for note body copy in the app's editor.
+    public var bodyTextStyle: Font.TextStyle {
+        switch self {
+        case .small: .callout
+        case .medium: .body
+        case .large: .title3
+        }
+    }
+
+    /// Text style used for note lines rendered inside the widget.
+    public var widgetLineTextStyle: Font.TextStyle {
+        switch self {
+        case .small: .caption2
+        case .medium: .caption
+        case .large: .footnote
         }
     }
 }

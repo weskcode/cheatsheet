@@ -334,6 +334,24 @@
         }
       }
     },
+    "Hide" : {
+      "comment" : "Dismisses the widget setup hint card shown above a newly created note.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hide"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ocultar"
+          }
+        }
+      }
+    },
     "In Trash" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -503,6 +521,24 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Notas"
+          }
+        }
+      }
+    },
+    "OK" : {
+      "comment" : "Dismisses the storage-error alert on iOS without retrying.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "OK"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aceptar"
           }
         }
       }
@@ -851,6 +887,24 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Usar %@ como color de la nota"
+          }
+        }
+      }
+    },
+    "Settings" : {
+      "comment" : "Toolbar button and sheet title that opens app settings on iOS/iPadOS.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Settings"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ajustes"
           }
         }
       }
@@ -1361,6 +1415,60 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Violeta"
+          }
+        }
+      }
+    },
+    "fontSize.large" : {
+      "comment" : "Note text size option shown in the font size picker.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Large"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Grande"
+          }
+        }
+      }
+    },
+    "fontSize.medium" : {
+      "comment" : "Note text size option shown in the font size picker.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Medium"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mediano"
+          }
+        }
+      }
+    },
+    "fontSize.small" : {
+      "comment" : "Note text size option shown in the font size picker.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Small"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pequeño"
           }
         }
       }

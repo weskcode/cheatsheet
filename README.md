@@ -62,9 +62,9 @@ CheatSheetWidgets/Resources/Localizable.xcstrings    Widget extension strings
 
 `Scripts/verify-localization.sh` checks both catalogs for missing translations,
 mismatched `%@`/`%lld` placeholders between languages, and untranslated stable
-keys; it runs in CI alongside `Scripts/verify-project-config.sh`. Adding a new
-user-visible string requires adding both an English and a Spanish entry to the
-relevant catalog.
+keys. It runs as part of every Xcode Cloud build alongside
+`Scripts/verify-project-config.sh`. Adding a new user-visible string requires
+adding both an English and a Spanish entry to the relevant catalog.
 
 ## Project Layout
 
@@ -84,8 +84,8 @@ project.yml          XcodeGen project definition
 ## Requirements
 
 - macOS 26 or later, or iOS/iPadOS 26 or later
-- Xcode 26 for submission builds. An Xcode 27 beta is fine for development only
-  — see the [OS support policy](Docs/os-support-policy.md).
+- Xcode 26 for submission builds. An Xcode 27 beta is fine for development only.
+  See the [OS support policy](Docs/os-support-policy.md).
 - XcodeGen
 
 Install XcodeGen with Homebrew:
@@ -176,7 +176,7 @@ After running the app once, add the CheatSheet widget from the macOS widget gall
 
 ## Privacy
 
-CheatSheet stores notes locally on device. The app does not include analytics, accounts, sync, or network services.
+CheatSheet stores notes locally on device. It has no accounts or sync. It uses TelemetryDeck to send a small number of anonymous, aggregate usage signals (for example, that a note was pinned); these never include note content and are not linked to your identity.
 See the public [Privacy Policy](PRIVACY.md) for the complete disclosure.
 
 ## Product Principles

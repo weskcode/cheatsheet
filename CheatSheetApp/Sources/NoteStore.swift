@@ -31,6 +31,7 @@ final class NoteStore {
         }
     }
     var searchText = ""
+    var shouldRequestReview = false
     private(set) var persistenceStatus: PersistenceStatus = .ready
     private(set) var activeNotes: [CheatSheetNote] = []
     private(set) var archivedNotes: [CheatSheetNote] = []
@@ -229,6 +230,7 @@ final class NoteStore {
     }
 
     func setPinned(_ noteID: CheatSheetNote.ID) {
+        let isNewPin = notes.first(where: { $0.id == noteID })?.isPinned == false
         notes = notes.map { note in
             var copy = note
             copy.isPinned = !note.isArchived && note.id == noteID
@@ -237,6 +239,27 @@ final class NoteStore {
         }
         selectedNoteID = noteID
         persistImmediately()
+
+        if isNewPin {
+            AnalyticsService.send("Note.pinned")
+            recordPinForReviewPrompt()
+        }
+    }
+
+    /// Requests a review prompt once the user has pinned `reviewPromptPinThreshold`
+    /// distinct notes over the app's lifetime -- a proxy for having engaged with
+    /// the widget feature, not just opened the app. Fires at most once per install.
+    private static let reviewPromptPinThreshold = 5
+
+    private func recordPinForReviewPrompt() {
+        let defaults = UserDefaults.standard
+        let pinCount = defaults.integer(forKey: "pinNoteCount") + 1
+        defaults.set(pinCount, forKey: "pinNoteCount")
+
+        guard pinCount >= Self.reviewPromptPinThreshold,
+              !defaults.bool(forKey: "hasRequestedReviewAfterPinning") else { return }
+        defaults.set(true, forKey: "hasRequestedReviewAfterPinning")
+        shouldRequestReview = true
     }
 
     func flushPendingChanges() async {
@@ -259,8 +282,23 @@ final class NoteStore {
             lastReloadedWidgetNote = Self.widgetNote(in: notes)
             isPersistenceSuspended = false
             persistenceStatus = .ready
+
+            if notes != storedNotes {
+                persistImmediately()
+            }
         } catch {
             handleLoadFailure(error)
+        }
+    }
+
+    /// Retries whichever kind of failure is currently showing: re-reads the
+    /// store after a load failure, or re-attempts writing the in-memory notes
+    /// after a save failure.
+    func retry() {
+        if isPersistenceSuspended {
+            retryLoad()
+        } else {
+            persistImmediately()
         }
     }
 

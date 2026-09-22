@@ -18,7 +18,7 @@ against actual source, not assumed.
 | `{DEVICE_SUPPORT}` | iPhone + iPad + Mac | `project.yml`: `CheatSheetiOS` has `TARGETED_DEVICE_FAMILY: "1,2"`; a separate full `CheatSheet` macOS target also exists — brief's iPhone/iPhone+iPad enum doesn't cover this app; extended to include Mac |
 | `{BRAND_SOURCE}` | App's own `AccentColor` + `CheatSheetPalette` (10 swatches) + Liquid Glass material system with material fallback | `Shared/Sources/CheatSheetNote.swift`, `CheatSheetApp/Sources/ViewModifiers.swift`, `AppDesign.swift`, `AppTheme.swift` |
 | `{TONE}` | Calm, precise, native — a quiet utility, not a flashy consumer app | README Product Principles: "deliberately narrow," "local-first," "No sync, collaboration, rich-document, or account system without a separate product decision"; in-app empty states use plain `ContentUnavailableView`, no marketing chrome |
-| `{LOCALIZATION}` | Primary: English (`en`, `sourceLanguage` in both `.xcstrings` catalogs). Follow-on: Spanish (`es`, "neutral international Spanish" per README), verified complete by `Scripts/verify-localization.sh` and covered by `CheatSheetiOSSpanishLocaleUITests` in CI | `CheatSheetApp/Resources/Localizable.xcstrings`, `CheatSheetWidgets/Resources/Localizable.xcstrings`, `.github/workflows/ci.yml` |
+| `{LOCALIZATION}` | Primary: English (`en`, `sourceLanguage` in both `.xcstrings` catalogs). Follow-on: Spanish (`es`, "neutral international Spanish" per README), verified complete by `Scripts/verify-localization.sh` and covered by `CheatSheetiOSSpanishLocaleUITests` | `CheatSheetApp/Resources/Localizable.xcstrings`, `CheatSheetWidgets/Resources/Localizable.xcstrings` |
 
 ## Product constraint list (honest, per Phase 1.5)
 

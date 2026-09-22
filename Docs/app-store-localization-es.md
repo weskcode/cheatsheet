@@ -1,4 +1,4 @@
-# CheatSheet — Spanish App Store Connect Metadata
+# CheatSheet: Spanish App Store Connect Metadata
 
 This is metadata copy for App Store Connect, not app code. Nothing here is
 consumed by the build; add it manually under the app's "Spanish" localization
@@ -12,20 +12,20 @@ Spanish-preferring region generically).
 broadly understood choice across Latin American storefronts, and the app has
 no region-specific content or vocabulary that would justify maintaining a
 second, separately-tuned Spain listing. Add Spanish (Spain) later only if you
-want Spain-specific store-listing copy — the runtime app UI itself doesn't
+want Spain-specific store-listing copy. The runtime app UI itself doesn't
 need it either way, since it already ships one neutral `es` translation that
 covers both.
 
 ## App Name
 
-Keep **CheatSheet** — brand names are not translated.
+Keep **CheatSheet**. Brand names are not translated.
 
 ## Subtitle (30 characters max)
 
 ```
 Notas y comandos a mano
 ```
-(23 characters. "Notes and commands at hand" — mirrors the README's own
+(23 characters. "Notes and commands at hand" mirrors the README's own
 framing of the product.)
 
 ## Promotional text (170 characters max, editable anytime without review)
@@ -81,7 +81,7 @@ de estabilidad.
 
 ## App Privacy ("Nutrition Label")
 
-This is a questionnaire in App Store Connect, not free text you translate —
+This is a questionnaire in App Store Connect, not free text you translate.
 Apple renders the resulting labels in the storefront's language automatically.
 No action needed beyond keeping the existing "no data collected" answers
 accurate (matches `PrivacyInfo.xcprivacy` and `PRIVACY.md`).
@@ -91,17 +91,15 @@ accurate (matches `PrivacyInfo.xcprivacy` and `PRIVACY.md`).
 These fields accept one URL regardless of storefront language; the existing
 English URLs (`https://github.com/weskcode/cheatsheet/issues`, etc.) work as-is
 for the Spanish listing. If you want the linked privacy policy page itself to
-read in Spanish for Spanish-speaking users, that means translating
-`PRIVACY.md` (or adding `PRIVACY.es.md` and linking both) — optional polish,
-not an App Store requirement. It's a short document; flagging it here as a
-reasonable follow-up rather than doing it unprompted, since it's a public repo
-doc rather than app-bundled content.
+read in Spanish, translate `PRIVACY.md` (or add `PRIVACY.es.md` and link
+both). Apple doesn't require this; it's optional polish. The document is
+short, so it's a reasonable follow-up task.
 
 ## Screenshots
 
 App Store Connect lets a Spanish (Mexico) localization reuse the same
-screenshot images as English if you don't want to caption them separately —
-none of this app's screenshots contain burned-in English text per the
+screenshot images as English if you don't want to caption them separately.
+None of this app's screenshots contain burned-in English text per the
 existing `Docs/Images/*.png` captures, so no new captures are required purely
 for the Spanish listing. Only recapture if you later add Spanish caption
 overlays via the `app-store-screenshots` skill.

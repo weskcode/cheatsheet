@@ -47,6 +47,8 @@ public enum CheatSheetAppGroup {
     }
 }
 
+// @unchecked: `UserDefaults` is a thread-safe class; this struct's other
+// stored property is an immutable `String`.
 public struct UserDefaultsCheatSheetNoteRepository: CheatSheetNoteRepository, @unchecked Sendable {
     private let defaults: UserDefaults
     private let notesKey: String
@@ -103,6 +105,7 @@ public struct UnavailableCheatSheetNoteRepository: CheatSheetNoteRepository {
     }
 }
 
+// @unchecked: same reasoning as `UserDefaultsCheatSheetNoteRepository` above.
 public struct WidgetNoteSnapshotRepository: @unchecked Sendable {
     private let defaults: UserDefaults
     private let noteKey: String
@@ -145,6 +148,7 @@ public struct WidgetNoteSnapshotRepository: @unchecked Sendable {
     }
 }
 
+// @unchecked: same reasoning as `UserDefaultsCheatSheetNoteRepository` above.
 public struct CheatSheetStoreMetadataRepository: @unchecked Sendable {
     private let defaults: UserDefaults
     private let initializedKey: String

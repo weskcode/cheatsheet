@@ -23,7 +23,11 @@ struct GlassPaletteSwatchButton: View {
         .buttonStyle(.plain)
         .frame(width: hitTargetSize, height: hitTargetSize)
         .contentShape(Rectangle())
-        .accessibilityLabel("\(swatch.displayName) note color")
+        // Declares this as one opaque accessible element rather than letting
+        // the circle/checkmark overlay expose themselves as separate children,
+        // which otherwise interferes with the explicit label/value below.
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(Text("\(swatch.displayName) note color"))
         .accessibilityIdentifier("palette-\(swatch.rawValue.lowercased())")
         .accessibilityValue(isSelected ? "Selected" : "Not selected")
         .accessibilityAddTraits(isSelected ? [.isSelected] : [])

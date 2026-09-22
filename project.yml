@@ -1,4 +1,8 @@
 name: CheatSheet
+packages:
+  TelemetryDeck:
+    url: https://github.com/TelemetryDeck/SwiftSDK
+    from: "2.14.2"
 options:
   bundleIdPrefix: com.wesleykeetch
   deploymentTarget:
@@ -10,8 +14,8 @@ settings:
     SWIFT_VERSION: "6.0"
     GENERATE_INFOPLIST_FILE: YES
     ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: AccentColor
-    MARKETING_VERSION: "1.1"
-    CURRENT_PROJECT_VERSION: "13"
+    MARKETING_VERSION: "1.2"
+    CURRENT_PROJECT_VERSION: "14"
     VERSIONING_SYSTEM: apple-generic
 targets:
   CheatSheet:
@@ -36,6 +40,7 @@ targets:
     dependencies:
       - target: CheatSheetWidgets
         embed: true
+      - package: TelemetryDeck
     entitlements:
       path: CheatSheetApp/CheatSheet.entitlements
       properties:
@@ -125,6 +130,9 @@ targets:
       - path: Shared/Sources
       - path: CheatSheetApp/Sources/NoteStore.swift
       - path: CheatSheetApp/Sources/ScreenshotDemoContent.swift
+      - path: CheatSheetApp/Sources/AnalyticsService.swift
+    dependencies:
+      - package: TelemetryDeck
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.wesleykeetch.wesleycheatsheet.tests
@@ -163,6 +171,7 @@ targets:
     dependencies:
       - target: CheatSheetiOSWidgets
         embed: true
+      - package: TelemetryDeck
     entitlements:
       path: CheatSheetApp/CheatSheet-iOS.entitlements
       properties:
@@ -185,6 +194,9 @@ targets:
       - path: Shared/Sources
       - path: CheatSheetApp/Sources/NoteStore.swift
       - path: CheatSheetApp/Sources/ScreenshotDemoContent.swift
+      - path: CheatSheetApp/Sources/AnalyticsService.swift
+    dependencies:
+      - package: TelemetryDeck
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.wesleykeetch.wesleycheatsheet.ios.tests
