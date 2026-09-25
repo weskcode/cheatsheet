@@ -61,7 +61,9 @@ CheatSheet builds and tests on Xcode Cloud, not GitHub Actions. Every push to
 `develop` or `main`, and every pull request against them, triggers a build.
 Xcode Cloud regenerates the project from `project.yml` on clone
 (`ci_scripts/ci_post_clone.sh`), so nothing needs to change in that script when
-adding new source files.
+adding new source files. The UI test gate uses the `CheatSheetiOSUISmoke`
+scheme, which skips `testQASweep` and `MarketingScreenshotTests`; run those on
+demand through `CheatSheetiOSUI` with `-only-testing`.
 
 ## Widget Signing
 
