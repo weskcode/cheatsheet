@@ -19,6 +19,15 @@ fi
 cd "$CI_PRIMARY_REPOSITORY_PATH"
 xcodegen generate --spec project.yml --project . --project-root .
 
+# Xcode Cloud disables automatic SPM resolution and requires a resolved
+# manifest to already exist at this path before it will build
+# (https://developer.apple.com/documentation/xcode/making-dependencies-available-to-xcode-cloud).
+# CheatSheet.xcodeproj is gitignored, so this pin can't live at its normal
+# location in the repo; keep the source of truth in ci_scripts/ and copy it
+# into place right after the project is generated.
+mkdir -p CheatSheet.xcodeproj/project.xcworkspace/xcshareddata/swiftpm
+cp ci_scripts/Package.resolved CheatSheet.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved
+
 # Fail loudly if the workflow's Environment tab picked an SDK major CheatSheet
 # does not expect (a beta, or a version this branch has not been updated for),
 # rather than silently archiving something that will bounce at App Store
