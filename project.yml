@@ -258,3 +258,22 @@ schemes:
         - CheatSheetiOSUITests
     run:
       config: Debug
+  # Xcode Cloud's Test action cannot pass -skip-testing, so the gate the
+  # retired GitHub Actions pipeline ran lives here as scheme skips instead.
+  # Skip by name, never allow-list: new UI test classes run automatically.
+  # testQASweep (flaky screenshot monolith) and MarketingScreenshotTests
+  # (App Store captures) stay on demand via CheatSheetiOSUI and -only-testing.
+  CheatSheetiOSUISmoke:
+    build:
+      targets:
+        CheatSheetiOS: all
+        CheatSheetiOSWidgets: all
+        CheatSheetiOSUITests: testing
+    test:
+      targets:
+        - name: CheatSheetiOSUITests
+          skippedTests:
+            - CheatSheetiOSUITests/testQASweep()
+            - MarketingScreenshotTests
+    run:
+      config: Debug
