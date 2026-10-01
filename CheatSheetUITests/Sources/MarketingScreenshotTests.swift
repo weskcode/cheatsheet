@@ -25,6 +25,7 @@ final class MarketingScreenshotTests: XCTestCase {
             "-cheatsheet-ui-testing",
             "-cheatsheet-skip-onboarding",
             "-cheatsheet-seed-screenshot-demo",
+            "-showWidgetHints", "NO",
             "-AppleLanguages", "(en)", "-AppleLocale", "en_US"
         ] + extra
         app.launch()
@@ -52,17 +53,53 @@ final class MarketingScreenshotTests: XCTestCase {
         XCTAssertTrue(app.textFields["note-title-field"].waitForExistence(timeout: 15))
         shoot(app, "M2-note-open")
 
-        // M3: the palette and font controls sit above the editor on a real note.
-        shoot(app, "M3-style-controls")
+        // Show a different, task-focused note and the editor's full palette.
+        let back = app.navigationBars.firstMatch.buttons.firstMatch
+        back.tap()
+        app.staticTexts["Ship Checklist"].firstMatch.tap()
+        XCTAssertTrue(app.textFields["note-title-field"].waitForExistence(timeout: 15))
+        shoot(app, "M3-checklist")
 
         // M4: font menu open over real content.
         let fontPicker = app.buttons["font-style-picker"].firstMatch
-        if fontPicker.waitForExistence(timeout: 10), fontPicker.isHittable {
-            fontPicker.tap()
-            _ = app.buttons["Serif"].waitForExistence(timeout: 5)
-            shoot(app, "M4-font-menu")
-            // Leave the note on its default Mono rather than mutating it.
-            if app.buttons["Mono"].firstMatch.exists { app.buttons["Mono"].firstMatch.tap() }
+        guard fontPicker.waitForExistence(timeout: 10), fontPicker.isHittable else {
+            XCTFail("Font picker is unavailable for the marketing capture")
+            return
+        }
+        fontPicker.tap()
+        guard app.buttons["Serif"].firstMatch.waitForExistence(timeout: 5) else {
+            XCTFail("Font menu did not open for the marketing capture")
+            return
+        }
+        shoot(app, "M4-font-menu")
+        // Leave the note on its default Mono rather than mutating it.
+        if app.buttons["Mono"].firstMatch.exists { app.buttons["Mono"].firstMatch.tap() }
+
+        let sizePicker = app.buttons["font-size-picker"].firstMatch
+        guard sizePicker.waitForExistence(timeout: 5), sizePicker.isHittable else {
+            XCTFail("Text size picker is unavailable for the marketing capture")
+            return
+        }
+        sizePicker.tap()
+        guard app.buttons["Medium"].firstMatch.waitForExistence(timeout: 5) else {
+            XCTFail("Text size menu did not open for the marketing capture")
+            return
+        }
+        shoot(app, "M8-size-menu")
+        app.buttons["Medium"].firstMatch.tap()
+
+        // Each note uses a different palette tint and useful sample content.
+        for (title, name) in [
+            ("Swift Concurrency", "M9-concurrency"),
+            ("Docker Cleanup", "M10-docker"),
+            ("Xcode Shortcuts", "M11-shortcuts"),
+            ("HTTP Status Codes", "M12-http")
+        ] {
+            if back.waitForExistence(timeout: 5), back.isHittable { back.tap() }
+            XCTAssertTrue(app.staticTexts[title].waitForExistence(timeout: 10))
+            app.staticTexts[title].firstMatch.tap()
+            XCTAssertTrue(app.textFields["note-title-field"].waitForExistence(timeout: 10))
+            shoot(app, name)
         }
     }
 
@@ -116,8 +153,10 @@ final class MarketingScreenshotTests: XCTestCase {
         shoot(app, "M6-trash-list")
 
         app.staticTexts["Vim Motions"].firstMatch.tap()
-        if app.buttons["restore-note-button"].waitForExistence(timeout: 10) {
-            shoot(app, "M7-trash-detail")
+        guard app.buttons["restore-note-button"].waitForExistence(timeout: 10) else {
+            XCTFail("Trash detail did not open for the marketing capture")
+            return
         }
+        shoot(app, "M7-trash-detail")
     }
 }
