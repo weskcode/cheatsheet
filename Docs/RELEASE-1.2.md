@@ -12,7 +12,7 @@ need you, since they involve your Apple ID and signing.
 | [`app-store-localization-es.md`](app-store-localization-es.md) | The same fields in Spanish (Mexico) |
 | [`testflight-1.2-what-to-test.md`](testflight-1.2-what-to-test.md) | The TestFlight "What to Test" tester message (full + short versions) |
 | [`press-kit-1.2.md`](press-kit-1.2.md) | Fact sheet, journalist pitch email, Product Hunt copy, Apple editorial nomination text, social launch posts |
-| [`../AppStoreScreenshots/final/`](../AppStoreScreenshots/final/README.md) | 9 store screenshots: 6 iPhone (1320×2868), 3 iPad (2064×2752) |
+| [`../AppStoreScreenshots/final/`](../AppStoreScreenshots/final/README.md) | 20 store screenshots: 10 iPhone (1320×2868) and 10 Mac (2880×1800). The iPad images are from an earlier set |
 
 ## Final test pass: 1.2 / build 14
 
@@ -29,10 +29,9 @@ Confirmed green (latest run, shared-machine load ~700–900):
 | UI tests (iPhone) | 11 PASS |
 | UI tests (iPad) | (running, prior full-session run: 11 PASS) |
 | Release builds, universal binary, archives | (running, prior full-session run: all PASS, lipo arm64 + x86_64) |
-| 9 shipped screenshot assets | exact sizes, no alpha |
+| 20 shipped screenshot assets | exact sizes, no alpha |
 
-No app code changed since `f99d35b`; the pending steps are re-confirmation of
-builds/archives that passed earlier this session. Update this table from the
+App code changed since `f99d35b`: `e49be08` keeps the iPhone editor header controls on screen. Unit tests (69, macOS and iOS), the iPhone UI suite (11), and a universal Release build were re-run after it on 2026-10-01 against the Xcode 27 beta SDK, which verifies behavior but not submission readiness. Update this table from the
 latest `finalsuite2` run if any step regresses.
 
 ## Signing and distribution: Xcode Cloud
@@ -87,29 +86,22 @@ starting.
    Content Rights per [`app-store-release-kit-1.2.md`](app-store-release-kit-1.2.md#1-app-information-one-time-or-confirm-unchanged).
 2. The version page: paste in Name, Subtitle, Description, Keywords,
    Promotional Text, What's New, Support/Privacy URLs from the same file.
-3. Upload the 9 screenshots from `AppStoreScreenshots/final/` in filename
-   order.
+3. Upload the iPhone and Mac screenshots from `AppStoreScreenshots/final/` in
+   filename order.
 4. Select the build you just validated in TestFlight.
 5. Paste the Review Notes block from the release kit.
 6. Resolve any remaining open items flagged in the release kit before
    submitting.
 7. **Add for Review.**
 
-## Git Flow: after everything above is real and tested
+## Merge: after everything above is real and tested
 
-Standard close per `CONTRIBUTING.md`:
+Merge the release pull request into `main`, then tag it (see `CONTRIBUTING.md`):
 
 ```sh
-# release/1.2 -> main, tagged
-git checkout main && git merge --no-ff release/1.2
-git tag -a v1.2.0 -m "CheatSheet 1.2"
+git checkout main && git pull
+git tag -a v<version> -m "CheatSheet <version>"
 git push origin main --tags
-
-# back-merge into develop
-git checkout develop && git merge --no-ff release/1.2
-git push origin develop
-
-# delete the release branch
-git push origin --delete release/1.2
-git branch -d release/1.2
 ```
+
+Delete the release branch once its pull request has merged.

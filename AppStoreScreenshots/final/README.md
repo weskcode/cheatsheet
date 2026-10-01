@@ -26,7 +26,7 @@ the attachment names from `captions.tsv`:
 ```sh
 xcodebuild test -project CheatSheet.xcodeproj -scheme CheatSheetiOSUI \
   -configuration Debug \
-  -destination 'platform=iOS Simulator,name=CheatSheet Marketing 17 Pro Max,OS=27.0' \
+  -destination 'platform=iOS Simulator,name=<existing 6.9-inch iPhone simulator>,OS=27.0' \
   -resultBundlePath /tmp/CheatSheet-Marketing-Captures.xcresult \
   -only-testing:CheatSheetiOSUITests/MarketingScreenshotTests
 xcrun xcresulttool export attachments \

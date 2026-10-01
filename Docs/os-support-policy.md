@@ -150,16 +150,12 @@ DEVELOPER_DIR=/Applications/Xcode-beta.app/Contents/Developer xcodebuild build \
 ## Branching
 
 The iOS 26 line stays shippable at all times; iOS 27 work happens beside it.
-This slots into the existing Git Flow model (see `CONTRIBUTING.md`) rather than
-replacing it.
+This sits on top of the single-branch flow in `CONTRIBUTING.md`.
 
 | Branch                     | Floor | SDK contract | Purpose                                      |
 | -------------------------- | ----- | ------------ | -------------------------------------------- |
-| `main`                     | 26.0  | 26           | Released. Always submittable.                |
-| `develop`                  | 26.0  | 26           | Next release. Always submittable.            |
-| `release/*`                | 26.0  | 26           | Stabilising a release cut from `develop`.    |
-| `hotfix/*`                 | 26.0  | 26           | Urgent fix off `main`.                       |
-| `feature/ios-27-readiness` | 26.0  | 27           | Long-lived OS adoption branch off `develop`. |
+| `main`                     | 26.0  | 26           | Released and next release. Always submittable. |
+| `feature/ios-27-readiness` | 26.0  | 27           | Long-lived OS adoption branch off `main`.    |
 
 **Why a feature branch and not a permanent parallel branch.** A permanent
 `ios-27` branch rots: it accumulates conflicts against every release, and the
@@ -169,10 +165,10 @@ a long-lived but *thin* feature branch keeps the merge cheap.
 Rules for the readiness branch:
 
 - Keep it thin. Only the SDK contract, CI variant, and genuinely 27-gated
-  adoption belong on it. Ordinary features go to `develop` as usual.
-- Merge `develop` into it on a regular cadence (weekly, or after every merge to
-  `develop`). Never let it drift.
-- It may be red while a beta is broken. `develop` may never be red.
+  adoption belong on it. Ordinary features go to `main` as usual.
+- Merge `main` into it on a regular cadence (weekly, or after every merge to
+  `main`). Never let it drift.
+- It may be red while a beta is broken. `main` may never be red.
 
 Note that adopting the iOS 27 **SDK** does not imply an iOS 27 **floor**. Those
 are separate decisions, governed by the rule above.
@@ -187,25 +183,24 @@ macOS 26.0, all availability gates removed, test-runtime floor set to iOS 26.5,
 CI moved to the `macos-26` runner so the macOS job can host a macOS 26 app.
 
 **Phase 2: beta season (now until iOS 27 GM).** Create
-`feature/ios-27-readiness` off `develop` when there is something to put on it.
+`feature/ios-27-readiness` off `main` when there is something to put on it.
 On that branch set `CHEATSHEET_EXPECTED_SDK_MAJOR=27` as an environment
 variable on a dedicated Xcode Cloud workflow for the branch, and set that
 workflow's Environment tab to the Xcode 27 beta. Re-run the trial build
-against each beta. `develop` and `main` do not move.
+against each beta. `main` does not move.
 
 **Phase 3: iOS 27 released, Xcode 27 released.** Flip the SDK contract on
-`develop`: `CHEATSHEET_EXPECTED_SDK_MAJOR` default `26` → `27`, the `.xcode-version`
-file and the Environment tab on `develop`'s and `main`'s Xcode Cloud workflows
+`main`: `CHEATSHEET_EXPECTED_SDK_MAJOR` default `26` → `27`, the `.xcode-version`
+file and the Environment tab on the Xcode Cloud workflows
 `26` → `27`, and update the support matrix above plus `README.md` and
-`CONTRIBUTING.md`. Merge `feature/ios-27-readiness` into `develop`, cut a
-`release/*`, run the full device sweep, tag into `main`. Leave the floor at 26.0
+`CONTRIBUTING.md`. Merge `feature/ios-27-readiness` into `main`, run the full device sweep, and tag `main`. Leave the floor at 26.0
 unless a needed feature forces it higher.
 
 ## Checklist for the day iOS 27 ships
 
 1. Install the released Xcode 27; confirm `Scripts/verify-build-sdk.sh` passes
    with `CHEATSHEET_EXPECTED_SDK_MAJOR=27`.
-2. Flip the SDK contract on `develop` (see Phase 3) and merge the readiness branch.
+2. Flip the SDK contract on `main` (see Phase 3) and merge the readiness branch.
 3. Regenerate the project and run the full suite: `Scripts/verify-macos.sh`,
    iOS unit tests, iOS UI tests.
 4. Verify the widgets on an iOS 27 device: App Group sharing and timeline

@@ -59,7 +59,7 @@ Components, or override the floor with `CHEATSHEET_MIN_IOS_RUNTIME`.
 ## Continuous Integration
 
 CheatSheet builds and tests on Xcode Cloud, not GitHub Actions. Every push to
-`develop` or `main`, and every pull request against them, triggers a build.
+`main`, and every pull request against it, triggers a build.
 Xcode Cloud regenerates the project from `project.yml` on clone
 (`ci_scripts/ci_post_clone.sh`), so nothing needs to change in that script when
 adding new source files.
@@ -71,26 +71,24 @@ Team ID and app groups. Update `project.yml`, the macOS and iOS entitlement file
 under `CheatSheetApp/` and `CheatSheetWidgets/`, and
 `Shared/Sources/CheatSheetNote.swift`, then run `xcodegen generate`.
 
-## Branching (Git Flow)
+## Branching
 
-This project follows [Git Flow](https://nvie.com/posts/a-successful-git-branching-model/):
+This project uses a single long-lived branch, `main`, which must stay submittable.
 
-- `main`: always reflects the latest released version. Only release and hotfix branches merge here.
-- `develop`: integration branch for the next release. Feature branches merge here.
-- `feature/<short-name>`: new work, branched from `develop`. Merge back into `develop` via pull request when done.
-- `release/<version>`: cut from `develop` to stabilize a release (version bumps, release notes, final QA). Merges into both `main` (tagged) and back into `develop`.
-- `hotfix/<short-name>`: urgent fixes branched from `main`. Merges into both `main` (tagged) and `develop`.
-- `feature/ios-<major>-readiness`: long-lived OS adoption branch off `develop`, carrying a different SDK
-  contract from the shipping line. Keep it thin and merge `develop` into it often. See
+- `main`: the only long-lived branch. Everything merges here by pull request.
+- `feature/<short-name>` and `fix/<short-name>`: short-lived branches cut from `main`. Open a pull request back into `main` when done.
+- `feature/ios-<major>-readiness`: a long-lived OS adoption branch cut from `main` for a different SDK
+  contract from the shipping line. Keep it thin and merge `main` into it often. See
   [`Docs/os-support-policy.md`](Docs/os-support-policy.md).
+- `gh-pages`: hosts the GitHub Pages site (landing page and privacy mirror). It is not a development branch.
 
 Guidelines:
 
-- Never commit directly to `main` or `develop`; use a pull request.
-- Keep branch names lowercase and hyphenated, e.g. `feature/widget-color-picker`, `hotfix/checklist-crash`.
+- Never commit directly to `main`; use a pull request.
+- Keep branch names lowercase and hyphenated, e.g. `feature/widget-color-picker`, `fix/checklist-crash`.
 - Delete a branch after it merges.
-- Tag every merge into `main` with the release version (e.g. `v1.2.0`).
-- Keep `main` and `develop` submittable at all times. Beta-SDK work belongs on an OS readiness branch.
+- Tag every release on `main` with its version (e.g. `v1.2.0`).
+- Keep `main` submittable at all times. Beta-SDK work belongs on an OS readiness branch.
 
 ## Code Style
 
