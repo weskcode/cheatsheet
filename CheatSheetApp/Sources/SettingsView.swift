@@ -10,27 +10,29 @@ struct SettingsView: View {
     var body: some View {
         Form {
             #if os(macOS)
-            Toggle("Show menu bar quick access", isOn: $showMenuBarQuickAccess)
-            Text("Adds a CheatSheet icon to the menu bar for quick capture and recent notes.")
-                .font(.caption)
-                .foregroundStyle(.secondary)
-
-            Divider()
+            Section {
+                Toggle("Show menu bar quick access", isOn: $showMenuBarQuickAccess)
+            } footer: {
+                Text("Adds a CheatSheet icon to the menu bar for quick capture and recent notes.")
+            }
             #endif
 
-            Toggle("Show widget setup hint", isOn: $showWidgetHints)
-            Text("Pin a note, then add the CheatSheet widget on a supported platform.")
-                .font(.caption)
-                .foregroundStyle(.secondary)
+            Section {
+                Toggle("Show widget setup hint", isOn: $showWidgetHints)
+            } footer: {
+                Text("Pin a note, then add the CheatSheet widget on a supported platform.")
+            }
 
-            Divider()
-
-            Button("Show onboarding next launch") {
-                hasCompletedOnboarding = false
+            Section {
+                Button("Show onboarding next launch") {
+                    hasCompletedOnboarding = false
+                }
             }
         }
         .formStyle(.grouped)
+        #if os(macOS)
         .scenePadding()
         .frame(minWidth: 320, idealWidth: 360, maxWidth: 440)
+        #endif
     }
 }

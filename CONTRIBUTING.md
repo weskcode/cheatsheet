@@ -2,11 +2,14 @@
 
 Thanks for taking the time to improve CheatSheet.
 
-This project is meant to stay small, native, and easy to build. The best contributions are focused, well tested, and easy to review.
+This project is meant to stay small, native, and easy to build. The best contributions stay focused and come with tests that make them easy to review.
 
 ## Development Setup
 
-1. Install Xcode 26 or later.
+1. Install Xcode 26. An Xcode 27 beta is fine for development, but must
+   never be used for a submission build. See `Docs/os-support-policy.md`.
+   The app requires macOS 26 / iOS 26, so a Mac running macOS 26 or later is
+   needed to run the macOS app and its tests.
 2. Install XcodeGen.
 3. Generate the project.
 
@@ -19,6 +22,15 @@ xcodegen generate
 
 ```sh
 Scripts/verify-macos.sh
+```
+
+## Verifying the Build SDK
+
+Before archiving for the App Store, confirm the active toolchain ships the
+SDK this branch targets. A beta SDK is rejected at upload.
+
+```sh
+Scripts/verify-build-sdk.sh
 ```
 
 ## Running Tests
@@ -40,6 +52,18 @@ xcodegen generate --spec project.yml
 xcodebuild test -project CheatSheet.xcodeproj -scheme CheatSheetiOS -destination "id=$(Scripts/resolve-ios-simulator.sh)" -derivedDataPath /tmp/CheatSheet-iOS-Test-DD CODE_SIGNING_ALLOWED=NO
 ```
 
+Tests run on iOS 26.5 or newer. `Scripts/resolve-ios-simulator.sh` fails rather
+than selecting an older runtime; install a newer simulator via Xcode > Settings >
+Components, or override the floor with `CHEATSHEET_MIN_IOS_RUNTIME`.
+
+## Continuous Integration
+
+CheatSheet builds and tests on Xcode Cloud, not GitHub Actions. Every push to
+`main`, and every pull request against it, triggers a build.
+Xcode Cloud regenerates the project from `project.yml` on clone
+(`ci_scripts/ci_post_clone.sh`), so nothing needs to change in that script when
+adding new source files.
+
 ## Widget Signing
 
 The widgets need a shared app group. Forks should use their own Apple Developer
@@ -47,22 +71,24 @@ Team ID and app groups. Update `project.yml`, the macOS and iOS entitlement file
 under `CheatSheetApp/` and `CheatSheetWidgets/`, and
 `Shared/Sources/CheatSheetNote.swift`, then run `xcodegen generate`.
 
-## Branching (Git Flow)
+## Branching
 
-This project follows [Git Flow](https://nvie.com/posts/a-successful-git-branching-model/):
+This project uses a single long-lived branch, `main`, which must stay submittable.
 
-- `main` — always reflects the latest released version. Only release and hotfix branches merge here.
-- `develop` — integration branch for the next release. Feature branches merge here.
-- `feature/<short-name>` — new work, branched from `develop`. Merge back into `develop` via pull request when done.
-- `release/<version>` — cut from `develop` to stabilize a release (version bumps, release notes, final QA). Merges into both `main` (tagged) and back into `develop`.
-- `hotfix/<short-name>` — urgent fixes branched from `main`. Merges into both `main` (tagged) and `develop`.
+- `main`: the only long-lived branch. Everything merges here by pull request.
+- `feature/<short-name>` and `fix/<short-name>`: short-lived branches cut from `main`. Open a pull request back into `main` when done.
+- `feature/ios-<major>-readiness`: a long-lived OS adoption branch cut from `main` for a different SDK
+  contract from the shipping line. Keep it thin and merge `main` into it often. See
+  [`Docs/os-support-policy.md`](Docs/os-support-policy.md).
+- `gh-pages`: hosts the GitHub Pages site (landing page and privacy mirror). It is not a development branch.
 
 Guidelines:
 
-- Never commit directly to `main` or `develop`; use a pull request.
-- Keep branch names lowercase and hyphenated, e.g. `feature/widget-color-picker`, `hotfix/checklist-crash`.
+- Never commit directly to `main`; use a pull request.
+- Keep branch names lowercase and hyphenated, e.g. `feature/widget-color-picker`, `fix/checklist-crash`.
 - Delete a branch after it merges.
-- Tag every merge into `main` with the release version (e.g. `v1.2.0`).
+- Tag every release on `main` with its version (e.g. `v1.2.0`).
+- Keep `main` submittable at all times. Beta-SDK work belongs on an OS readiness branch.
 
 ## Code Style
 
@@ -75,7 +101,7 @@ Guidelines:
 
 ## Conduct
 
-Be kind, specific, and practical. Assume good intent, keep feedback focused on the work, and help maintain a welcoming space for people learning macOS app development.
+Be kind, specific, and practical. Assume good intent and keep feedback focused on the work. Many contributors here are still learning macOS app development, so help keep the space welcoming.
 
 ## Pull Requests
 

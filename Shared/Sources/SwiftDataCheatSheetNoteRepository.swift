@@ -1,5 +1,8 @@
 import Foundation
+import OSLog
 import SwiftData
+
+private let repositoryLogger = Logger(subsystem: "com.wesleykeetch.wesleycheatsheet", category: "Persistence")
 
 public enum CheatSheetNoteRepositoryFactory {
     public static func live() -> any CheatSheetNoteRepository {
@@ -33,6 +36,9 @@ public enum CheatSheetNoteRepositoryFactory {
     }
 }
 
+// @unchecked: `ModelContainer` itself is `Sendable`; every `ModelContext` used
+// here is created fresh per call rather than stored, so no non-Sendable state
+// crosses actor boundaries.
 public final class SwiftDataCheatSheetNoteRepository: CheatSheetNoteRepository, @unchecked Sendable {
     private let container: ModelContainer
     private let legacyRepository: (any CheatSheetNoteRepository)?
@@ -107,7 +113,17 @@ public final class SwiftDataCheatSheetNoteRepository: CheatSheetNoteRepository, 
         duplicateExistingNotes.forEach(context.delete)
 
         try context.save()
-        try widgetSnapshotRepository?.saveNote(notes.widgetDisplayNote)
+
+        // The notes themselves are durably saved at this point. A failure to
+        // also update the widget's snapshot is a lesser, best-effort failure
+        // that must not be reported to the user as "your note didn't save" --
+        // it did -- nor skip marking the store initialized below.
+        do {
+            try widgetSnapshotRepository?.saveNote(notes.widgetDisplayNote)
+        } catch {
+            repositoryLogger.error("Failed to update widget snapshot: \(error.localizedDescription, privacy: .private)")
+        }
+
         metadataRepository?.markSwiftDataStoreInitialized()
     }
 

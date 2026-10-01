@@ -10,11 +10,20 @@ extension WidgetFamily {
         }
     }
 
-    var lineLimit: Int {
+    /// Base line count per family, scaled down at larger note text sizes so a
+    /// bigger font doesn't overflow the widget's fixed content box.
+    func lineLimit(for fontSize: CheatSheetFontSize) -> Int {
+        let base: Int
         switch self {
-        case .systemSmall: 4
-        case .systemMedium: 5
-        default: 9
+        case .systemSmall: base = 4
+        case .systemMedium: base = 5
+        default: base = 9
+        }
+
+        switch fontSize {
+        case .small: return base + 1
+        case .medium: return base
+        case .large: return max(2, base - 2)
         }
     }
 

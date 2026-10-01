@@ -39,8 +39,7 @@ struct MenuBarQuickAccessView: View {
             quickCapture
 
             Button {
-                let noteID = store.addNote()
-                store.selectedNoteID = noteID
+                store.addNote()
                 openMainWindow()
             } label: {
                 Label("New Note", systemImage: "plus")
@@ -185,7 +184,7 @@ struct MenuBarQuickAccessView: View {
     }
 
     private static func title(for text: String) -> String {
-        let fallback = "Quick Note"
+        let fallback = String(localized: "menuBar.quickCapture.defaultTitle", defaultValue: "Quick Note")
         guard let firstLine = text
             .split(whereSeparator: \.isNewline)
             .map({ String($0).trimmingCharacters(in: .whitespacesAndNewlines) })
@@ -234,7 +233,7 @@ private struct MenuBarNoteRow: View {
                     }
                 }
 
-                Text(note.body.notePreviewLine)
+                Text(note.previewLine)
                     .font(.caption)
                     .foregroundStyle(.secondary)
                     .lineLimit(1)

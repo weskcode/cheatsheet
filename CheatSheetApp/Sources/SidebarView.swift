@@ -37,5 +37,6 @@ struct SidebarView: View {
             prompt: isShowingTrash ? "Search trash" : "Search notes"
         )
         .listStyle(.sidebar)
+        .accessibilityIdentifier("note-list")
     }
 }

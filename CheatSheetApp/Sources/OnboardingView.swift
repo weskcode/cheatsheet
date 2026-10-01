@@ -42,16 +42,15 @@ struct OnboardingView: View {
         VStack(alignment: .leading, spacing: onboardingSpacing) {
             header(showCloseButton: showCloseButton)
 
+            StickyNotePreview(note: CheatSheetNote.starterNotes[0])
+                .frame(maxWidth: onboardingPreviewMaxWidth)
+                .frame(maxWidth: .infinity, alignment: .center)
+
             stepGroup
 
-            VStack(spacing: onboardingPreviewSpacing) {
-                OnboardingStartButton(action: finish)
-                    .frame(maxWidth: 260)
-
-                StickyNotePreview(note: CheatSheetNote.starterNotes[0])
-                    .frame(maxWidth: onboardingPreviewMaxWidth)
-            }
-            .frame(maxWidth: .infinity)
+            OnboardingStartButton(action: finish)
+                .frame(maxWidth: 260)
+                .frame(maxWidth: .infinity, alignment: .center)
         }
     }
 
@@ -80,26 +79,24 @@ struct OnboardingView: View {
     }
 
     private var stepGroup: some View {
-        LiquidGlassGroup(spacing: 12) {
-            VStack(spacing: 12) {
-                OnboardingStepRow(
-                    symbol: "plus",
-                    title: "Add notes",
-                    description: "Use the plus button to create small Git, Swift, terminal, or project checklists."
-                )
+        VStack(alignment: .leading, spacing: 12) {
+            OnboardingStepRow(
+                dotColor: Color(hex: CheatSheetPalette.blue.rawValue),
+                title: "Add notes",
+                description: "Use the plus button to create small Git, Swift, terminal, or project checklists."
+            )
 
-                OnboardingStepRow(
-                    symbol: "paintpalette",
-                    title: "Tune the look",
-                    description: "Pick a color or font above the editor and the widget follows that style."
-                )
+            OnboardingStepRow(
+                dotColor: Color(hex: CheatSheetPalette.mint.rawValue),
+                title: "Tune the look",
+                description: "Pick a color or font above the editor and the widget follows that style."
+            )
 
-                OnboardingStepRow(
-                    symbol: "pin.fill",
-                    title: "Pin the widget note",
-                    description: "Choose Use in Widget, then add the CheatSheet widget on supported platforms."
-                )
-            }
+            OnboardingStepRow(
+                dotColor: Color(hex: CheatSheetPalette.coral.rawValue),
+                title: "Pin the widget note",
+                description: "Choose Use in Widget, then add the CheatSheet widget on supported platforms."
+            )
         }
     }
 
