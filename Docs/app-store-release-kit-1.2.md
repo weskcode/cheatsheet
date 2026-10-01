@@ -32,7 +32,7 @@ access, user-generated content shared with others, contests. CheatSheet has
 no accounts and no way for one user to see another user's content. Nothing
 in the app scores above 4+ on any axis. If Apple's expanded age-rating
 questionnaire (13+/16+/18+ categories, required since Jan 31 2026) asks
-about data-linked advertising or profiling, answer **No** to all — the
+about data-linked advertising or profiling, answer **No** to all. The
 app's analytics are anonymous and not linked to identity.
 `PrivacyInfo.xcprivacy` declares one collected data type (Product
 Interaction usage analytics via TelemetryDeck), not linked to identity and
@@ -124,7 +124,7 @@ Both pages are the branded AppHQ site, verified 2026-09-08: the landing page
 lists all three platforms (Mac, iPhone, iPad) and the privacy page carried the
 full policy (effective date, contact, local-only storage, no accounts, no
 third parties). That verification predates the TelemetryDeck analytics
-addition to `PRIVACY.md` — the live AppHQ and GitHub Pages copies need to be
+addition to `PRIVACY.md`: the live AppHQ and GitHub Pages copies need to be
 re-published from the current `PRIVACY.md` before submission so they match
 the App Privacy answers below.
 The GitHub Pages copy (`weskcode.github.io/cheatsheet/`) remains as a mirror/

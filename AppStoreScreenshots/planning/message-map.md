@@ -1,8 +1,8 @@
-# CheatSheet — Message Map
+# CheatSheet: Message Map
 
 Narrative arc: **hook → core workflow → differentiator → depth/personalization →
 retained value / companion surface**, plus one trust beat. No screen leads with
-Settings, an empty state, or a permission prompt — none of those are the
+Settings, an empty state, or a permission prompt. None of those are the
 product's value anyway (the app has none of the latter two beyond a plain
 first-run empty state).
 
@@ -18,16 +18,16 @@ first-run empty state).
 
 ## Rules applied
 
-- No phrase repeats verbatim across headlines — each screen owns one distinct
+- No phrase repeats verbatim across headlines. Each screen owns one distinct
   search theme; no keyword stuffing.
 - Headlines 4–6 words, benefit-first, no feature-name jargon a non-technical
   reader would trip on ("pinned widget note" → "the command you always forget").
 - Slide 6 (privacy) is a *verifiable* claim, not a generic "your privacy
-  matters" platitude — cited against the actual manifest and audit findings.
+  matters" platitude, cited against the actual manifest and audit findings.
 - Slide 5 says **"native on"**, never "synced across" or "same notes
-  everywhere" — per the no-cross-device-sync constraint in
+  everywhere", per the no-cross-device-sync constraint in
   `feature-evidence.md`.
 - Row order above is the default narrative order for the **iPhone** set. iPad
   and Mac sets reorder to lead with whichever row is strongest on that device
   (e.g. Mac set opens with row 5 or 7, not row 1, since there's no Home Screen
-  widget on Mac in the same sense — Mac uses the menu bar + widget gallery).
+  widget on Mac in the same sense, Mac uses the menu bar + widget gallery).

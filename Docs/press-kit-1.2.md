@@ -126,7 +126,7 @@ Write plain text, it auto-formats into headings and checkboxes as you go.
 Pin one note to a widget so it's visible without opening the app.
 
 It's free, open source under the MIT license, with no account and no ads.
-Only a few anonymous, non-tracking analytics signals leave the device —
+Only a few anonymous, non-tracking analytics signals leave the device,
 your notes never do.
 
 1.2 adds Spanish localization, fixes a handful of iPad-specific bugs, and
@@ -140,5 +140,5 @@ is now built for iOS 26 and macOS 26.
 Keep every public claim inside what's actually true of this build: no
 review counts, ratings, "#1", or award language until they're real. The
 open-source and on-device-storage claims above are directly verifiable in
-the source, so lead with them. Don't claim "zero network calls" — the app
+the source, so lead with them. Don't claim "zero network calls": the app
 sends anonymous, non-tracking analytics signals via TelemetryDeck.
