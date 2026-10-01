@@ -48,3 +48,4 @@ CLAUDE.local.md
 # curated final set; raw/candidate captures are large and regeneratable.
 AppStoreScreenshots/raw/
 AppStoreScreenshots/candidates/
+AppStoreScreenshots/templates/__pycache__/

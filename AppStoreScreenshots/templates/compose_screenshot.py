@@ -16,6 +16,7 @@ Usage:
 """
 import argparse
 import math
+import tempfile
 from PIL import Image, ImageDraw, ImageFont
 
 GRADIENT_STOPS = [
@@ -200,6 +201,57 @@ def compose(screenshot_path, eyebrow, headline, canvas_w, canvas_h, out_path,
     return out_path
 
 
+def compose_centered(screenshot_path, headline, canvas_w, canvas_h, out_path, device):
+    """Center a short benefit caption above a real iPhone or Mac capture."""
+    W, H = canvas_w, canvas_h
+    if device == "iphone":
+        with tempfile.NamedTemporaryFile(suffix=".png") as temporary:
+            compose(screenshot_path, "", "", W, H, temporary.name, device)
+            canvas = Image.open(temporary.name).convert("RGB")
+    elif device == "mac":
+        canvas = diagonal_gradient(W, H, 165, GRADIENT_STOPS)
+        shot = Image.open(screenshot_path).convert("RGB")
+        frame_w = int(W * 0.89)
+        frame_h = round(frame_w * shot.height / shot.width)
+        max_h = int(H * 0.78)
+        if frame_h > max_h:
+            frame_h = max_h
+            frame_w = round(frame_h * shot.width / shot.height)
+        frame_x = (W - frame_w) // 2
+        frame_y = H - frame_h - int(H * 0.025)
+        shadow = Image.new("RGBA", (W, H), (0, 0, 0, 0))
+        sd = ImageDraw.Draw(shadow)
+        sd.rounded_rectangle(
+            (frame_x + 18, frame_y + 22, frame_x + frame_w + 18, frame_y + frame_h + 22),
+            radius=26, fill=(0, 0, 0, 90)
+        )
+        from PIL import ImageFilter
+        canvas = Image.alpha_composite(canvas.convert("RGBA"), shadow.filter(ImageFilter.GaussianBlur(32)))
+        screen = shot.resize((frame_w, frame_h), Image.LANCZOS)
+        canvas.paste(screen, (frame_x, frame_y), rounded_mask((frame_w, frame_h), 24))
+        canvas = canvas.convert("RGB")
+    else:
+        raise ValueError("Centered layout supports iPhone and Mac")
+
+    draw = ImageDraw.Draw(canvas)
+    font_size = int(W * (0.071 if device == "iphone" else 0.035))
+    font = sf_font(font_size, "Bold")
+    max_width = int(W * 0.83)
+    lines = []
+    for paragraph in headline.split("\n"):
+        lines.extend(wrap_text(draw, paragraph, font, max_width))
+    if len(lines) > 2:
+        raise ValueError(f"Caption needs more than two lines: {headline}")
+    line_h = int(font_size * 1.12)
+    top = int(H * (0.047 if device == "iphone" else 0.036))
+    for index, line in enumerate(lines):
+        width = draw.textlength(line, font=font)
+        draw.text(((W - width) / 2, top + index * line_h), line,
+                  font=font, fill=HEADLINE_COLOR)
+    canvas.save(out_path, "PNG")
+    return out_path
+
+
 if __name__ == "__main__":
     p = argparse.ArgumentParser()
     p.add_argument("--screenshot", required=True)
@@ -208,7 +260,11 @@ if __name__ == "__main__":
     p.add_argument("--canvas-size", default="1320x2868")
     p.add_argument("--out", required=True)
     p.add_argument("--device", default="iphone", choices=["iphone", "ipad", "mac"])
+    p.add_argument("--layout", default="original", choices=["original", "centered"])
     args = p.parse_args()
     w, h = (int(v) for v in args.canvas_size.split("x"))
-    out = compose(args.screenshot, args.eyebrow, args.headline, w, h, args.out, args.device)
+    if args.layout == "centered":
+        out = compose_centered(args.screenshot, args.headline, w, h, args.out, args.device)
+    else:
+        out = compose(args.screenshot, args.eyebrow, args.headline, w, h, args.out, args.device)
     print("wrote", out)

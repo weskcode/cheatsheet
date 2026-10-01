@@ -1,58 +1,52 @@
-# Final App Store screenshots (1.2)
+# CheatSheet App Store screenshots
 
-Upload order is the filename order. iPhone files go in the **6.9"** slot, iPad
-in the **13"** slot; App Store Connect scales every smaller size down from
-these, so no other sizes are needed.
+The current set contains ten iPhone screenshots (`iphone-01.png` through
+`iphone-10.png`) and ten Mac screenshots (`mac-01.png` through `mac-10.png`).
+Upload them in filename order. The iPhone files are 1320 × 2868 pixels for the
+6.9-inch display slot. The Mac files are 2880 × 1800 pixels. All are RGB PNGs
+without transparency.
 
-| File | Size | Eyebrow | Headline |
-| --- | --- | --- | --- |
-| iphone-01 | 1320×2868 | DEVELOPER CHEAT SHEET | Every command, one tap away |
-| iphone-02 | 1320×2868 | MONOSPACED BY DEFAULT | Write commands in plain text |
-| iphone-03 | 1320×2868 | TEN COLOR TINTS | Color-code notes by project |
-| iphone-04 | 1320×2868 | FOUR FONT STYLES | Choose mono, serif, or rounded |
-| iphone-05 | 1320×2868 | INSTANT SEARCH | Find any snippet as you type |
-| iphone-06 | 1320×2868 | 30-DAY TRASH | Restore deleted notes for 30 days |
-| ipad-01 | 2064×2752 | IPAD SPLIT VIEW | Browse and edit side by side |
-| ipad-02 | 2064×2752 | FILTER AS YOU TYPE | Search every note instantly |
-| ipad-03 | 2064×2752 | MONOSPACE AND SERIF | Choose the font that fits |
-| mac-01 | 2880×1800 | MAC SPLIT VIEW | Browse and edit side by side |
-| mac-02 | 2880×1800 | INSTANT SEARCH | Find any snippet as you type |
-| mac-03 | 2880×1800 | 30-DAY TRASH | Restore deleted notes for 30 days |
+The first iPhone image shows the Home Screen widget. The next images show the
+note library, editor, checklist, font and text-size controls, search, colors,
+reference notes, and Trash recovery. The Mac set shows menu bar quick capture,
+varied notes and colors, search, and Trash recovery. Captions and capture sources are
+listed in `captions.tsv`.
 
-## How these were produced
+The iPad files in this directory are from an earlier set. They are outside
+this iPhone and Mac update.
 
-1. **Capture**: `MarketingScreenshotTests` in the UI test target, run on an
-   iPhone 17 Pro Max and an iPad Pro 13". It seeds `ScreenshotDemoContent` and
-   only ever photographs that curated content.
+## Capture and render
 
-   ```sh
-   xcrun simctl status_bar <udid> override --time "9:41" \
-     --batteryState charged --batteryLevel 100 --cellularBars 4 --wifiBars 3
-   xcodebuild test -scheme CheatSheetiOSUI -destination "id=<udid>" \
-     -resultBundlePath out.xcresult \
-     -only-testing:CheatSheetiOSUITests/MarketingScreenshotTests
-   xcrun xcresulttool export attachments --path out.xcresult --output-path raw/
-   ```
+The iPhone UI test target has a dedicated `MarketingScreenshotTests` suite.
+It launches the app with `-cheatsheet-seed-screenshot-demo` to show curated
+reference notes. Run it on an installed iPhone simulator runtime, then export
+the kept attachments and copy them to `AppStoreScreenshots/raw/iphone/` using
+the attachment names from `captions.tsv`:
 
-2. **Compose**: `AppStoreScreenshots/templates/compose_screenshot.py` per the
-   approved style in `../planning/style-direction.md`.
+```sh
+xcodebuild test -project CheatSheet.xcodeproj -scheme CheatSheetiOSUI \
+  -configuration Debug \
+  -destination 'platform=iOS Simulator,name=CheatSheet Marketing 17 Pro Max,OS=27.0' \
+  -resultBundlePath /tmp/CheatSheet-Marketing-Captures.xcresult \
+  -only-testing:CheatSheetiOSUITests/MarketingScreenshotTests
+xcrun xcresulttool export attachments \
+  --path /tmp/CheatSheet-Marketing-Captures.xcresult \
+  --output-path /tmp/CheatSheet-Marketing-Attachments
+```
 
-   Mac captures (`mac-raw-*.png`) came straight from the Debug build running
-   locally with the same launch arguments the UI tests use
-   (`-cheatsheet-ui-testing -cheatsheet-skip-onboarding
-   -cheatsheet-seed-screenshot-demo`), so they photograph the same curated
-   demo content; the window was captured with `screencapture -x -o -l` and
-   composed with `--device mac --canvas-size 2880x1800`.
+The widget source is cropped from the existing
+`Docs/Images/cheatsheet-iphone-widget.png` marketing capture.
 
-**Do not reuse `testQASweep` captures for the store.** That test creates a
-throwaway "QA Sweep Note" with placeholder body text, so everything it captures
-after its third checkpoint shows test data, which Apple treats as grounds for
-rejection. `MarketingScreenshotTests` exists specifically to avoid that.
+The Mac sources were captured from the app window and menu bar panel in the
+Debug build with the same seeded notes and `-showWidgetHints NO`. The panel
+and app window were aligned at their actual screen positions for `mac-02`.
+The raw capture directory is
+ignored by Git. Once the sources are present, render the final assets with:
 
-## Caption strategy
+```sh
+python3 AppStoreScreenshots/templates/render_final.py
+```
 
-Apple began OCR-indexing screenshot caption text in June 2025, making captions a
-Tier 1 ranking signal. Unlike title/subtitle, captions *should* reinforce core
-keywords. Each headline is 4-6 words, leads with an action verb where it reads
-naturally, and owns one distinct keyword theme (see `captions.tsv`). White on
-the dark brand gradient keeps OCR contrast high.
+The renderer uses the approved centered-caption layout and the existing dark
+CheatSheet gradient. Captions describe visible features. They are short enough
+to read at App Store preview size.
