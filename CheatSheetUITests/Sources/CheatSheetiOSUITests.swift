@@ -103,7 +103,13 @@ final class CheatSheetiOSUITests: XCTestCase {
         let app = launchApp()
         createNote(in: app)
 
-        let mintButton = app.buttons["palette-59c979"]
+        let titleField = app.textFields["note-title-field"]
+        let pinButton = app.buttons["Use in Widget"]
+        XCTAssertTrue(pinButton.waitForExistence(timeout: 10))
+        XCTAssertGreaterThanOrEqual(titleField.frame.minX, app.frame.minX)
+        XCTAssertLessThanOrEqual(pinButton.frame.maxX, app.frame.maxX)
+
+        let mintButton = app.descendants(matching: .any)["palette-59c979"]
         XCTAssertTrue(mintButton.waitForExistence(timeout: 10))
         mintButton.tap()
         XCTAssertEqual(mintButton.value as? String, "Selected")
@@ -116,7 +122,6 @@ final class CheatSheetiOSUITests: XCTestCase {
         serifButton.tap()
         XCTAssertEqual(fontPicker.value as? String, "Serif")
 
-        let pinButton = app.buttons["widget-pin-button"]
         XCTAssertTrue(pinButton.waitForExistence(timeout: 10))
         pinButton.tap()
         XCTAssertTrue(app.staticTexts["Shown in widget"].waitForExistence(timeout: 10))

@@ -24,7 +24,13 @@ struct EditorHeader: View {
 
                 VStack(alignment: .leading, spacing: 8) {
                     statusLabel
-                    compactControls
+                    GlassPalettePicker(selection: $note.tintHex)
+
+                    HStack(spacing: 8) {
+                        FontStylePicker(selection: $note.fontStyle)
+                        FontSizePicker(selection: $fontSize)
+                        pinButton
+                    }
                 }
             }
         }
@@ -44,17 +50,21 @@ struct EditorHeader: View {
 
             FontSizePicker(selection: $fontSize)
 
-            Button(action: pinAction) {
-                Label(note.isPinned ? "Pinned to Widget" : "Use in Widget", systemImage: note.isPinned ? "pin.fill" : "pin")
-            }
-            .labelStyle(.iconOnly)
-            .controlSize(.small)
-            .glassCompatibleButtonStyle(prominent: note.isPinned)
-            .help(note.isPinned ? "This note appears in the widget" : "Show this note in the widget")
-            .accessibilityElement(children: .ignore)
-            .accessibilityLabel(note.isPinned ? "Pinned to Widget" : "Use in Widget")
-            .accessibilityAddTraits(note.isPinned ? [.isSelected] : [])
-            .accessibilityIdentifier("widget-pin-button")
+            pinButton
         }
+    }
+
+    private var pinButton: some View {
+        Button(action: pinAction) {
+            Label(note.isPinned ? "Pinned to Widget" : "Use in Widget", systemImage: note.isPinned ? "pin.fill" : "pin")
+        }
+        .labelStyle(.iconOnly)
+        .controlSize(.small)
+        .glassCompatibleButtonStyle(prominent: note.isPinned)
+        .help(note.isPinned ? "This note appears in the widget" : "Show this note in the widget")
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(note.isPinned ? "Pinned to Widget" : "Use in Widget")
+        .accessibilityAddTraits(note.isPinned ? [.isSelected] : [])
+        .accessibilityIdentifier("widget-pin-button")
     }
 }
