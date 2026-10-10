@@ -16,6 +16,12 @@ if ! command -v xcodegen >/dev/null 2>&1; then
     brew install xcodegen
 fi
 
+# XcodeGen added .icon (Icon Composer) support in 2.45.1. An older one turns
+# AppIcon.icon into a plain folder, and the archive ships with no app icon.
+if ! printf '%s\n' 2.45.1 "$(xcodegen --version | awk '{print $2}')" | sort -V -C; then
+    brew upgrade xcodegen
+fi
+
 cd "$CI_PRIMARY_REPOSITORY_PATH"
 xcodegen generate --spec project.yml --project . --project-root .
 

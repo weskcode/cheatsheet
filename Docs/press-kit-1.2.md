@@ -20,7 +20,7 @@ verified against the current codebase.
 | Website / source | https://github.com/weskcode/cheatsheet |
 | Support | https://github.com/weskcode/cheatsheet/issues |
 | Email | weskcode@duck.com |
-| Icon | `CheatSheetApp/Resources/Assets.xcassets/AppIcon.appiconset/icon_1024.png` |
+| Icon | `Docs/Images/cheatsheet-app-icon.png` (1024 × 1024, exported from `CheatSheetApp/Resources/AppIcon.icon`) |
 | Screenshots | `AppStoreScreenshots/final/` (9 images) and `Docs/Images/` (5 marketing photos) |
 
 ## Boilerplate (for a press kit "About" section or article footer)
