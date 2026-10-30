@@ -199,3 +199,9 @@ Start with [CONTRIBUTING.md](CONTRIBUTING.md) for setup, style, and pull request
 ## License
 
 CheatSheet is available under the MIT License. See [LICENSE](LICENSE) for details.
+
+## Simulator runtime policy
+
+iOS 26.0 is the deployment floor. Never download, install, restore, or test iOS 18
+or older simulator runtimes. Use existing iOS 27.0 devices, with iOS 26.0 for floor
+checks. Missing destinations are blocked checks. Follow [AGENTS.md](AGENTS.md).
