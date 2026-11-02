@@ -8,8 +8,8 @@ that is on the App Store.
 
 | Platform      | Minimum (deployment target) | Built against (SDK) | Toolchain | Test runtime |
 | ------------- | --------------------------- | ------------------- | --------- | ------------ |
-| iOS / iPadOS  | 26.0                        | 26.x                | Xcode 26  | iOS 26.5+    |
-| macOS         | 26.0                        | 26.x                | Xcode 26  | macOS 26+    |
+| iOS / iPadOS  | 26.0                        | 27.x                | Xcode 27  | iOS 26.5+    |
+| macOS         | 26.0                        | 27.x                | Xcode 27  | macOS 26+    |
 
 ## Two versions that are easy to confuse
 
@@ -78,10 +78,10 @@ Scripts/verify-build-sdk.sh          # hard fail on mismatch, run before archivi
 Scripts/verify-build-sdk.sh --warn   # warn only, used by Scripts/verify-macos.sh
 ```
 
-The expected major is a branch-level contract, defaulting to `26` and overridable:
+The expected major is a branch-level contract, defaulting to `27` and overridable:
 
 ```sh
-CHEATSHEET_EXPECTED_SDK_MAJOR=27 Scripts/verify-build-sdk.sh
+CHEATSHEET_EXPECTED_SDK_MAJOR=28 Scripts/verify-build-sdk.sh
 ```
 
 `ci_scripts/ci_post_clone.sh` runs the hard-fail form as the first thing Xcode
@@ -149,13 +149,13 @@ DEVELOPER_DIR=/Applications/Xcode-beta.app/Contents/Developer xcodebuild build \
 
 ## Branching
 
-The iOS 26 line stays shippable at all times; iOS 27 work happens beside it.
+The released line stays shippable at all times; work for the next OS major happens beside it.
 This sits on top of the single-branch flow in `CONTRIBUTING.md`.
 
 | Branch                     | Floor | SDK contract | Purpose                                      |
 | -------------------------- | ----- | ------------ | -------------------------------------------- |
-| `main`                     | 26.0  | 26           | Released and next release. Always submittable. |
-| `feature/ios-27-readiness` | 26.0  | 27           | Long-lived OS adoption branch off `main`.    |
+| `main`                     | 26.0  | 27           | Released and next release. Always submittable. |
+| `feature/ios-28-readiness` | 26.0  | 28           | Long-lived OS adoption branch off `main`, created when needed. |
 
 **Why a feature branch and not a permanent parallel branch.** A permanent
 `ios-27` branch rots: it accumulates conflicts against every release, and the
@@ -182,19 +182,20 @@ enforced in CI. iOS 27 trial build proves zero migration debt.
 macOS 26.0, all availability gates removed, test-runtime floor set to iOS 26.5,
 CI moved to the `macos-26` runner so the macOS job can host a macOS 26 app.
 
-**Phase 2: beta season (now until iOS 27 GM).** Create
+**Phase 2: beta season (until iOS 27 GM).** Create
 `feature/ios-27-readiness` off `main` when there is something to put on it.
 On that branch set `CHEATSHEET_EXPECTED_SDK_MAJOR=27` as an environment
 variable on a dedicated Xcode Cloud workflow for the branch, and set that
 workflow's Environment tab to the Xcode 27 beta. Re-run the trial build
 against each beta. `main` does not move.
 
-**Phase 3: iOS 27 released, Xcode 27 released.** Flip the SDK contract on
-`main`: `CHEATSHEET_EXPECTED_SDK_MAJOR` default `26` → `27`, the `.xcode-version`
-file and the Environment tab on the Xcode Cloud workflows
-`26` → `27`, and update the support matrix above plus `README.md` and
-`CONTRIBUTING.md`. Merge `feature/ios-27-readiness` into `main`, run the full device sweep, and tag `main`. Leave the floor at 26.0
-unless a needed feature forces it higher.
+**Phase 3: iOS 27 released, Xcode 27 released (SDK contract flipped, 2026-11-02).**
+The SDK contract on `main` moved from 26 to 27: the `CHEATSHEET_EXPECTED_SDK_MAJOR`
+default, `.xcode-version` (27.2), the support matrix above, `README.md` and
+`CONTRIBUTING.md`. `feature/ios-27-readiness` was never created, so there was
+nothing to merge. The floor stays at 26.0. Still open: set the Environment tab
+on each Xcode Cloud workflow to Xcode 27.2 in App Store Connect, run the full
+device sweep, and tag `main`.
 
 ## Checklist for the day iOS 27 ships
 
