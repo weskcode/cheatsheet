@@ -54,7 +54,7 @@ final class MarketingScreenshotTests: XCTestCase {
         shoot(app, "M2-note-open")
 
         // Show a different, task-focused note and the editor's full palette.
-        let back = app.navigationBars.firstMatch.buttons.firstMatch
+        let back = app.stackBackButton
         back.tap()
         app.staticTexts["Ship Checklist"].firstMatch.tap()
         XCTAssertTrue(app.textFields["note-title-field"].waitForExistence(timeout: 15))
@@ -107,9 +107,21 @@ final class MarketingScreenshotTests: XCTestCase {
         let app = launchSeeded()
         XCTAssertTrue(app.staticTexts["Git Rescue"].waitForExistence(timeout: 20))
 
+        // The search field is a navigation-bar drawer that only appears once the
+        // list is pulled down. On iPhone Duo one fast app-wide swipe often left it
+        // hidden, so pull the list down slowly from near its top, up to 3 times.
+        // iPad has no `note-list` collection view here; the sidebar fallback
+        // below covers it.
         var field = app.searchFields.firstMatch
-        if !field.waitForExistence(timeout: 3) {
-            app.swipeDown()
+        let list = app.collectionViews["note-list"]
+        for _ in 0..<3 where list.exists && !field.waitForExistence(timeout: 3) {
+            let start = list.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.2))
+            start.press(
+                forDuration: 0.1,
+                thenDragTo: start.withOffset(CGVector(dx: 0, dy: 250)),
+                withVelocity: .slow,
+                thenHoldForDuration: 0.3
+            )
             field = app.searchFields.firstMatch
         }
         if !field.waitForExistence(timeout: 3) {
