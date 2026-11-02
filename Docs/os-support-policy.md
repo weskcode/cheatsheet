@@ -32,9 +32,9 @@ Set 2026-09-01. Every OS-conditional path in the app was a Liquid Glass gate:
 `GlassEffectContainer`, `glassEffect(_:in:)`, and the `.glass` /
 `.glassProminent` button styles, all introduced in 26.0. With the floor at 26.0
 those gates are unconditionally true, so they were removed:
-`CheatSheetApp/Sources/LiquidGlassGroup.swift` and
-`CheatSheetApp/Sources/ViewModifiers.swift` now call the Liquid Glass API
-directly, and the two platform arms collapsed into one `#if os(macOS) || os(iOS)`
+`CheatSheetApp/Sources/ViewModifiers.swift` now calls the Liquid Glass API
+directly (as did `LiquidGlassGroup.swift` until it was deleted as unused on
+2026-09-18), and the two platform arms collapsed into one `#if os(macOS) || os(iOS)`
 branch. There are no `#available` or `@available` checks left in the codebase.
 
 **26.0, not a point release.** Nothing in the app requires a 26.x point release,
