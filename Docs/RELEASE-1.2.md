@@ -53,7 +53,7 @@ If a workflow does not exist yet:
    dropdown. Do not leave it on "Latest Release" or "Latest Beta"; both drift
    without warning as Apple ships new versions. `.xcode-version` at the
    repository root records the version this project currently expects
-   (`26.6`) for reference, but the Environment tab setting is what actually
+   (`27.2`) for reference, but the Environment tab setting is what actually
    governs the build.
 4. **Start Condition**: Branch Changes on `release/1.2` (or `main`, once this
    merges there) for an archive-and-distribute workflow. A separate,
