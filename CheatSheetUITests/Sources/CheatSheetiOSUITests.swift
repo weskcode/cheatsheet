@@ -83,6 +83,9 @@ final class CheatSheetiOSUITests: XCTestCase {
         selectAllText(in: titleField, app: app)
         titleField.typeText("Release Commands")
 
+        // Return ends title editing. On iPhone Duo the keyboard and its
+        // suggestion bar cover the whole note editor, so it has to go first.
+        titleField.typeText("\n")
         let bodyEditor = app.textViews["note-body-editor"]
         XCTAssertTrue(bodyEditor.waitForExistence(timeout: 10))
         bodyEditor.tap()
@@ -196,12 +199,9 @@ final class CheatSheetiOSUITests: XCTestCase {
             }
         }
         // iPad keeps the list on screen in a split-view sidebar, so there is
-        // nothing to pop. Tapping anyway is actively harmful: with two
-        // navigation bars present, `navigationBars.buttons.firstMatch`
-        // resolves to the DETAIL pane's first button -- "New Note" -- so this
-        // silently created a note instead of navigating.
+        // nothing to pop and no BackButton to find.
         guard !isSplitViewLayout(in: app) else { return }
-        let backButton = app.navigationBars.buttons.firstMatch
+        let backButton = app.stackBackButton
         XCTAssertTrue(backButton.waitForExistence(timeout: 10))
         backButton.tap()
     }
@@ -258,7 +258,7 @@ final class CheatSheetiOSUITests: XCTestCase {
     /// device/size-class directly, so this helper works unmodified on both.
     private func returnToListIfPushed(in app: XCUIApplication) {
         guard !app.searchFields.firstMatch.exists else { return }
-        let backButton = app.navigationBars.firstMatch.buttons.firstMatch
+        let backButton = app.stackBackButton
         if backButton.waitForExistence(timeout: 2), backButton.isHittable {
             backButton.tap()
         }
@@ -393,6 +393,9 @@ final class CheatSheetiOSUITests: XCTestCase {
         titleField.typeText("QA Sweep Note")
         capture(app, "06-title-edited")
 
+        // Return ends title editing. On iPhone Duo the keyboard and its
+        // suggestion bar cover the whole note editor, so it has to go first.
+        titleField.typeText("\n")
         let bodyEditor = app.textViews["note-body-editor"]
         XCTAssertTrue(bodyEditor.waitForExistence(timeout: 10))
         bodyEditor.tap()
@@ -405,7 +408,9 @@ final class CheatSheetiOSUITests: XCTestCase {
         // from the note surface's starting state, not just from each other.
         let paletteSamples = ["palette-d99a2b", "palette-e85d75", "palette-8b7cff"]
         for (index, identifier) in paletteSamples.enumerated() {
-            let swatch = app.buttons[identifier]
+            // On iPhone Duo a Button with .accessibilityElement(children: .ignore)
+            // is exposed as an Other element, so match by identifier alone.
+            let swatch = app.descendants(matching: .any)[identifier]
             XCTAssertTrue(swatch.waitForExistence(timeout: 10), "Missing palette swatch \(identifier)")
             swatch.tap()
             XCTAssertEqual(swatch.value as? String, "Selected", "\(identifier) should report Selected after tap.")
@@ -426,7 +431,8 @@ final class CheatSheetiOSUITests: XCTestCase {
         capture(app, "09b-font-serif-applied")
 
         // --- Item 8: pin / unpin ---
-        let pinButton = app.buttons["widget-pin-button"]
+        // Matched by identifier alone for the same iPhone Duo reason as the swatches.
+        let pinButton = app.descendants(matching: .any)["widget-pin-button"]
         XCTAssertTrue(pinButton.waitForExistence(timeout: 10))
         pinButton.tap()
         XCTAssertTrue(app.staticTexts["Shown in widget"].waitForExistence(timeout: 10))
@@ -525,4 +531,11 @@ final class CheatSheetiOSUITests: XCTestCase {
         XCTAssertTrue(menuItem.waitForExistence(timeout: 10), "Could not find toolbar action '\(label)' (\(identifier)), even behind More.")
         menuItem.tap()
     }
+}
+
+extension XCUIApplication {
+    /// The compact NavigationStack's system back button, matched by its system
+    /// identifier: iPhone Duo puts it in a side toolbar, so there is no
+    /// navigation bar to search.
+    var stackBackButton: XCUIElement { buttons["BackButton"].firstMatch }
 }
