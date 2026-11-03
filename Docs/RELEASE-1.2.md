@@ -1,8 +1,10 @@
 # CheatSheet 1.2: Release Checklist
 
-Master index for shipping 1.2 (build 14). Everything text-based is done and
-linked below; the remaining steps happen in Xcode / App Store Connect and
-need you, since they involve your Apple ID and signing.
+Master index for shipping 1.2. The submitted builds are macOS **39** and
+iOS **42**, both from `4bef828`. Xcode Cloud assigns these build numbers
+independently of the repository build setting. Both versions are waiting
+for review with manual release selected. Privacy publication and manifest
+consistency checks remain open in the release kit.
 
 ## Documents in this release kit
 
@@ -14,12 +16,17 @@ need you, since they involve your Apple ID and signing.
 | [`press-kit-1.2.md`](press-kit-1.2.md) | Fact sheet, journalist pitch email, Product Hunt copy, Apple editorial nomination text, social launch posts |
 | [`../AppStoreScreenshots/final/`](../AppStoreScreenshots/final/README.md) | 20 store screenshots: 10 iPhone (1320×2868) and 10 Mac (2880×1800). The iPad images are from an earlier set |
 
-## Final test pass: 1.2 / build 14
+## Historical test pass: 1.2 / build 14
 
 Run against a clean XcodeGen-generated project, both device families, both
 platforms, on `release/1.2`.
 
-Confirmed green (latest run, shared-machine load ~700–900):
+This table records the earlier build-14 session. It is not verification of
+submitted builds 39 or 42. Current UI-test evidence is in
+[PR #13](https://github.com/weskcode/cheatsheet/pull/13), and the Mac rename
+and SDK checks are in [PR #12](https://github.com/weskcode/cheatsheet/pull/12).
+
+Recorded results (shared-machine load ~700–900):
 
 | Check | Result |
 | --- | --- |

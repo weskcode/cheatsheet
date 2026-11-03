@@ -1,4 +1,7 @@
-# TestFlight "What to Test" (1.2, build 14)
+# TestFlight "What to Test" (1.2)
+
+The submitted release builds are macOS 39 and iOS 42. The message below
+was drafted for the earlier build 14 and retains that feature checklist.
 
 Paste into App Store Connect → TestFlight → (build) → **Test Information →
 What to Test**. Validated at 1,659 / 4,000 characters.
