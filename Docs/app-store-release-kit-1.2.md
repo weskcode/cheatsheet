@@ -1,7 +1,9 @@
 # CheatSheet 1.2: App Store Release Kit
 
 Everything needed to fill out App Store Connect (or a submission checklist
-tool like Kickstart Premium) for version **1.2, build 14**. Every text field
+tool like Kickstart Premium) for version **1.2**: macOS build **39** and
+iOS build **42**, both built from
+`4bef828b3238d4c3e268227109960823afccda78`. Every text field
 below is validated against Apple's character limits with
 `app-store-aso/scripts/validate_metadata.py`. The count appears next to each
 heading. Copy each block as-is; nothing needs editing unless you want to
@@ -33,10 +35,10 @@ no accounts and no way for one user to see another user's content. Nothing
 in the app scores above 4+ on any axis. If Apple's expanded age-rating
 questionnaire (13+/16+/18+ categories, required since Jan 31 2026) asks
 about data-linked advertising or profiling, answer **No** to all. The
-app's analytics are anonymous and not linked to identity.
-`PrivacyInfo.xcprivacy` declares one collected data type (Product
-Interaction usage analytics via TelemetryDeck), not linked to identity and
-not used for tracking.
+app does not send analytics data in version 1.2. The included TelemetryDeck
+SDK is disabled. The app's privacy manifest still declares Product Interaction
+data, not linked to identity and not used for tracking. That declaration
+does not describe the disabled runtime behavior; see section 10.
 
 ## 3. App Name (10/30 characters)
 
@@ -65,7 +67,7 @@ Editable any time without a new build or review. Update seasonally if useful.
 Short notes, commands, and checklists always at hand, with widgets for macOS, iOS, and iPadOS. No account, no ads, no internet connection required.
 ```
 
-## 6. Description (1,462/4,000 characters)
+## 6. Description (1,304/4,000 characters)
 
 ```
 CheatSheet is an open-source app for macOS, iOS, and iPadOS that keeps the short notes, checklists, and commands you use every day close at hand.
@@ -80,7 +82,7 @@ With CheatSheet you can:
 - Capture a note or jump to a recent one straight from the macOS menu bar.
 - Use adaptive layouts built for each device: compact on iPhone, split-view on iPad and Mac.
 
-CheatSheet stores everything only on your device using SwiftData and a shared app group between the app and its widget. There's no account and no internet connection required to use the app. It sends a small number of anonymous, aggregate usage signals via TelemetryDeck (for example, that a note was pinned) that are never linked to your identity. Nothing you write ever leaves your device.
+CheatSheet stores everything only on your device using SwiftData and a shared app group between the app and its widget. There's no account and no internet connection required to use the app. Nothing you write ever leaves your device.
 
 Fully localized in English and Spanish, including onboarding, starter notes, and accessibility labels.
 
@@ -117,40 +119,41 @@ that testing newly caught; it doesn't add iPad as a new platform.
 | --- | --- |
 | Support URL | `https://github.com/weskcode/cheatsheet/issues` |
 | Marketing URL | `https://cheatsheet.apphq.online/` (branded landing page) |
-| Privacy Policy URL | `https://cheatsheet.apphq.online/privacy` (live; full text, verified accurate) |
+| Privacy Policy URL | `https://cheatsheet.apphq.online/privacy` (live; correction pending publication) |
 | Contact email | `weskcode@duck.com` |
 
-Both pages are the branded AppHQ site, verified 2026-09-08: the landing page
-lists all three platforms (Mac, iPhone, iPad) and the privacy page carried the
-full policy (effective date, contact, local-only storage, no accounts, no
-third parties). That verification predates the TelemetryDeck analytics
-addition to `PRIVACY.md`: the live AppHQ and GitHub Pages copies need to be
-re-published from the current `PRIVACY.md` before submission so they match
-the App Privacy answers below.
-The GitHub Pages copy (`weskcode.github.io/cheatsheet/`) remains as a mirror/
-fallback.
+The AppHQ privacy page currently says the app includes no third-party SDKs,
+although TelemetryDeck is included and disabled. The GitHub Pages policy
+currently describes active analytics signals, which version 1.2 does not send.
+Both public policy copies need the corrected paragraph from `PRIVACY.md`.
+Publication requires separate approval and has not been performed.
 
 ## 10. App Privacy ("Nutrition Label") questionnaire
 
-Declare one collected data type: **Usage Data → Product Interaction**,
-Not Linked to your identity, Not Used for Tracking, purpose **App
-Functionality**. This is TelemetryDeck's aggregate usage signal (e.g. "a
-note was pinned") and matches
-`CheatSheetApp/Resources/PrivacyInfo.xcprivacy` (one collected data type,
-`NSPrivacyCollectedDataTypeLinked = false`,
-`NSPrivacyCollectedDataTypeTracking = false`) and `PRIVACY.md`. Answer
-**"Data Not Collected"** for every other category. The WidgetKit
-extension's own `CheatSheetWidgets/Resources/PrivacyInfo.xcprivacy` still
-declares zero collected data types (it doesn't call TelemetryDeck), so
-list it separately in App Store Connect if Apple asks per-extension.
-`NSPrivacyTracking = false` in both manifests. No Required Reason API is
-used beyond `UserDefaults`, correctly declared.
+The owner's selected answer for version 1.2 is **Data Not Collected**.
+`AnalyticsService` uses a placeholder App ID, so both SDK initialization and
+signal sending return without calling TelemetryDeck. The dependency remains
+included in the app.
+
+Confirm that the selected answer is published in App Store Connect before
+marking this check complete. The public API does not establish publication;
+the read-only web-session check on 2026-11-02 was blocked by expired
+credentials requiring two-factor authentication.
+
+The app's `PrivacyInfo.xcprivacy` still declares Product Interaction data for
+App Functionality. The widget manifest declares no collected data types.
+`NSPrivacyTracking` is false in both manifests. The app manifest and disabled
+runtime behavior remain inconsistent. Manifest or dependency changes require
+separate approval, a new build, and a submission plan. This documentation
+correction changes neither manifest nor either submitted build.
 
 ## 11. Screenshots
 
-Ready in [`AppStoreScreenshots/final/`](../AppStoreScreenshots/final/README.md):
-6 iPhone (1320×2868, 6.9" slot) + 3 iPad (2064×2752, 13" slot) + 3 Mac
-(2880×1800, 16:10 slot). Upload in filename order.
+Available in [`AppStoreScreenshots/final/`](../AppStoreScreenshots/final/README.md):
+10 iPhone (1320×2868), 3 earlier iPad (2064×2752), and 10 Mac
+(2880×1800) images are available locally. App Store Connect currently has
+10 iPhone, 3 iPad, and 3 Mac screenshots. The uploaded Mac set differs
+from the current local Mac set. Uploading replacements is a separate action.
 
 ## 12. Review Notes (paste into the "App Review Information" notes field)
 
@@ -161,7 +164,7 @@ To see note formatting: open any starter note, or create one and type a line sta
 
 To see the widget: long-press the Home Screen (iOS/iPadOS) or open the Notification Center widget gallery (macOS), add the CheatSheet widget, then pin a note in-app via the pin icon in the editor toolbar.
 
-The app has no login, no server component, and stores all data locally via SwiftData in an App Group container shared with the widget extension. It sends anonymous, non-tracking usage analytics via TelemetryDeck; no note content or user data is ever transmitted.
+The app has no login, no server component, and stores all data locally via SwiftData in an App Group container shared with the widget extension. Version 1.2 includes the TelemetryDeck SDK with analytics initialization and usage signals disabled. No analytics data is sent.
 ```
 
 App Store Connect also asks for App Review Contact Information: a separate
@@ -185,12 +188,12 @@ use during review. Use `weskcode@duck.com` for the email field there.
 
 ## Open items: need you or App Store Connect access
 
-- ✅ **Privacy Policy URL**: RESOLVED. Live at
-  `https://cheatsheet.apphq.online/privacy`, verified accurate. The GitHub
-  Pages copy remains as a mirror.
+- **Privacy policies and App Privacy**: public policy corrections await
+  publication approval. The selected ASC answer is Data Not Collected;
+  publication remains unverified. The manifest discrepancy remains open
+  as described in section 10.
 - ❔ **EU Digital Services Act trader status**: required for EU distribution since Feb 2025; verified only inside App Store Connect, not from this repo.
-- ✅ **Mac App Store screenshots**: RESOLVED. Three 2880×1800 (16:10)
-  screenshots exist in `AppStoreScreenshots/final/mac-0{1,2,3}.png`, captured
-  from a seeded Debug build with the same demo content the iPhone/iPad shots
-  use (see `AppStoreScreenshots/raw/mac-raw-*.png`).
+- **Mac App Store screenshots**: the uploaded set contains three images.
+  Ten 2880×1800 images exist locally, from `mac-01.png` through `mac-10.png`.
+  The uploaded set was inspected separately and has not been replaced.
 - ❔ **First-ever submission vs. update**: if App Store Connect doesn't already have this app's record, category/age-rating/URLs above are first-time setup, not just an edit.

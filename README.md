@@ -176,7 +176,7 @@ After running the app once, add the CheatSheet widget from the macOS widget gall
 
 ## Privacy
 
-CheatSheet stores notes locally on device. It has no accounts or sync. It uses TelemetryDeck to send a small number of anonymous, aggregate usage signals (for example, that a note was pinned); these never include note content and are not linked to your identity.
+CheatSheet stores notes locally on device. It has no accounts or sync. Version 1.2 includes the TelemetryDeck SDK with analytics initialization and usage signals disabled. It sends no analytics data.
 See the public [Privacy Policy](PRIVACY.md) for the complete disclosure.
 
 ## Product Principles
