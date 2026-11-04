@@ -67,6 +67,8 @@ Select the exact destination reported by Xcode. Use an existing iOS 27+
 simulator under the current local policy, or an approved physical QA device.
 The app's deployment floor remains iOS 26.0. A missing destination blocks its
 check; do not install an older simulator runtime to satisfy it.
+If the SDK check fails, pause submission preparation and report the mismatch;
+do not install another Xcode or runtime as an automatic repair.
 
 After signing approval and profile preparation, run the existing UI suite on
 the physical device. Set `qa_destination` to `platform=iOS,id=<DEVICE_UDID>`;
@@ -104,7 +106,7 @@ At most two build/test lanes may run, each using its own device and DerivedData.
 | Launch and onboarding | Launch completes; onboarding dismisses and stays dismissed on subsequent launches. |
 | Capture and search | New notes open for editing; title/body searches find matching notes and clear correctly. |
 | Input edge cases | Empty notes, long titles, long unbroken text, emoji, multiline paste, and rapid edits remain usable. |
-| Formatting and style | Open Style; check every color/font option and text size, close and reopen it, then resume plain-text editing. Headings and unchecked/completed items render as intended. |
+| Formatting and style | Open Style; check every color/font option and text size, close and reopen it, then resume plain-text editing. Repeat in landscape, including opening a size menu and using Done. Headings and unchecked/completed items render as intended. |
 | Settings | Widget hint changes persist; requesting onboarding shows it on the next launch only until dismissed. |
 | Persistence | Changes survive backgrounding and normal relaunch without test arguments. Check offline too. |
 | Trash | Disposable notes restore; confirmed permanent deletion removes only the intended note. |

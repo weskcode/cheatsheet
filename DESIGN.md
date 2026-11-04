@@ -4,8 +4,8 @@ Wes selected a blend of Native Notebook and Reference Sheet on 2026-11-03.
 The note gets the main area of the editor. A single solid document surface has a
 thin border in the note's selected color. Title, widget status and pinning stay
 visible above it. Style opens the existing color, font and text-size controls in
-a system presentation: a sheet on compact iPhone layouts and a popover where
-space allows.
+a system presentation: a sheet on compact iPhone layouts, full screen in
+landscape when height is compact, and a popover where space allows.
 
 Use semantic system fonts and foreground colors. Keep the four existing font
 choices, three shared text sizes and ten note colors. The editor uses the

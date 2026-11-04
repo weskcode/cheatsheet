@@ -56,7 +56,7 @@ struct EditorHeader: View {
         .popover(isPresented: $showsStyle) {
             EditorStyleView(note: $note, fontSize: $fontSize)
                 #if os(iOS)
-                .presentationCompactAdaptation(.sheet)
+                .presentationCompactAdaptation(horizontal: .sheet, vertical: .fullScreenCover)
                 #endif
         }
     }

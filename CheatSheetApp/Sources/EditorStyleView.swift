@@ -34,7 +34,11 @@ struct EditorStyleView: View {
             #endif
         }
         .frame(width: presentationWidth)
-        .frame(minHeight: AppDesign.stylePopoverMinimumHeight)
+        #if os(iOS)
+        .frame(idealHeight: AppDesign.stylePopoverHeight)
+        #else
+        .frame(minHeight: AppDesign.stylePopoverHeight)
+        #endif
     }
 
     private var styleForm: some View {

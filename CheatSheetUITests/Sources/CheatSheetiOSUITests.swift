@@ -221,6 +221,39 @@ final class CheatSheetiOSUITests: XCTestCase {
         XCTAssertTrue(app.staticTexts["Shown in widget"].waitForExistence(timeout: 10))
     }
 
+    func testStyleMenusRemainUsableInLandscape() throws {
+        let app = launchApp()
+        createNote(in: app)
+        addTeardownBlock {
+            await MainActor.run {
+                XCUIDevice.shared.orientation = .portrait
+            }
+        }
+        XCUIDevice.shared.orientation = .landscapeLeft
+        openStyle(in: app)
+        capture(app, "style-landscape")
+        XCTAssertGreaterThan(app.frame.width, app.frame.height)
+        let done = app.buttons["note-style-done-button"]
+        XCTAssertGreaterThanOrEqual(done.frame.minY, app.frame.minY)
+        XCTAssertLessThanOrEqual(done.frame.maxY, app.frame.maxY)
+        XCTAssertTrue(done.isHittable)
+        let sizePicker = app.buttons["font-size-picker"]
+        XCTAssertTrue(sizePicker.waitForExistence(timeout: 10))
+        for _ in 0..<3 where sizePicker.frame.maxY > app.frame.maxY {
+            app.collectionViews.firstMatch.swipeUp()
+        }
+        XCTAssertLessThanOrEqual(sizePicker.frame.maxY, app.frame.maxY)
+        XCTAssertTrue(sizePicker.isHittable)
+        let originalSize = try XCTUnwrap(sizePicker.value as? String)
+        sizePicker.tap()
+        for size in ["Small", "Medium", "Large"] {
+            XCTAssertTrue(app.buttons[size].waitForExistence(timeout: 5))
+        }
+        app.buttons[originalSize].tap()
+        closeStyle(in: app)
+        XCTAssertTrue(app.textViews["note-body-editor"].isHittable)
+    }
+
     private func openStyle(in app: XCUIApplication) {
         let button = app.buttons["note-style-button"]
         XCTAssertTrue(button.waitForExistence(timeout: 10))
