@@ -229,18 +229,18 @@ metadata publication, or submission.
 
 ## Open items: need you or App Store Connect access
 
-- **Physical QA and final candidate**: a later SE run executed 23 unique cases:
-  21 passed and two sweep/marketing cases failed. The four focused layout cases
-  passed at `c5cf88e` with test diff `8ba18be2`. A signed rebuild of the reviewed
-  test-only scroll correction (`e4ac9581`) was interrupted after eight seconds
-  when host memory pressure crossed the allowed threshold. No affected cases ran
-  and no new signed test binary was established. Corrected sweep/marketing tests
-  still need a successful
-  exact-diff rebuild and rerun. Do not treat the prior passes as a full run on
-  the expanded five-file diff. The earlier automation timeout and failed
-  diagnostic remain historical evidence; no useful diagnostic logs were obtained.
-  Normal-disk persistence, actual widgets, remaining Mac flows, physical iPad
-  checks, and final-candidate recording and screenshot parity remain pending.
+- **Physical QA and final candidate**: all 23 unique UI cases have passing SE
+  evidence across two test binaries. The 21 unchanged cases passed at `c5cf88e`
+  with diff `8ba18be2`. The corrected sweep and marketing cases passed after a
+  signed rebuild at `e8d61de` with reviewed diff `e4ac9581`. That exact five-file
+  correction is committed as `489cd91`. The rebuild took 10.04 seconds; both
+  affected cases passed with no failures, skips, or runtime warnings. This is
+  combined evidence, not a single 23-case run on one binary. Earlier capacity
+  stops, automation timeouts, and the failed diagnostic are historical evidence.
+  The owner reports normal-disk cold-relaunch persistence, with limited installed
+  binary identification. Actual widgets, VoiceOver, Mac Quick Capture, physical
+  iPad checks, and final-candidate recording and screenshot parity remain pending.
+  Mac minimum-window editing and Style opening and dismissal passed separately.
 - **Privacy policies and App Privacy**: the corrected AppHQ policy is published,
   and a restored web-session check on 2026-11-04 confirmed Data Not Collected
   is published in ASC. The approved owned-manifest correction is applied.
@@ -257,8 +257,9 @@ metadata publication, or submission.
   declaration was returned. Trader self-assessment remains open as described
   below. Do not change declarations or compatibility settings without named
   approval.
-- **Trader self-assessment**: the owner reports an existing non-trader declaration.
-  Its applicability remains under discussion based on hobby/noncommercial versus
-  business/professional activity. No DSA declaration change is authorized or made.
+- **Trader self-assessment**: the owner reports business or professional activity
+  and an existing non-trader declaration. Owner self-assessment and confirmation
+  of the account and app declarations remain pending. No DSA declaration change
+  or publication of contact information is authorized or made.
   Current agreement readback has no pending alert; do not treat the former
   Schedule 2 alert or expired web session as current blockers.
