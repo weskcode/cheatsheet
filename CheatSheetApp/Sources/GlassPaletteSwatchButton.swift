@@ -21,7 +21,7 @@ struct GlassPaletteSwatchButton: View {
                 }
         }
         .buttonStyle(.plain)
-        .frame(width: hitTargetSize, height: hitTargetSize)
+        .frame(width: Self.hitTargetSize, height: Self.hitTargetSize)
         .contentShape(Rectangle())
         // Declares this as one opaque accessible element rather than letting
         // the circle/checkmark overlay expose themselves as separate children,
@@ -39,7 +39,10 @@ struct GlassPaletteSwatchButton: View {
     private var selectedIndicator: some View {
         if isSelected {
             Image(systemName: differentiateWithoutColor ? "checkmark.circle.fill" : "checkmark")
-                .font(.caption.bold())
+                .resizable()
+                .scaledToFit()
+                .frame(width: 10, height: 10)
+                .fontWeight(.bold)
                 .foregroundStyle(.white)
                 .padding(2)
                 .background(.black.opacity(0.35), in: Circle())
@@ -50,7 +53,7 @@ struct GlassPaletteSwatchButton: View {
         isSelected ? AnyShapeStyle(.primary) : AnyShapeStyle(.secondary.opacity(0.35))
     }
 
-    private var hitTargetSize: CGFloat {
+    static var hitTargetSize: CGFloat {
         #if os(iOS)
         AppDesign.minimumHitSize
         #else
