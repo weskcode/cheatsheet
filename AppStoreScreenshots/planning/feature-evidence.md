@@ -38,7 +38,7 @@ against actual source, not assumed.
 | 2 | Automatic checklist & heading formatting | `DisplayLine.swift` (`parsedChecklistLine`), `ChecklistLineView.swift` | Type `- [ ]` and `#` like you already do; it renders as real checklist rows and headings, no special editor | Note editor/preview with a mix of heading + checked + unchecked lines | Yes |
 | 3 | 10 colors × 4 fonts per note | `GlassPalettePicker.swift`, `FontStylePicker.swift`, `CheatSheetPalette` (10 cases), `CheatSheetFontStyle` (4 cases) | Color-code by project/language at a glance | Editor header with the palette row visible/expanded | Yes |
 | 4 | 30-day Trash with restore | `TrashNoteView.swift`, `NoteTrashPolicy.retentionInterval` (30 days) | Deleted a note by accident? It's recoverable, not gone | Trash detail view showing "Deletes automatically in N days" + Restore | Yes |
-| 5 | 100% private, no account, no tracking, no network | `PrivacyInfo.xcprivacy` (both targets, empty `NSPrivacyCollectedDataTypes`, `NSPrivacyTracking: false`), zero network calls in source | Notes never leave the device | Text-forward claim slide (no login screen exists to show *because there isn't one*) | Yes, verifiable claim |
+| 5 | 100% private, no account, no tracking, no network | Owned app/widget `PrivacyInfo.xcprivacy` files declare no collected data and tracking is false; analytics initialization/signals are disabled in version 1.2. The bundled TelemetryDeck manifest separately declares potential analytics collection | Notes never leave the device | Text-forward claim slide (no login screen exists to show *because there isn't one*) | Yes, verifiable claim |
 
 ## Additional real, evidenced flows (not in the top-5 ASO set, available as alternates)
 

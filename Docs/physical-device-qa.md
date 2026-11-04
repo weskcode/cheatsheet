@@ -9,14 +9,15 @@ Simulator checks supplement physical-device testing; they do not replace it.
 - Physical UI testing needs a development team on `CheatSheetiOSUITests` and
   development profiles that include the designated devices. The connected
   iPhone SE already has matching local development profiles; no registration
-  or profile refresh is needed for that device. The test target's team setting
-  still awaits named signing approval.
+  or profile refresh is needed for that device. The approved test-target team
+  setting is now configured; its signed physical-device test build passed.
 - The app includes TelemetryDeck with initialization and signals disabled.
-  Its app privacy manifest still declares Product Interaction collection, and
-  the live privacy page incorrectly says there are no third-party SDKs.
-  Prepare corrections separately; manifest changes and publication need approval.
-- Settings has no privacy-policy link. Its placement needs a design decision
-  before implementation.
+  Its app privacy manifest now declares no collected data. The bundled SDK
+  retains its own Product Interaction and Device ID declarations for Analytics;
+  the aggregate archive report will therefore still include those SDK types.
+  AppHQ policy publication is approved but awaits authenticated editor access.
+- Settings now includes the approved separate Privacy Policy row, localized
+  in English and Spanish. Runtime link and browser-handoff checks are pending.
 - Read-only App Store Connect checks on 2026-11-03 confirmed published
   Data Not Collected privacy answers and active required agreements. Recheck
   them against the final candidate; EU trader status remains unverified.

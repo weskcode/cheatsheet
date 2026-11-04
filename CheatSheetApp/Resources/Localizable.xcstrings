@@ -773,6 +773,24 @@
         }
       }
     },
+    "Privacy Policy" : {
+      "comment" : "Settings link to the app privacy policy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Privacy Policy"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Política de privacidad"
+          }
+        }
+      }
+    },
     "Quick Capture" : {
       "extractionState" : "manual",
       "localizations" : {

@@ -36,9 +36,8 @@ in the app scores above 4+ on any axis. If Apple's expanded age-rating
 questionnaire (13+/16+/18+ categories, required since Jan 31 2026) asks
 about data-linked advertising or profiling, answer **No** to all. The
 app does not send analytics data in version 1.2. The included TelemetryDeck
-SDK is disabled. The app's privacy manifest still declares Product Interaction
-data, not linked to identity and not used for tracking. That declaration
-does not describe the disabled runtime behavior; see section 10.
+SDK is disabled. CheatSheet's own privacy manifest declares no collected data.
+The bundled SDK retains its own potential collection declarations; see section 10.
 
 ## 3. App Name (10/30 characters)
 
@@ -117,7 +116,7 @@ that testing newly caught; it doesn't add iPad as a new platform.
 
 | Field | Value |
 | --- | --- |
-| Support URL | `https://github.com/weskcode/cheatsheet/issues` |
+| Support URL | `https://cheatsheet.apphq.online/` |
 | Marketing URL | `https://cheatsheet.apphq.online/` (branded landing page) |
 | Privacy Policy URL | `https://cheatsheet.apphq.online/privacy` (live; correction pending publication) |
 | Contact email | `weskcode@duck.com` |
@@ -126,7 +125,8 @@ The AppHQ privacy page currently says the app includes no third-party SDKs,
 although TelemetryDeck is included and disabled. The GitHub Pages policy
 currently describes active analytics signals, which version 1.2 does not send.
 Both public policy copies need the corrected paragraph from `PRIVACY.md`.
-Publication requires separate approval and has not been performed.
+AppHQ publication is approved but awaits authenticated editor access. No public
+policy has been changed by this preparation.
 
 ## 10. App Privacy ("Nutrition Label") questionnaire
 
@@ -135,17 +135,19 @@ The owner's selected answer for version 1.2 is **Data Not Collected**.
 signal sending return without calling TelemetryDeck. The dependency remains
 included in the app.
 
-Confirm that the selected answer is published in App Store Connect before
-marking this check complete. The public API does not establish publication;
-the read-only web-session check on 2026-11-02 was blocked by expired
-credentials requiring two-factor authentication.
+Read-only web-session checks on 2026-11-03 confirmed that Data Not Collected is
+published and required agreements are active. Recheck the final candidate;
+the public API alone does not establish privacy publication.
 
-The app's `PrivacyInfo.xcprivacy` still declares Product Interaction data for
-App Functionality. The widget manifest declares no collected data types.
-`NSPrivacyTracking` is false in both manifests. The app manifest and disabled
-runtime behavior remain inconsistent. Manifest or dependency changes require
-separate approval, a new build, and a submission plan. This documentation
-correction changes neither manifest nor either submitted build.
+The approved app-manifest correction sets `NSPrivacyCollectedDataTypes` to an
+empty array, matching the disabled runtime behavior. The widget manifest also
+declares no collected data types. Tracking is false in both owned manifests.
+TelemetryDeck's bundled manifest remains unchanged: it declares Product
+Interaction and Device ID for Analytics. Xcode's aggregate archive privacy
+report therefore still includes the SDK's declared types. This does not mean
+the disabled SDK is collecting data; recheck runtime behavior before answering
+App Privacy for the final build. Enabling analytics or changing the dependency
+requires separate approval. Submitted build 42 does not contain this correction.
 
 ## 11. Screenshots
 
@@ -188,10 +190,10 @@ use during review. Use `weskcode@duck.com` for the email field there.
 
 ## Open items: need you or App Store Connect access
 
-- **Privacy policies and App Privacy**: public policy corrections await
-  publication approval. The selected ASC answer is Data Not Collected;
-  publication remains unverified. The manifest discrepancy remains open
-  as described in section 10.
+- **Privacy policies and App Privacy**: AppHQ policy correction publication is
+  approved and awaits editor login. Data Not Collected is published in ASC.
+  The approved owned-manifest correction is applied; final archive privacy
+  aggregation and runtime checks remain pending as described in section 10.
 - ❔ **EU Digital Services Act trader status**: required for EU distribution since Feb 2025; verified only inside App Store Connect, not from this repo.
 - **Mac App Store screenshots**: the uploaded set contains three images.
   Ten 2880×1800 images exist locally, from `mac-01.png` through `mac-10.png`.

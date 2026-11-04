@@ -49,6 +49,23 @@ final class CheatSheetiOSUITests: XCTestCase {
         )
     }
 
+    func testPrivacyPolicyIsAccessibleFromSettings() throws {
+        let app = launchApp()
+        XCTAssertTrue(app.buttons["new-note-button"].waitForExistence(timeout: 10))
+        openSecondaryAction("Settings", in: app)
+        let policy = app.descendants(matching: .any)["privacy-policy-link"]
+        XCTAssertTrue(policy.waitForExistence(timeout: 10))
+        XCTAssertEqual(policy.label, "Privacy Policy")
+        XCTAssertTrue(policy.isHittable)
+        capture(app, "settings-privacy-policy")
+        policy.tap()
+        let safari = XCUIApplication(bundleIdentifier: "com.apple.mobilesafari")
+        XCTAssertTrue(safari.wait(for: .runningForeground, timeout: 10))
+        app.activate()
+        XCTAssertTrue(policy.waitForExistence(timeout: 10))
+        XCTAssertTrue(app.buttons["Done"].isHittable)
+    }
+
     func testWidgetHintSettingSurvivesRelaunch() throws {
         let app = launchApp()
         XCTAssertTrue(app.buttons["new-note-button"].waitForExistence(timeout: 10))

@@ -210,6 +210,7 @@ targets:
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.wesleykeetch.wesleycheatsheet.ios.ui-tests
+        DEVELOPMENT_TEAM: HD39MR492X
         TARGETED_DEVICE_FAMILY: "1,2"
 schemes:
   CheatSheet:
