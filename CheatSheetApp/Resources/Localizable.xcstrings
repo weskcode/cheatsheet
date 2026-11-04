@@ -159,6 +159,24 @@
         }
       }
     },
+    "Choose note text size" : {
+      "comment" : "Help tooltip for the note appearance menu.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Choose note text size"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Elige el tamaño del texto de la nota"
+          }
+        }
+      }
+    },
     "Clear" : {
       "comment" : "Button that clears the quick-capture text field.",
       "extractionState" : "manual",
