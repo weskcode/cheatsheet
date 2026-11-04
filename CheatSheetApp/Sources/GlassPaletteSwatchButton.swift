@@ -2,6 +2,7 @@ import SwiftUI
 
 struct GlassPaletteSwatchButton: View {
     @Environment(\.accessibilityDifferentiateWithoutColor) private var differentiateWithoutColor
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
     let swatch: CheatSheetPalette
     let isSelected: Bool
     let action: () -> Void
@@ -32,7 +33,7 @@ struct GlassPaletteSwatchButton: View {
         .accessibilityValue(isSelected ? "Selected" : "Not selected")
         .accessibilityAddTraits(isSelected ? [.isSelected] : [])
         .help("Set \(swatch.displayName.lowercased()) note color")
-        .animation(.snappy(duration: 0.22), value: isSelected)
+        .animation(reduceMotion ? nil : .snappy(duration: 0.22), value: isSelected)
     }
 
     @ViewBuilder

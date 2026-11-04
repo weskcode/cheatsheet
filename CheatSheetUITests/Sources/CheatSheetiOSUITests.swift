@@ -51,6 +51,7 @@ final class CheatSheetiOSUITests: XCTestCase {
 
     func testWidgetHintSettingSurvivesRelaunch() throws {
         let app = launchApp()
+        XCTAssertTrue(app.buttons["new-note-button"].waitForExistence(timeout: 10))
         openSecondaryAction("Settings", in: app)
         let initialValue = try XCTUnwrap(widgetHintSwitch(in: app).value as? String)
         XCTAssertTrue(["0", "1"].contains(initialValue))
@@ -58,7 +59,8 @@ final class CheatSheetiOSUITests: XCTestCase {
         for expectedValue in [initialValue == "1" ? "0" : "1", initialValue] {
             let toggle = widgetHintSwitch(in: app)
             toggle.tap()
-            XCTAssertEqual(toggle.value as? String, expectedValue)
+            let changed = XCTNSPredicateExpectation(predicate: NSPredicate(format: "value == %@", expectedValue), object: toggle)
+            XCTAssertEqual(XCTWaiter.wait(for: [changed], timeout: 5), .completed)
 
             app.terminate()
             app.launch()
@@ -160,6 +162,7 @@ final class CheatSheetiOSUITests: XCTestCase {
         XCTAssertGreaterThanOrEqual(titleField.frame.minX, app.frame.minX)
         XCTAssertLessThanOrEqual(pinButton.frame.maxX, app.frame.maxX)
 
+        openStyle(in: app)
         let mintButton = app.descendants(matching: .any)["palette-59c979"]
         XCTAssertTrue(mintButton.waitForExistence(timeout: 10))
         mintButton.tap()
@@ -173,6 +176,7 @@ final class CheatSheetiOSUITests: XCTestCase {
         serifButton.tap()
         XCTAssertEqual(fontPicker.value as? String, "Serif")
 
+        closeStyle(in: app)
         XCTAssertTrue(pinButton.waitForExistence(timeout: 10))
         pinButton.tap()
         XCTAssertTrue(app.staticTexts["Shown in widget"].waitForExistence(timeout: 10))
@@ -181,11 +185,52 @@ final class CheatSheetiOSUITests: XCTestCase {
     func testPaletteTapTargetsDoNotOverlap() throws {
         let app = launchApp()
         createNote(in: app)
-        let blue = app.descendants(matching: .any)["palette-4b88ff"]
-        let cyan = app.descendants(matching: .any)["palette-45c7c4"]
-        XCTAssertTrue(blue.waitForExistence(timeout: 10))
-        XCTAssertTrue(cyan.waitForExistence(timeout: 10))
-        XCTAssertFalse(blue.frame.intersects(cyan.frame), "Adjacent note colors must have separate tap targets.")
+        openStyle(in: app)
+        let colors = ["4b88ff", "45c7c4", "8b7cff", "59c979", "8fbf3f", "d99a2b", "e86f51", "e85d75", "5d6bff", "5c6470"]
+        let swatches = colors.map { app.descendants(matching: .any)["palette-\($0)"] }
+        for (index, swatch) in swatches.enumerated() {
+            XCTAssertTrue(swatch.waitForExistence(timeout: 10))
+            XCTAssertTrue(swatch.isHittable)
+            for other in swatches.dropFirst(index + 1) {
+                XCTAssertFalse(swatch.frame.intersects(other.frame), "Note colors must have separate tap targets.")
+            }
+        }
+    }
+
+    func testStyleCanBeClosedAndReopenedWithoutLosingChanges() throws {
+        let app = launchApp()
+        createNote(in: app)
+        let bodyEditor = app.textViews["note-body-editor"]
+        bodyEditor.tap()
+        bodyEditor.typeText("Keep this note while changing its appearance.")
+        let editedBody = try XCTUnwrap(bodyEditor.value as? String)
+        XCTAssertTrue(editedBody.contains("Keep this note while changing its appearance."))
+        openStyle(in: app)
+        let mint = app.descendants(matching: .any)["palette-59c979"]
+        XCTAssertTrue(mint.waitForExistence(timeout: 10))
+        mint.tap()
+        closeStyle(in: app)
+        XCTAssertEqual(bodyEditor.value as? String, editedBody)
+        XCTAssertTrue(bodyEditor.isHittable)
+        openStyle(in: app)
+        XCTAssertEqual(mint.value as? String, "Selected")
+        closeStyle(in: app)
+        let pin = app.descendants(matching: .any)["widget-pin-button"]
+        XCTAssertTrue(pin.waitForExistence(timeout: 10))
+        pin.tap()
+        XCTAssertTrue(app.staticTexts["Shown in widget"].waitForExistence(timeout: 10))
+    }
+
+    private func openStyle(in app: XCUIApplication) {
+        let button = app.buttons["note-style-button"]
+        XCTAssertTrue(button.waitForExistence(timeout: 10))
+        button.tap()
+        XCTAssertTrue(app.buttons["note-style-done-button"].waitForExistence(timeout: 10))
+    }
+
+    private func closeStyle(in app: XCUIApplication) {
+        app.buttons["note-style-done-button"].tap()
+        XCTAssertTrue(app.buttons["note-style-button"].waitForExistence(timeout: 10))
     }
 
     func testTrashRestoreAndPermanentDeleteFlow() throws {
@@ -350,24 +395,21 @@ final class CheatSheetiOSUITests: XCTestCase {
         )
     }
 
-    /// iPhone hides the navigationBarDrawer search field until the list
-    /// scrolls, and a full-screen swipe reaches it. iPad keeps the list in a
-    /// split-view sidebar, where `.searchable(placement: .sidebar)` puts the
-    /// field above the first row -- a full-screen swipe there lands on the
-    /// detail pane and scrolls nothing, so the sidebar must be swiped directly.
+    /// Target the note list so the gesture reaches its search drawer on
+    /// iPhone and the sidebar on iPad, rather than another scrollable pane.
     private func revealSearchField(in app: XCUIApplication) -> XCUIElement {
-        var field = app.searchFields.firstMatch
+        let field = app.searchFields.firstMatch
         if field.waitForExistence(timeout: 2) { return field }
 
-        app.swipeDown()
-        field = app.searchFields.firstMatch
-        if field.waitForExistence(timeout: 2) { return field }
-
-        let sidebar = app.collectionViews["Sidebar"]
-        if sidebar.waitForExistence(timeout: 2) {
-            sidebar.swipeDown()
+        let list = noteList(in: app)
+        if list.exists {
+            let start = list.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.47))
+            let end = list.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.85))
+            start.press(forDuration: 0.1, thenDragTo: end)
+        } else {
+            app.swipeDown()
         }
-        return app.searchFields.firstMatch
+        return field
     }
 
     // MARK: - Ad hoc QA sweep (manual verification pass, runs on iPhone and iPad)
@@ -464,6 +506,7 @@ final class CheatSheetiOSUITests: XCTestCase {
         // Deliberately avoids palette-4b88ff (Blue), which is the app's likely
         // default tint, so every tap here produces a visibly different color
         // from the note surface's starting state, not just from each other.
+        openStyle(in: app)
         let paletteSamples = ["palette-d99a2b", "palette-e85d75", "palette-8b7cff"]
         for (index, identifier) in paletteSamples.enumerated() {
             // On iPhone Duo a Button with .accessibilityElement(children: .ignore)
@@ -487,6 +530,8 @@ final class CheatSheetiOSUITests: XCTestCase {
         app.buttons["Serif"].tap()
         XCTAssertEqual(fontPicker.value as? String, "Serif")
         capture(app, "09b-font-serif-applied")
+
+        closeStyle(in: app)
 
         // --- Item 8: pin / unpin ---
         // Matched by identifier alone for the same iPhone Duo reason as the swatches.

@@ -489,6 +489,24 @@
         }
       }
     },
+    "Note color" : {
+      "comment" : "Section heading for the note color palette.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Note color"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Color de la nota"
+          }
+        }
+      }
+    },
     "Note font" : {
       "comment" : "Accessibility label for the font style picker control.",
       "extractionState" : "manual",
@@ -503,6 +521,24 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Fuente de la nota"
+          }
+        }
+      }
+    },
+    "Note text size" : {
+      "comment" : "Visible label above the note text-size menu.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Note text size"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tamaño del texto de la nota"
           }
         }
       }
@@ -1042,6 +1078,24 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Empezar a escribir"
+          }
+        }
+      }
+    },
+    "Style" : {
+      "comment" : "Button and presentation title for note appearance controls.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Style"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Estilo"
           }
         }
       }

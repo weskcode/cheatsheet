@@ -104,7 +104,7 @@ At most two build/test lanes may run, each using its own device and DerivedData.
 | Launch and onboarding | Launch completes; onboarding dismisses and stays dismissed on subsequent launches. |
 | Capture and search | New notes open for editing; title/body searches find matching notes and clear correctly. |
 | Input edge cases | Empty notes, long titles, long unbroken text, emoji, multiline paste, and rapid edits remain usable. |
-| Formatting and style | Headings, unchecked/completed items, every color/font option, and text size render as intended. |
+| Formatting and style | Open Style; check every color/font option and text size, close and reopen it, then resume plain-text editing. Headings and unchecked/completed items render as intended. |
 | Settings | Widget hint changes persist; requesting onboarding shows it on the next launch only until dismissed. |
 | Persistence | Changes survive backgrounding and normal relaunch without test arguments. Check offline too. |
 | Trash | Disposable notes restore; confirmed permanent deletion removes only the intended note. |

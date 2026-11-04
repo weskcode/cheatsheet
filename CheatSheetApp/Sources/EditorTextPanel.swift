@@ -18,7 +18,11 @@ struct EditorTextPanel: View {
                 .lineSpacing(5)
                 .scrollContentBackground(.hidden)
                 .padding(AppDesign.editorTextPadding)
-                .noteContentSurface(tint: Color(hex: note.tintHex), cornerRadius: AppDesign.editorCornerRadius)
+                .background(.background, in: RoundedRectangle(cornerRadius: AppDesign.editorCornerRadius, style: .continuous))
+                .overlay {
+                    RoundedRectangle(cornerRadius: AppDesign.editorCornerRadius, style: .continuous)
+                        .strokeBorder(Color(hex: note.tintHex), lineWidth: 1)
+                }
                 #if os(iOS)
                 .scrollDismissesKeyboard(.interactively)
                 #endif
@@ -27,4 +31,13 @@ struct EditorTextPanel: View {
             WidgetCenter.shared.reloadAllTimelines()
         }
     }
+}
+
+#Preview("Editor") {
+    @Previewable @State var note = CheatSheetNote(
+        title: "Git Rescue",
+        body: "git status\ngit log --oneline\ngit restore --staged ."
+    )
+    EditorTextPanel(note: $note, pinAction: {})
+        .padding()
 }
