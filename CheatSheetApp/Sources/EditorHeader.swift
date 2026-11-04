@@ -72,7 +72,6 @@ struct EditorHeader: View {
         .controlSize(.small)
         .glassCompatibleButtonStyle(prominent: note.isPinned)
         .help(note.isPinned ? "This note appears in the widget" : "Show this note in the widget")
-        .accessibilityElement(children: .ignore)
         .accessibilityLabel(note.isPinned ? "Pinned to Widget" : "Use in Widget")
         .accessibilityAddTraits(note.isPinned ? [.isSelected] : [])
         .accessibilityIdentifier("widget-pin-button")

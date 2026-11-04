@@ -100,6 +100,7 @@ final class MarketingScreenshotTests: XCTestCase {
             ("HTTP Status Codes", "M12-http")
         ] {
             if back.waitForExistence(timeout: 5), back.isHittable { back.tap() }
+            app.revealNoteInList(title)
             XCTAssertTrue(app.staticTexts[title].waitForExistence(timeout: 10))
             app.staticTexts[title].firstMatch.tap()
             XCTAssertTrue(app.textFields["note-title-field"].waitForExistence(timeout: 10))

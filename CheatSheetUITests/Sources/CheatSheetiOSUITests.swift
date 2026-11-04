@@ -8,7 +8,7 @@ final class CheatSheetiOSUITests: XCTestCase {
 
     /// Launches with an in-memory store so the suite never touches the real
     /// App Group data, and with a deterministic onboarding state.
-    private func launchApp(showOnboarding: Bool = false) -> XCUIApplication {
+    private func launchApp(showOnboarding: Bool = false, extraArguments: [String] = []) -> XCUIApplication {
         let app = XCUIApplication()
         app.launchArguments = [
             "-cheatsheet-ui-testing",
@@ -17,7 +17,7 @@ final class CheatSheetiOSUITests: XCTestCase {
             // locale rather than depending on the simulator's default.
             "-AppleLanguages", "(en)",
             "-AppleLocale", "en_US"
-        ]
+        ] + extraArguments
         app.launch()
         return app
     }
@@ -180,7 +180,7 @@ final class CheatSheetiOSUITests: XCTestCase {
         XCTAssertLessThanOrEqual(pinButton.frame.maxX, app.frame.maxX)
 
         openStyle(in: app)
-        let mintButton = app.descendants(matching: .any)["palette-59c979"]
+        let mintButton = app.buttons["palette-59c979"]
         XCTAssertTrue(mintButton.waitForExistence(timeout: 10))
         mintButton.tap()
         XCTAssertEqual(mintButton.value as? String, "Selected")
@@ -204,10 +204,12 @@ final class CheatSheetiOSUITests: XCTestCase {
         createNote(in: app)
         openStyle(in: app)
         let colors = ["4b88ff", "45c7c4", "8b7cff", "59c979", "8fbf3f", "d99a2b", "e86f51", "e85d75", "5d6bff", "5c6470"]
-        let swatches = colors.map { app.descendants(matching: .any)["palette-\($0)"] }
+        let swatches = colors.map { app.buttons["palette-\($0)"] }
         for (index, swatch) in swatches.enumerated() {
             XCTAssertTrue(swatch.waitForExistence(timeout: 10))
             XCTAssertTrue(swatch.isHittable)
+            XCTAssertGreaterThanOrEqual(swatch.frame.width, 44)
+            XCTAssertGreaterThanOrEqual(swatch.frame.height, 44)
             for other in swatches.dropFirst(index + 1) {
                 XCTAssertFalse(swatch.frame.intersects(other.frame), "Note colors must have separate tap targets.")
             }
@@ -215,24 +217,34 @@ final class CheatSheetiOSUITests: XCTestCase {
     }
 
     func testStyleCanBeClosedAndReopenedWithoutLosingChanges() throws {
-        let app = launchApp()
+        let app = launchApp(extraArguments: [
+            "-showWidgetHints", "YES",
+            "-UIPreferredContentSizeCategoryName", "UICTContentSizeCategoryL"
+        ])
         createNote(in: app)
+        XCTAssertTrue(app.staticTexts["Ready for the widget"].waitForExistence(timeout: 10))
         let bodyEditor = app.textViews["note-body-editor"]
         bodyEditor.tap()
         bodyEditor.typeText("Keep this note while changing its appearance.")
         let editedBody = try XCTUnwrap(bodyEditor.value as? String)
         XCTAssertTrue(editedBody.contains("Keep this note while changing its appearance."))
         openStyle(in: app)
-        let mint = app.descendants(matching: .any)["palette-59c979"]
+        let mint = app.buttons["palette-59c979"]
         XCTAssertTrue(mint.waitForExistence(timeout: 10))
         mint.tap()
         closeStyle(in: app)
+        capture(app, "style-editor-after-dismissal", includeHierarchy: true)
         XCTAssertEqual(bodyEditor.value as? String, editedBody)
+        XCTAssertGreaterThanOrEqual(bodyEditor.frame.height, 44)
         XCTAssertTrue(bodyEditor.isHittable)
+        bodyEditor.tap()
+        bodyEditor.typeText(" Still editable after Style.")
+        XCTAssertTrue((bodyEditor.value as? String)?.contains("Still editable after Style.") == true)
+        capture(app, "style-editor-after-resuming")
         openStyle(in: app)
         XCTAssertEqual(mint.value as? String, "Selected")
         closeStyle(in: app)
-        let pin = app.descendants(matching: .any)["widget-pin-button"]
+        let pin = app.buttons["widget-pin-button"]
         XCTAssertTrue(pin.waitForExistence(timeout: 10))
         pin.tap()
         XCTAssertTrue(app.staticTexts["Shown in widget"].waitForExistence(timeout: 10))
@@ -248,17 +260,20 @@ final class CheatSheetiOSUITests: XCTestCase {
         }
         XCUIDevice.shared.orientation = .landscapeLeft
         openStyle(in: app)
-        capture(app, "style-landscape")
+        capture(app, "style-landscape", includeHierarchy: true)
         XCTAssertGreaterThan(app.frame.width, app.frame.height)
         let done = app.buttons["note-style-done-button"]
         XCTAssertGreaterThanOrEqual(done.frame.minY, app.frame.minY)
         XCTAssertLessThanOrEqual(done.frame.maxY, app.frame.maxY)
         XCTAssertTrue(done.isHittable)
         let sizePicker = app.buttons["font-size-picker"]
-        XCTAssertTrue(sizePicker.waitForExistence(timeout: 10))
-        for _ in 0..<3 where sizePicker.frame.maxY > app.frame.maxY {
+        for _ in 0..<3 {
+            if sizePicker.exists, sizePicker.isHittable, sizePicker.frame.maxY <= app.frame.maxY {
+                break
+            }
             app.collectionViews.firstMatch.swipeUp()
         }
+        XCTAssertTrue(sizePicker.waitForExistence(timeout: 10))
         XCTAssertLessThanOrEqual(sizePicker.frame.maxY, app.frame.maxY)
         XCTAssertTrue(sizePicker.isHittable)
         let originalSize = try XCTUnwrap(sizePicker.value as? String)
@@ -269,6 +284,29 @@ final class CheatSheetiOSUITests: XCTestCase {
         app.buttons[originalSize].tap()
         closeStyle(in: app)
         XCTAssertTrue(app.textViews["note-body-editor"].isHittable)
+    }
+
+    func testEditorRemainsUsableAtAccessibilityTextSize() throws {
+        let app = launchApp(extraArguments: [
+            "-showWidgetHints", "YES",
+            "-UIPreferredContentSizeCategoryName", "UICTContentSizeCategoryAccessibilityXXXL"
+        ])
+        createNote(in: app)
+        XCTAssertGreaterThan(app.textFields["note-title-field"].frame.height, 44)
+        let bodyEditor = app.textViews["note-body-editor"]
+        bodyEditor.tap()
+        bodyEditor.typeText("Writing with accessibility text.")
+        let editedBody = try XCTUnwrap(bodyEditor.value as? String)
+        openStyle(in: app)
+        XCTAssertTrue(app.buttons["note-style-done-button"].isHittable)
+        closeStyle(in: app)
+        capture(app, "editor-accessibility-text", includeHierarchy: true)
+        XCTAssertEqual(bodyEditor.value as? String, editedBody)
+        XCTAssertGreaterThanOrEqual(bodyEditor.frame.height, 44)
+        XCTAssertTrue(bodyEditor.isHittable)
+        bodyEditor.tap()
+        bodyEditor.typeText(" Still editable.")
+        XCTAssertTrue((bodyEditor.value as? String)?.contains("Still editable.") == true)
     }
 
     private func openStyle(in app: XCUIApplication) {
@@ -507,8 +545,10 @@ final class CheatSheetiOSUITests: XCTestCase {
             "Vim Motions", "zsh + Homebrew", "Xcode Shortcuts", "HTTP Status Codes"
         ]
         for title in demoTitles {
+            app.revealNoteInList(title)
             XCTAssertTrue(app.staticTexts[title].waitForExistence(timeout: 10), "Missing seeded demo note '\(title)'.")
         }
+        app.revealNoteInList("Git Rescue", direction: .towardStart)
         XCTAssertTrue(app.images["Pinned"].waitForExistence(timeout: 10), "Expected exactly one pin indicator (Git Rescue) after seeding.")
         XCTAssertEqual(app.images.matching(identifier: "Pinned").count, 1)
         capture(app, "03-demo-notes-seeded")
@@ -559,9 +599,7 @@ final class CheatSheetiOSUITests: XCTestCase {
         openStyle(in: app)
         let paletteSamples = ["palette-d99a2b", "palette-e85d75", "palette-8b7cff"]
         for (index, identifier) in paletteSamples.enumerated() {
-            // On iPhone Duo a Button with .accessibilityElement(children: .ignore)
-            // is exposed as an Other element, so match by identifier alone.
-            let swatch = app.descendants(matching: .any)[identifier]
+            let swatch = app.buttons[identifier]
             XCTAssertTrue(swatch.waitForExistence(timeout: 10), "Missing palette swatch \(identifier)")
             swatch.tap()
             XCTAssertEqual(swatch.value as? String, "Selected", "\(identifier) should report Selected after tap.")
@@ -585,7 +623,7 @@ final class CheatSheetiOSUITests: XCTestCase {
 
         // --- Item 8: pin / unpin ---
         // Matched by identifier alone for the same iPhone Duo reason as the swatches.
-        let pinButton = app.descendants(matching: .any)["widget-pin-button"]
+        let pinButton = app.buttons["widget-pin-button"]
         XCTAssertTrue(pinButton.waitForExistence(timeout: 10))
         pinButton.tap()
         XCTAssertTrue(app.staticTexts["Shown in widget"].waitForExistence(timeout: 10))
@@ -652,11 +690,17 @@ final class CheatSheetiOSUITests: XCTestCase {
         assertNoPersistenceBanner(app)
     }
 
-    private func capture(_ app: XCUIApplication, _ name: String) {
-        let attachment = XCTAttachment(screenshot: app.screenshot())
+    private func capture(_ app: XCUIApplication, _ name: String, includeHierarchy: Bool = false) {
+        let attachment = XCTAttachment(screenshot: XCUIScreen.main.screenshot())
         attachment.name = name
         attachment.lifetime = .keepAlways
         add(attachment)
+        if includeHierarchy {
+            let hierarchy = XCTAttachment(string: app.debugDescription)
+            hierarchy.name = name + "-hierarchy"
+            hierarchy.lifetime = .keepAlways
+            add(hierarchy)
+        }
     }
 
     private func assertNoPersistenceBanner(_ app: XCUIApplication) {
@@ -687,6 +731,37 @@ final class CheatSheetiOSUITests: XCTestCase {
 }
 
 extension XCUIApplication {
+    enum NoteListScrollDirection {
+        case towardStart
+        case towardEnd
+    }
+
+    func revealNoteInList(_ title: String, direction: NoteListScrollDirection = .towardEnd) {
+        let sidebar = collectionViews["Sidebar"]
+        let list = sidebar.exists ? sidebar : collectionViews["note-list"]
+        guard list.waitForExistence(timeout: 5) else {
+            XCTFail("Expected the note list before scrolling to '\(title)'.")
+            return
+        }
+        let row = list.staticTexts[title].firstMatch
+        // SwiftUI's lazy list omits offscreen notes from the SE accessibility tree.
+        for _ in 0..<5 {
+            if row.exists, row.isHittable, list.frame.contains(row.frame) {
+                return
+            }
+            switch direction {
+            case .towardStart:
+                list.swipeDown()
+            case .towardEnd:
+                list.swipeUp()
+            }
+        }
+        XCTAssertTrue(
+            row.exists && row.isHittable && list.frame.contains(row.frame),
+            "Expected note '\(title)' to be visible after at most five list swipes."
+        )
+    }
+
     /// The compact NavigationStack's system back button, matched by its system
     /// identifier: iPhone Duo puts it in a side toolbar, so there is no
     /// navigation bar to search.
