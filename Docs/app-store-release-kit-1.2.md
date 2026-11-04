@@ -142,10 +142,12 @@ The owner's selected answer for version 1.2 is **Data Not Collected**.
 signal sending return without calling TelemetryDeck. The dependency remains
 included in the app.
 
-Earlier read-only web-session evidence recorded published Data Not Collected
-and active agreements. A fresh check on 2026-11-04 was blocked by an expired
-Apple web session requiring 2FA. Current publication and agreement status remain
-unverified. The public API alone does not establish privacy publication.
+A restored web-session check on 2026-11-04 confirmed Data Not Collected is
+published. The program license (version 5033) and Developer Agreement are active.
+After the owner's acceptance, a fresh agreement readback returned `pending=false`
+and no contract messages. The earlier Schedule 2 alert is cleared. No agreement
+was accepted by the agent. The public API alone does not establish privacy
+publication.
 
 The approved app-manifest correction sets `NSPrivacyCollectedDataTypes` to an
 empty array, matching the disabled runtime behavior. The widget manifest also
@@ -227,23 +229,36 @@ metadata publication, or submission.
 
 ## Open items: need you or App Store Connect access
 
-- **Physical QA and final candidate**: the current SE regression attempt timed
-  out while enabling XCTest automation, before executing any cases. The approved
-  diagnostic collection was attempted once and returned no useful device logs.
-  These results establish neither a root cause nor a recovery. Normal-disk
-  persistence, actual widgets, remaining Mac flows, physical iPad checks, and
-  final-candidate recording and screenshot parity remain pending.
+- **Physical QA and final candidate**: a later SE run executed 23 unique cases:
+  21 passed and two sweep/marketing cases failed. The four focused layout cases
+  passed at `c5cf88e` with test diff `8ba18be2`. A signed rebuild of the reviewed
+  test-only scroll correction (`e4ac9581`) was interrupted after eight seconds
+  when host memory pressure crossed the allowed threshold. No affected cases ran
+  and no new signed test binary was established. Corrected sweep/marketing tests
+  still need a successful
+  exact-diff rebuild and rerun. Do not treat the prior passes as a full run on
+  the expanded five-file diff. The earlier automation timeout and failed
+  diagnostic remain historical evidence; no useful diagnostic logs were obtained.
+  Normal-disk persistence, actual widgets, remaining Mac flows, physical iPad
+  checks, and final-candidate recording and screenshot parity remain pending.
 - **Privacy policies and App Privacy**: the corrected AppHQ policy is published,
-  and historical evidence records Data Not Collected published in ASC. A fresh
-  publication check is blocked by the expired web session. The approved owned-manifest
-  correction is applied. The Settings link opened Safari in a passing physical
-  SE test at source `0a55950`; final-candidate runtime and archive privacy
+  and a restored web-session check on 2026-11-04 confirmed Data Not Collected
+  is published in ASC. The approved owned-manifest correction is applied.
+  The Settings link opened Safari in a passing physical SE test at source
+  `0a55950`; final-candidate runtime and archive privacy
   aggregation checks remain pending as described in section 10.
 - **Mac App Store screenshots**: the uploaded set contains three images.
   Ten 2880×1800 images exist locally, from `mac-01.png` through `mac-10.png`.
   The uploaded set was inspected separately and has not been replaced.
-- **Compatibility and declarations**: current Mac/Vision Pro opt-ins and
-  required Regulations & Permits declarations need a fresh web-session check.
-  EU DSA trader verification is account-level and is absent from the app
-  declaration list. Do not change answers or compatibility settings without
-  named approval.
+- **Compatibility and declarations**: the restored web session confirmed
+  iOS-on-Mac and iOS-on-Vision-Pro are enabled; neither setting was changed.
+  This readback does not prove runtime compatibility. The returned medical-device
+  declaration is pending but optional (`required=false`); no required pending
+  declaration was returned. Trader self-assessment remains open as described
+  below. Do not change declarations or compatibility settings without named
+  approval.
+- **Trader self-assessment**: the owner reports an existing non-trader declaration.
+  Its applicability remains under discussion based on hobby/noncommercial versus
+  business/professional activity. No DSA declaration change is authorized or made.
+  Current agreement readback has no pending alert; do not treat the former
+  Schedule 2 alert or expired web session as current blockers.
