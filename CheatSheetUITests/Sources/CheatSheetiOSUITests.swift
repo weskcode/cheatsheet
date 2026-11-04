@@ -49,6 +49,54 @@ final class CheatSheetiOSUITests: XCTestCase {
         )
     }
 
+    func testWidgetHintSettingSurvivesRelaunch() throws {
+        let app = launchApp()
+        openSecondaryAction("Settings", in: app)
+        let initialValue = try XCTUnwrap(widgetHintSwitch(in: app).value as? String)
+        XCTAssertTrue(["0", "1"].contains(initialValue))
+
+        for expectedValue in [initialValue == "1" ? "0" : "1", initialValue] {
+            let toggle = widgetHintSwitch(in: app)
+            toggle.tap()
+            XCTAssertEqual(toggle.value as? String, expectedValue)
+
+            app.terminate()
+            app.launch()
+            openSecondaryAction("Settings", in: app)
+            XCTAssertEqual(widgetHintSwitch(in: app).value as? String, expectedValue)
+        }
+    }
+
+    func testSettingsCanShowOnboardingOnNextLaunch() throws {
+        let app = launchApp()
+        XCTAssertTrue(app.buttons["new-note-button"].waitForExistence(timeout: 10))
+        openSecondaryAction("Settings", in: app)
+        let resetButton = app.buttons["Show onboarding next launch"]
+        XCTAssertTrue(resetButton.waitForExistence(timeout: 10))
+        resetButton.tap()
+
+        app.terminate()
+        app.launchArguments.removeAll { $0 == "-cheatsheet-skip-onboarding" }
+        app.launch()
+        let doneButton = app.buttons["onboarding-done-button"]
+        XCTAssertTrue(doneButton.waitForExistence(timeout: 10))
+        XCTAssertTrue(app.staticTexts["Add notes"].waitForExistence(timeout: 10))
+        doneButton.tap()
+        XCTAssertTrue(app.buttons["new-note-button"].waitForExistence(timeout: 10))
+
+        app.terminate()
+        app.launch()
+        XCTAssertTrue(app.buttons["new-note-button"].waitForExistence(timeout: 10))
+        XCTAssertFalse(app.buttons["onboarding-done-button"].exists)
+    }
+
+    private func widgetHintSwitch(in app: XCUIApplication) -> XCUIElement {
+        let labeledToggle = app.switches["Show widget setup hint"]
+        XCTAssertTrue(labeledToggle.waitForExistence(timeout: 10))
+        let control = labeledToggle.switches.firstMatch
+        return control.exists ? control : labeledToggle
+    }
+
     func testCreatingANoteAddsItToTheList() throws {
         let app = launchApp()
 
@@ -128,6 +176,16 @@ final class CheatSheetiOSUITests: XCTestCase {
         XCTAssertTrue(pinButton.waitForExistence(timeout: 10))
         pinButton.tap()
         XCTAssertTrue(app.staticTexts["Shown in widget"].waitForExistence(timeout: 10))
+    }
+
+    func testPaletteTapTargetsDoNotOverlap() throws {
+        let app = launchApp()
+        createNote(in: app)
+        let blue = app.descendants(matching: .any)["palette-4b88ff"]
+        let cyan = app.descendants(matching: .any)["palette-45c7c4"]
+        XCTAssertTrue(blue.waitForExistence(timeout: 10))
+        XCTAssertTrue(cyan.waitForExistence(timeout: 10))
+        XCTAssertFalse(blue.frame.intersects(cyan.frame), "Adjacent note colors must have separate tap targets.")
     }
 
     func testTrashRestoreAndPermanentDeleteFlow() throws {
