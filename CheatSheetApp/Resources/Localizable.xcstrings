@@ -614,6 +614,24 @@
         }
       }
     },
+    "Open Style to choose a color or font. The widget follows that style." : {
+      "comment" : "Onboarding step description.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Open Style to choose a color or font. The widget follows that style."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abre Estilo para elegir un color o una fuente. El widget seguirá ese estilo."
+          }
+        }
+      }
+    },
     "Paste a command, shortcut, or reminder" : {
       "comment" : "Placeholder text in the menu bar quick-capture editor.",
       "extractionState" : "manual",
@@ -628,24 +646,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Pega un comando, atajo o recordatorio"
-          }
-        }
-      }
-    },
-    "Pick a color or font above the editor and the widget follows that style." : {
-      "comment" : "Onboarding step description.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Pick a color or font above the editor and the widget follows that style."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Elige un color o una fuente encima del editor y el widget seguirá ese estilo."
           }
         }
       }
@@ -1240,6 +1240,24 @@
         }
       }
     },
+    "Use New Note to create small Git, Swift, terminal, or project checklists." : {
+      "comment" : "Onboarding step description.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Use New Note to create small Git, Swift, terminal, or project checklists."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Usa Nota nueva para crear pequeñas listas de Git, Swift, terminal o proyectos."
+          }
+        }
+      }
+    },
     "Use in Widget" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -1253,24 +1271,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Usar en el widget"
-          }
-        }
-      }
-    },
-    "Use the plus button to create small Git, Swift, terminal, or project checklists." : {
-      "comment" : "Onboarding step description.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Use the plus button to create small Git, Swift, terminal, or project checklists."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Usa el botón más para crear pequeñas listas de Git, Swift, terminal o proyectos."
           }
         }
       }
