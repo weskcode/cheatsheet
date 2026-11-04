@@ -118,15 +118,14 @@ that testing newly caught; it doesn't add iPad as a new platform.
 | --- | --- |
 | Support URL | `https://cheatsheet.apphq.online/` |
 | Marketing URL | `https://cheatsheet.apphq.online/` (branded landing page) |
-| Privacy Policy URL | `https://cheatsheet.apphq.online/privacy` (live; correction pending publication) |
+| Privacy Policy URL | `https://cheatsheet.apphq.online/privacy` (corrected policy published) |
 | Contact email | `weskcode@duck.com` |
 
-The AppHQ privacy page currently says the app includes no third-party SDKs,
-although TelemetryDeck is included and disabled. The GitHub Pages policy
-currently describes active analytics signals, which version 1.2 does not send.
-Both public policy copies need the corrected paragraph from `PRIVACY.md`.
-AppHQ publication is approved but awaits authenticated editor access. No public
-policy has been changed by this preparation.
+The corrected AppHQ privacy policy was published and read back on 2026-11-04.
+It discloses that TelemetryDeck is included but disabled in version 1.2.
+The existing name, contact, download URL, and description fields were preserved.
+The separate GitHub Pages policy previously described active analytics signals;
+its deployment remains unverified. App Store Connect uses the corrected AppHQ URL.
 
 ## 10. App Privacy ("Nutrition Label") questionnaire
 
@@ -190,10 +189,11 @@ use during review. Use `weskcode@duck.com` for the email field there.
 
 ## Open items: need you or App Store Connect access
 
-- **Privacy policies and App Privacy**: AppHQ policy correction publication is
-  approved and awaits editor login. Data Not Collected is published in ASC.
-  The approved owned-manifest correction is applied; final archive privacy
-  aggregation and runtime checks remain pending as described in section 10.
+- **Privacy policies and App Privacy**: the corrected AppHQ policy is published,
+  and Data Not Collected is published in ASC. The approved owned-manifest
+  correction is applied. The Settings link opened Safari in a passing physical
+  SE test at source `0a55950`; final-candidate runtime and archive privacy
+  aggregation checks remain pending as described in section 10.
 - ❔ **EU Digital Services Act trader status**: required for EU distribution since Feb 2025; verified only inside App Store Connect, not from this repo.
 - **Mac App Store screenshots**: the uploaded set contains three images.
   Ten 2880×1800 images exist locally, from `mac-01.png` through `mac-10.png`.

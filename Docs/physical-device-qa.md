@@ -15,9 +15,12 @@ Simulator checks supplement physical-device testing; they do not replace it.
   Its app privacy manifest now declares no collected data. The bundled SDK
   retains its own Product Interaction and Device ID declarations for Analytics;
   the aggregate archive report will therefore still include those SDK types.
-  AppHQ policy publication is approved but awaits authenticated editor access.
+  The corrected AppHQ policy was published and read back on 2026-11-04.
 - Settings now includes the approved separate Privacy Policy row, localized
-  in English and Spanish. Runtime link and browser-handoff checks are pending.
+  in English and Spanish. On 2026-11-04, three focused tests passed on a
+  physical iPhone SE running iOS 27.2 at source `0a55950`: the policy link
+  opened Safari, onboarding reset survived relaunch, and widget hints persisted.
+  This development build is 1.2 (18), not the final App Store candidate.
 - Read-only App Store Connect checks on 2026-11-03 confirmed published
   Data Not Collected privacy answers and active required agreements. Recheck
   them against the final candidate; EU trader status remains unverified.
