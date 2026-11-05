@@ -2,6 +2,7 @@ import SwiftUI
 
 struct GlassPaletteSwatchButton: View {
     @Environment(\.accessibilityDifferentiateWithoutColor) private var differentiateWithoutColor
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
     let swatch: CheatSheetPalette
     let isSelected: Bool
     let action: () -> Void
@@ -19,20 +20,16 @@ struct GlassPaletteSwatchButton: View {
                     Circle()
                         .stroke(borderStyle, lineWidth: isSelected ? 2 : 1)
                 }
+                .frame(width: Self.hitTargetSize, height: Self.hitTargetSize)
+                .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
-        .frame(width: Self.hitTargetSize, height: Self.hitTargetSize)
-        .contentShape(Rectangle())
-        // Declares this as one opaque accessible element rather than letting
-        // the circle/checkmark overlay expose themselves as separate children,
-        // which otherwise interferes with the explicit label/value below.
-        .accessibilityElement(children: .ignore)
         .accessibilityLabel(Text("\(swatch.displayName) note color"))
         .accessibilityIdentifier("palette-\(swatch.rawValue.lowercased())")
         .accessibilityValue(isSelected ? "Selected" : "Not selected")
         .accessibilityAddTraits(isSelected ? [.isSelected] : [])
         .help("Set \(swatch.displayName.lowercased()) note color")
-        .animation(.snappy(duration: 0.22), value: isSelected)
+        .animation(reduceMotion ? nil : .snappy(duration: 0.22), value: isSelected)
     }
 
     @ViewBuilder
@@ -46,6 +43,7 @@ struct GlassPaletteSwatchButton: View {
                 .foregroundStyle(.white)
                 .padding(2)
                 .background(.black.opacity(0.35), in: Circle())
+                .accessibilityHidden(true)
         }
     }
 

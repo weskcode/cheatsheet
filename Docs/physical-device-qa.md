@@ -7,16 +7,25 @@ Simulator checks supplement physical-device testing; they do not replace it.
 ## Gates identified in the build 42 audit
 
 - Physical UI testing needs a development team on `CheatSheetiOSUITests` and
-  development profiles that include the designated devices. Signing and
-  provisioning changes await named approval.
+  development profiles that include the designated devices. The connected
+  iPhone SE already has matching local development profiles; no registration
+  or profile refresh is needed for that device. The approved test-target team
+  setting is now configured; its signed physical-device test build passed.
 - The app includes TelemetryDeck with initialization and signals disabled.
-  Its app privacy manifest still declares Product Interaction collection, and
-  the live privacy page incorrectly says there are no third-party SDKs.
-  Prepare corrections separately; manifest changes and publication need approval.
-- Settings has no privacy-policy link. Its placement needs a design decision
-  before implementation.
-- The cached Apple web session is expired. App Privacy publication and
-  required agreements remain unverified until authentication is restored.
+  Its app privacy manifest now declares no collected data. The bundled SDK
+  retains its own Product Interaction and Device ID declarations for Analytics;
+  the aggregate archive report will therefore still include those SDK types.
+  The corrected AppHQ policy was published and read back on 2026-11-04.
+- Settings now includes the approved separate Privacy Policy row, localized
+  in English and Spanish. On 2026-11-04, three focused tests passed on a
+  physical iPhone SE running iOS 27.2 at source `0a55950`: the policy link
+  opened Safari, onboarding reset survived relaunch, and widget hints persisted.
+  This development build is 1.2 (18), not the final App Store candidate.
+- Read-only App Store Connect checks on 2026-11-03 confirmed published
+  Data Not Collected privacy answers and active required agreements. Recheck
+  them against the final candidate; EU trader status remains unverified.
+- Uploaded screenshots include the old inline appearance controls. Refresh
+  the affected assets before submitting a build with the Style presentation.
 - The physical-device recording has not been produced. Do not label simulator
   evidence or a development build as a recording of the submitted candidate.
 
@@ -67,6 +76,8 @@ Select the exact destination reported by Xcode. Use an existing iOS 27+
 simulator under the current local policy, or an approved physical QA device.
 The app's deployment floor remains iOS 26.0. A missing destination blocks its
 check; do not install an older simulator runtime to satisfy it.
+If the SDK check fails, pause submission preparation and report the mismatch;
+do not install another Xcode or runtime as an automatic repair.
 
 After signing approval and profile preparation, run the existing UI suite on
 the physical device. Set `qa_destination` to `platform=iOS,id=<DEVICE_UDID>`;
@@ -104,7 +115,7 @@ At most two build/test lanes may run, each using its own device and DerivedData.
 | Launch and onboarding | Launch completes; onboarding dismisses and stays dismissed on subsequent launches. |
 | Capture and search | New notes open for editing; title/body searches find matching notes and clear correctly. |
 | Input edge cases | Empty notes, long titles, long unbroken text, emoji, multiline paste, and rapid edits remain usable. |
-| Formatting and style | Headings, unchecked/completed items, every color/font option, and text size render as intended. |
+| Formatting and style | Open Style; check every color/font option and text size, close and reopen it, then resume plain-text editing. Repeat in landscape, including opening a size menu and using Done. Headings and unchecked/completed items render as intended. |
 | Settings | Widget hint changes persist; requesting onboarding shows it on the next launch only until dismissed. |
 | Persistence | Changes survive backgrounding and normal relaunch without test arguments. Check offline too. |
 | Trash | Disposable notes restore; confirmed permanent deletion removes only the intended note. |

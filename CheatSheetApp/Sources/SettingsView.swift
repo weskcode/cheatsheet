@@ -28,6 +28,13 @@ struct SettingsView: View {
                     hasCompletedOnboarding = false
                 }
             }
+
+            Section {
+                if let privacyPolicyURL = URL(string: "https://cheatsheet.apphq.online/privacy") {
+                    Link("Privacy Policy", destination: privacyPolicyURL)
+                        .accessibilityIdentifier("privacy-policy-link")
+                }
+            }
         }
         .formStyle(.grouped)
         #if os(macOS)

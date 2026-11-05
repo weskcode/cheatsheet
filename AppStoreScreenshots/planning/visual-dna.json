@@ -25,9 +25,10 @@
   },
   "materialTreatment": {
     "primary": "Native Liquid Glass (.glassEffect / .buttonStyle(.glass...) / GlassEffectContainer) on macOS 26+ / iOS 26+",
-    "fallback": "content: .regularMaterial (dark) / .ultraThinMaterial (light) on earlier supported OS (macOS 15+/iOS 18+)",
-    "noteContentSurface": ".regularMaterial base + palette-tint overlay at 9-16% opacity + 1px hairline stroke at 8-14% opacity",
-    "evidence": "ViewModifiers.swift: LiquidGlassPanelModifier, NoteContentSurfaceModifier"
+    "fallback": "Supported OS floor is macOS 26 / iOS 26; existing material treatments remain on previews and Trash.",
+    "editorSurface": "Solid semantic background with a 1pt border in the selected note color; continuous 20pt corners",
+    "noteContentSurface": "Preview and Trash surfaces retain .regularMaterial with the existing tint wash and stroke",
+    "evidence": "EditorTextPanel.swift and ViewModifiers.swift: LiquidGlassPanelModifier, NoteContentSurfaceModifier"
   },
   "typography": {
     "noteFontChoices": ["monospaced (default)", "system", "rounded", "serif"],
@@ -51,7 +52,7 @@
     "system": "SF Symbols exclusively, no custom iconography",
     "recurring": ["note.text", "pin.fill / pin", "archivebox / archivebox.fill", "checkmark.circle.fill / circle", "text.page.fill", "square.and.pencil"]
   },
-  "motionPersonality": "Restrained — a single .snappy(duration: 0.22) selection animation on the palette swatch; no bouncy/playful motion anywhere in the codebase.",
+  "motionPersonality": "Restrained — a .snappy(duration: 0.22) palette selection animation, disabled with Reduce Motion; no bouncy/playful motion anywhere in the codebase.",
   "emotionalTone": "Calm, precise, get-in-get-out utility. Product principles explicitly state 'deliberately narrow.' No celebratory confetti, no gamification, no streaks/badges.",
   "appIcon": {
     "asset": "CheatSheetApp/Resources/AppIcon.icon",

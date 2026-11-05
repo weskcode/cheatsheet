@@ -48,6 +48,26 @@ final class CheatSheetiOSSpanishLocaleUITests: XCTestCase {
         )
     }
 
+    func testStyleControlsRenderInSpanish() throws {
+        let app = launchAppInSpanish()
+        let newNote = app.buttons["new-note-button"]
+        XCTAssertTrue(newNote.waitForExistence(timeout: 10))
+        newNote.tap()
+        let style = app.buttons["note-style-button"]
+        XCTAssertTrue(style.waitForExistence(timeout: 10))
+        XCTAssertTrue(style.label.contains("Estilo"))
+        style.tap()
+        XCTAssertTrue(app.staticTexts["Color de la nota"].waitForExistence(timeout: 10))
+        let sizePicker = app.buttons["font-size-picker"]
+        XCTAssertTrue(sizePicker.exists)
+        XCTAssertEqual(sizePicker.label, "Tamaño del texto de la nota")
+        XCTAssertFalse(app.buttons["Note text size"].exists)
+        let done = app.buttons["note-style-done-button"]
+        XCTAssertTrue(done.isHittable)
+        done.tap()
+        XCTAssertTrue(app.textViews["note-body-editor"].isHittable)
+    }
+
     /// Confirms the Spanish String Catalog entries actually load and render,
     /// not just that the app avoids crashing.
     func testSeededStarterNoteRendersInSpanish() throws {
