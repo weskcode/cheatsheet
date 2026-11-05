@@ -18,7 +18,14 @@ struct FontStylePicker: View {
                 }
             }
         } label: {
-            Label(selection.displayName, systemImage: "textformat")
+            Text(selection.displayName)
+                .fixedSize(horizontal: false, vertical: true)
+                .multilineTextAlignment(.leading)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                #if os(iOS)
+                .frame(minHeight: AppDesign.minimumHitSize)
+                #endif
+                .contentShape(Rectangle())
         }
         .menuStyle(.button)
         .controlSize(.small)

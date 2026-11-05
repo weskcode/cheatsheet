@@ -159,6 +159,24 @@
         }
       }
     },
+    "Choose note text size" : {
+      "comment" : "Help tooltip for the note appearance menu.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Choose note text size"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Elige el tamaño del texto de la nota"
+          }
+        }
+      }
+    },
     "Clear" : {
       "comment" : "Button that clears the quick-capture text field.",
       "extractionState" : "manual",
@@ -489,6 +507,24 @@
         }
       }
     },
+    "Note color" : {
+      "comment" : "Section heading for the note color palette.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Note color"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Color de la nota"
+          }
+        }
+      }
+    },
     "Note font" : {
       "comment" : "Accessibility label for the font style picker control.",
       "extractionState" : "manual",
@@ -503,6 +539,24 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Fuente de la nota"
+          }
+        }
+      }
+    },
+    "Note text size" : {
+      "comment" : "Visible label above the note text-size menu.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Note text size"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tamaño del texto de la nota"
           }
         }
       }
@@ -560,6 +614,24 @@
         }
       }
     },
+    "Open Style to choose a color or font. The widget follows that style." : {
+      "comment" : "Onboarding step description.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Open Style to choose a color or font. The widget follows that style."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abre Estilo para elegir un color o una fuente. El widget seguirá ese estilo."
+          }
+        }
+      }
+    },
     "Paste a command, shortcut, or reminder" : {
       "comment" : "Placeholder text in the menu bar quick-capture editor.",
       "extractionState" : "manual",
@@ -574,24 +646,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Pega un comando, atajo o recordatorio"
-          }
-        }
-      }
-    },
-    "Pick a color or font above the editor and the widget follows that style." : {
-      "comment" : "Onboarding step description.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Pick a color or font above the editor and the widget follows that style."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Elige un color o una fuente encima del editor y el widget seguirá ese estilo."
           }
         }
       }
@@ -715,6 +769,24 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Fijada: %@"
+          }
+        }
+      }
+    },
+    "Privacy Policy" : {
+      "comment" : "Settings link to the app privacy policy.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Privacy Policy"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Política de privacidad"
           }
         }
       }
@@ -1046,6 +1118,24 @@
         }
       }
     },
+    "Style" : {
+      "comment" : "Button and presentation title for note appearance controls.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Style"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Estilo"
+          }
+        }
+      }
+    },
     "This cannot be undone." : {
       "extractionState" : "manual",
       "localizations" : {
@@ -1168,6 +1258,24 @@
         }
       }
     },
+    "Use New Note to create small Git, Swift, terminal, or project checklists." : {
+      "comment" : "Onboarding step description.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Use New Note to create small Git, Swift, terminal, or project checklists."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Usa Nota nueva para crear pequeñas listas de Git, Swift, terminal o proyectos."
+          }
+        }
+      }
+    },
     "Use in Widget" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -1181,24 +1289,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Usar en el widget"
-          }
-        }
-      }
-    },
-    "Use the plus button to create small Git, Swift, terminal, or project checklists." : {
-      "comment" : "Onboarding step description.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Use the plus button to create small Git, Swift, terminal, or project checklists."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Usa el botón más para crear pequeñas listas de Git, Swift, terminal o proyectos."
           }
         }
       }

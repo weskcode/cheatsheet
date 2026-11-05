@@ -7,6 +7,8 @@ enum AppDesign {
     static let editorCornerRadius: CGFloat = 20
     static let editorSectionSpacing: CGFloat = 18
     static let editorTextPadding: CGFloat = 18
+    static let stylePopoverWidth: CGFloat = 380
+    static let stylePopoverHeight: CGFloat = 420
     static let previewCornerRadius: CGFloat = 24
     static let controlCornerRadius: CGFloat = 14
     static let minimumHitSize: CGFloat = 44

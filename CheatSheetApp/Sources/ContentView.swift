@@ -7,6 +7,8 @@ struct ContentView: View {
     @Environment(\.requestReview) private var requestReview
     #if os(iOS)
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
+    // Optional guidance yields to short layouts and to the space larger text needs.
+    @ScaledMetric(relativeTo: .body) private var widgetHintMinimumHeight: CGFloat = 480
     #endif
     @AppStorage("hasCompletedOnboarding") private var hasCompletedOnboarding = false
     @AppStorage("showWidgetHints") private var showWidgetHints = true
@@ -265,9 +267,28 @@ struct ContentView: View {
     }
     #endif
 
+    @ViewBuilder
     private func editorDetail(note: Binding<CheatSheetNote>, selectedNoteID: CheatSheetNote.ID) -> some View {
+        #if os(iOS)
+        GeometryReader { geometry in
+            editorContent(
+                note: note,
+                selectedNoteID: selectedNoteID,
+                hasRoomForHint: geometry.size.height >= widgetHintMinimumHeight
+            )
+        }
+        #else
+        editorContent(note: note, selectedNoteID: selectedNoteID, hasRoomForHint: true)
+        #endif
+    }
+
+    private func editorContent(
+        note: Binding<CheatSheetNote>,
+        selectedNoteID: CheatSheetNote.ID,
+        hasRoomForHint: Bool
+    ) -> some View {
         VStack(alignment: .leading, spacing: AppDesign.panelSpacing) {
-            if showWidgetHints, !note.wrappedValue.isPinned {
+            if showWidgetHints, !note.wrappedValue.isPinned, hasRoomForHint {
                 widgetSetupHint {
                     store.setPinned(selectedNoteID)
                 }

@@ -4,6 +4,8 @@ struct EditorHeader: View {
     @Binding var note: CheatSheetNote
     @Binding var fontSize: CheatSheetFontSize
     let pinAction: () -> Void
+    @State private var showsStyle = false
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
 
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
@@ -13,24 +15,21 @@ struct EditorHeader: View {
                 .foregroundStyle(.primary)
                 .accessibilityIdentifier("note-title-field")
 
-            ViewThatFits(in: .horizontal) {
-                HStack(spacing: 12) {
+            if dynamicTypeSize.isAccessibilitySize {
+                VStack(alignment: .leading, spacing: 10) {
                     statusLabel
-
-                    Spacer(minLength: 8)
-
-                    compactControls
-                }
-
-                VStack(alignment: .leading, spacing: 8) {
-                    statusLabel
-                    GlassPalettePicker(selection: $note.tintHex)
-
-                    HStack(spacing: 8) {
-                        FontStylePicker(selection: $note.fontStyle)
-                        FontSizePicker(selection: $fontSize)
+                    HStack {
+                        styleButton
+                        Spacer(minLength: 8)
                         pinButton
                     }
+                }
+            } else {
+                HStack(spacing: 12) {
+                    statusLabel
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                    styleButton
+                    pinButton
                 }
             }
         }
@@ -42,27 +41,37 @@ struct EditorHeader: View {
             .foregroundStyle(.secondary)
     }
 
-    private var compactControls: some View {
-        HStack(spacing: 8) {
-            GlassPalettePicker(selection: $note.tintHex)
-
-            FontStylePicker(selection: $note.fontStyle)
-
-            FontSizePicker(selection: $fontSize)
-
-            pinButton
+    private var styleButton: some View {
+        Button {
+            showsStyle = true
+        } label: {
+            Label("Style", systemImage: "textformat")
+                #if os(iOS)
+                .frame(minHeight: AppDesign.minimumHitSize)
+                #endif
+        }
+        .glassCompatibleButtonStyle()
+        .fixedSize(horizontal: true, vertical: false)
+        .accessibilityIdentifier("note-style-button")
+        .popover(isPresented: $showsStyle) {
+            EditorStyleView(note: $note, fontSize: $fontSize)
+                #if os(iOS)
+                .presentationCompactAdaptation(horizontal: .sheet, vertical: .fullScreenCover)
+                #endif
         }
     }
 
     private var pinButton: some View {
         Button(action: pinAction) {
             Label(note.isPinned ? "Pinned to Widget" : "Use in Widget", systemImage: note.isPinned ? "pin.fill" : "pin")
+                #if os(iOS)
+                .frame(minWidth: AppDesign.minimumHitSize, minHeight: AppDesign.minimumHitSize)
+                #endif
         }
         .labelStyle(.iconOnly)
         .controlSize(.small)
         .glassCompatibleButtonStyle(prominent: note.isPinned)
         .help(note.isPinned ? "This note appears in the widget" : "Show this note in the widget")
-        .accessibilityElement(children: .ignore)
         .accessibilityLabel(note.isPinned ? "Pinned to Widget" : "Use in Widget")
         .accessibilityAddTraits(note.isPinned ? [.isSelected] : [])
         .accessibilityIdentifier("widget-pin-button")
