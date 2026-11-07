@@ -83,13 +83,13 @@ struct OnboardingView: View {
             OnboardingStepRow(
                 dotColor: Color(hex: CheatSheetPalette.blue.rawValue),
                 title: "Add notes",
-                description: "Use the plus button to create small Git, Swift, terminal, or project checklists."
+                description: "Use New Note to create small Git, Swift, terminal, or project checklists."
             )
 
             OnboardingStepRow(
                 dotColor: Color(hex: CheatSheetPalette.mint.rawValue),
                 title: "Tune the look",
-                description: "Pick a color or font above the editor and the widget follows that style."
+                description: "Open Style to choose a color or font. The widget follows that style."
             )
 
             OnboardingStepRow(

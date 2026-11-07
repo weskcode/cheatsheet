@@ -23,7 +23,7 @@ struct GlassPalettePicker: View {
     }
 
     private var compactColumns: [GridItem] {
-        Array(repeating: GridItem(.fixed(26), spacing: 6), count: 5)
+        Array(repeating: GridItem(.fixed(GlassPaletteSwatchButton.hitTargetSize), spacing: 6), count: 5)
     }
 
     private var swatches: some View {

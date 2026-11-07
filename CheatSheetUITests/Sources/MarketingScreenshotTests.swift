@@ -53,14 +53,17 @@ final class MarketingScreenshotTests: XCTestCase {
         XCTAssertTrue(app.textFields["note-title-field"].waitForExistence(timeout: 15))
         shoot(app, "M2-note-open")
 
-        // Show a different, task-focused note and the editor's full palette.
+        // Show a different, task-focused note.
         let back = app.stackBackButton
         back.tap()
         app.staticTexts["Ship Checklist"].firstMatch.tap()
         XCTAssertTrue(app.textFields["note-title-field"].waitForExistence(timeout: 15))
         shoot(app, "M3-checklist")
 
-        // M4: font menu open over real content.
+        app.buttons["note-style-button"].tap()
+        XCTAssertTrue(app.buttons["note-style-done-button"].waitForExistence(timeout: 10))
+
+        // M4/M8 show the actual menus inside Style, matching the current app.
         let fontPicker = app.buttons["font-style-picker"].firstMatch
         guard fontPicker.waitForExistence(timeout: 10), fontPicker.isHittable else {
             XCTFail("Font picker is unavailable for the marketing capture")
@@ -87,6 +90,7 @@ final class MarketingScreenshotTests: XCTestCase {
         }
         shoot(app, "M8-size-menu")
         app.buttons["Medium"].firstMatch.tap()
+        app.buttons["note-style-done-button"].tap()
 
         // Each note uses a different palette tint and useful sample content.
         for (title, name) in [
@@ -96,6 +100,7 @@ final class MarketingScreenshotTests: XCTestCase {
             ("HTTP Status Codes", "M12-http")
         ] {
             if back.waitForExistence(timeout: 5), back.isHittable { back.tap() }
+            app.revealNoteInList(title)
             XCTAssertTrue(app.staticTexts[title].waitForExistence(timeout: 10))
             app.staticTexts[title].firstMatch.tap()
             XCTAssertTrue(app.textFields["note-title-field"].waitForExistence(timeout: 10))
