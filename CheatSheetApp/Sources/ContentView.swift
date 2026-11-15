@@ -46,7 +46,7 @@ struct ContentView: View {
                 persistenceAlertTitle,
                 isPresented: $isPresentingPersistenceAlert
             ) {
-                Button("Try Again", action: store.retry)
+                Button("Try Again", action: retryPersistence)
                 if !store.isPersistenceSuspended {
                     Button("OK", role: .cancel) {}
                 }
@@ -54,7 +54,9 @@ struct ContentView: View {
                 Text(persistenceAlertMessage)
             }
             .onChange(of: store.persistenceStatus) { _, newStatus in
-                isPresentingPersistenceAlert = newStatus.isFailure
+                if !isShowingOnboarding {
+                    isPresentingPersistenceAlert = newStatus.isFailure
+                }
             }
             #endif
             .tint(Color(hex: CheatSheetPalette.blue.rawValue))
@@ -71,8 +73,22 @@ struct ContentView: View {
             }
             .task {
                 isShowingOnboarding = !hasCompletedOnboarding
+                #if os(iOS)
+                if !isShowingOnboarding, store.persistenceStatus.isFailure {
+                    isPresentingPersistenceAlert = true
+                }
+                #endif
             }
-            .sheet(isPresented: $isShowingOnboarding) {
+            .sheet(
+                isPresented: $isShowingOnboarding,
+                onDismiss: {
+                    #if os(iOS)
+                    if store.persistenceStatus.isFailure {
+                        isPresentingPersistenceAlert = true
+                    }
+                    #endif
+                }
+            ) {
                 OnboardingView()
                     // Onboarding only marks itself complete when the user taps
                     // Done/Start Writing. Without this, a swipe-to-dismiss on
@@ -100,7 +116,9 @@ struct ContentView: View {
         #if os(iOS)
         rootContent
             .onChange(of: horizontalSizeClass) { _, newSizeClass in
-                if newSizeClass == .compact, let selectedNoteID = store.selectedNoteID {
+                if newSizeClass == .compact,
+                   let selectedNoteID = store.selectedNoteID,
+                   !isShowingTrash || store.note(with: selectedNoteID)?.isArchived == true {
                     compactPath = [selectedNoteID]
                 } else {
                     compactPath.removeAll()
@@ -330,6 +348,15 @@ struct ContentView: View {
     }
 
     #if os(iOS)
+    private func retryPersistence() {
+        store.retry()
+        if store.isPersistenceSuspended {
+            Task { @MainActor in
+                isPresentingPersistenceAlert = true
+            }
+        }
+    }
+
     private var persistenceAlertTitle: String {
         store.isPersistenceSuspended
             ? String(localized: "persistence.title.loadFailed", defaultValue: "Notes could not be opened")

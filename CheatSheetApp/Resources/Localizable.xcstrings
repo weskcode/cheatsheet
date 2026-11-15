@@ -1822,13 +1822,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "# Widget Formatting Demo\nPlain lines show as simple reminder text.\n- Bullets become quick checklist rows.\n- [ ] Open tasks use an empty circle.\n- [x] Finished tasks use a checkmark.\n# Tips\n- Pin one note to show it in the widget.\n- Pick a color and font above the editor.\n- Short lines read best on the desktop."
+            "value" : "# Widget Formatting Demo\nPlain lines show as simple reminder text.\n- Bullets become quick checklist rows.\n- [ ] Open tasks use an empty circle.\n- [x] Finished tasks use a checkmark.\n# Tips\n- Pin one note to show it in the widget.\n- Open Style to pick a color and font.\n- Short lines read best on the desktop."
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "# Demostración de formato del widget\nLas líneas simples se muestran como texto de recordatorio.\n- Las viñetas se convierten en filas de lista rápidas.\n- [ ] Las tareas pendientes usan un círculo vacío.\n- [x] Las tareas terminadas usan una marca de verificación.\n# Consejos\n- Fija una nota para mostrarla en el widget.\n- Elige un color y una fuente encima del editor.\n- Las líneas cortas se leen mejor en el escritorio."
+            "value" : "# Demostración de formato del widget\nLas líneas simples se muestran como texto de recordatorio.\n- Las viñetas se convierten en filas de lista rápidas.\n- [ ] Las tareas pendientes usan un círculo vacío.\n- [x] Las tareas terminadas usan una marca de verificación.\n# Consejos\n- Fija una nota para mostrarla en el widget.\n- Abre Estilo para elegir un color y una fuente.\n- Las líneas cortas se leen mejor en el escritorio."
           }
         }
       }

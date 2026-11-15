@@ -122,7 +122,7 @@ public extension CheatSheetNote {
             - [x] Finished tasks use a checkmark.
             # Tips
             - Pin one note to show it in the widget.
-            - Pick a color and font above the editor.
+            - Open Style to pick a color and font.
             - Short lines read best on the desktop.
             """),
             tintHex: CheatSheetPalette.indigo.rawValue,

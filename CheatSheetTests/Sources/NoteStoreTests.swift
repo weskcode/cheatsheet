@@ -215,6 +215,39 @@ struct NoteStoreTests {
         #expect(sut.selectedNoteID == activeID)
     }
 
+    @Test func leaveTrashPreservesSelectedRestoredNoteWhenOtherActiveNotesExist() throws {
+        let existingActiveID = try #require(UUID(uuidString: "00000000-0000-0000-0000-000000000908"))
+        let restoredID = try #require(UUID(uuidString: "00000000-0000-0000-0000-000000000909"))
+        let currentDate = Date(timeIntervalSince1970: 200)
+        let repository = SpyNoteRepository(
+            loadedNotes: [
+                Self.sampleNote(id: existingActiveID, title: "Pinned", isPinned: true),
+                Self.sampleNote(id: restoredID, title: "Restored", archivedAt: Date(timeIntervalSince1970: 100))
+            ]
+        )
+        let sut = NoteStore(repository: repository, reloadWidgetTimelines: {}, now: { currentDate })
+
+        sut.restoreArchivedNote(restoredID)
+        sut.leaveTrash()
+
+        #expect(sut.selectedNoteID == restoredID)
+    }
+
+    @Test func retryAfterRepeatedLoadFailureKeepsPersistenceSuspended() {
+        let repository = SpyNoteRepository(
+            loadedNotes: [Self.sampleNote(title: "Real")],
+            loadError: CheatSheetStorageError.noteDecodingFailed
+        )
+        let sut = NoteStore(repository: repository, reloadWidgetTimelines: {})
+        let initialStatus = sut.persistenceStatus
+
+        sut.retry()
+
+        #expect(sut.isPersistenceSuspended)
+        #expect(sut.persistenceStatus == initialStatus)
+        #expect(sut.persistenceStatus.isFailure)
+    }
+
     @Test func enterTrashSelectsMostRecentlyArchivedNote() throws {
         let activeID = try #require(UUID(uuidString: "00000000-0000-0000-0000-000000000905"))
         let olderArchivedID = try #require(UUID(uuidString: "00000000-0000-0000-0000-000000000906"))

@@ -262,6 +262,11 @@ final class CheatSheetiOSUITests: XCTestCase {
         openStyle(in: app)
         capture(app, "style-landscape", includeHierarchy: true)
         XCTAssertGreaterThan(app.frame.width, app.frame.height)
+        if UIDevice.current.userInterfaceIdiom == .phone {
+            let styleNavBar = app.navigationBars["Style"]
+            XCTAssertTrue(styleNavBar.waitForExistence(timeout: 5))
+            XCTAssertEqual(styleNavBar.frame.width, app.frame.width, accuracy: 2.0)
+        }
         let done = app.buttons["note-style-done-button"]
         XCTAssertGreaterThanOrEqual(done.frame.minY, app.frame.minY)
         XCTAssertLessThanOrEqual(done.frame.maxY, app.frame.maxY)

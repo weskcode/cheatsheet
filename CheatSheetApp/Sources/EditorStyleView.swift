@@ -6,6 +6,7 @@ struct EditorStyleView: View {
     @Environment(\.dismiss) private var dismiss
     #if os(iOS)
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
+    @Environment(\.verticalSizeClass) private var verticalSizeClass
     #endif
 
     var body: some View {
@@ -23,6 +24,11 @@ struct EditorStyleView: View {
             #else
             NavigationStack {
                 styleForm
+                    .frame(
+                        minWidth: presentationWidth,
+                        idealWidth: presentationWidth,
+                        idealHeight: AppDesign.stylePopoverHeight
+                    )
                     .navigationTitle("Style")
                     .navigationBarTitleDisplayMode(.inline)
                     .toolbar {
@@ -33,10 +39,8 @@ struct EditorStyleView: View {
             }
             #endif
         }
+        #if os(macOS)
         .frame(width: presentationWidth)
-        #if os(iOS)
-        .frame(idealHeight: AppDesign.stylePopoverHeight)
-        #else
         .frame(minHeight: AppDesign.stylePopoverHeight)
         #endif
     }
@@ -74,7 +78,7 @@ struct EditorStyleView: View {
 
     private var presentationWidth: CGFloat? {
         #if os(iOS)
-        horizontalSizeClass == .compact ? nil : AppDesign.stylePopoverWidth
+        (horizontalSizeClass == .compact || verticalSizeClass == .compact) ? nil : AppDesign.stylePopoverWidth
         #else
         AppDesign.stylePopoverWidth
         #endif
