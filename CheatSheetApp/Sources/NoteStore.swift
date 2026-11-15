@@ -226,6 +226,11 @@ final class NoteStore {
             return
         }
 
+        if let selectedNoteID,
+           activeNotes.contains(where: { $0.id == selectedNoteID }) {
+            return
+        }
+
         selectedNoteID = activeNoteID
     }
 
